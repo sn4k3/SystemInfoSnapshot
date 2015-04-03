@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noindex, nofolllow">
+        <meta name="author" content="Tiago Conceição">
+        <meta name="description" content="Collect the computer and system info at a given time in order to track issues or problems.">
+        <title>System Info Snapshot - <!--[TITLE]--></title>
+        <link href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/yeti/bootstrap.min.css" rel="stylesheet">
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/sortable/0.6.0/css/sortable-theme-bootstrap.css" rel="stylesheet">
+        <style>
+        body {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        /* keep full widget on smaller screens */
+        @media (max-width: 767px) {
+            body {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+        .text-center{ text-align:center !important; }
+        .panel-body { padding: 0; }
+        .padding20 {padding: 20px;}
+        .table { margin-bottom: 0; }
+        .navbar {
+            margin: 0;
+            border-radius: 0;
+        }
+        /* Footer */
+
+        footer{
+            border-top: #222222;
+            background-color: #333333;
+            color: #ffffff;
+            min-height: 230px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            margin-top: 40px;
+        }
+
+        footer h3{
+            margin-bottom: 25px;
+        }
+
+        footer a, footer a:hover, footer a:active, footer a:visited{
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        footer a:hover{
+            color:#008cba;
+        }
+
+        /*[ Back to Top / #back-to-top ]*/
+        #back-to-top {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 9999;
+            width: 45px;
+            height: 45px;
+            display: block;
+            background: #2c3e50;
+            background: rgba(0, 0, 0, 0.75);
+            font-size: 16px;
+            text-align: center;
+            line-height: 45px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        #back-to-top:hover {
+            text-decoration: none;
+            background-color: #F90;
+            background: rgba(255, 153, 0, 0.75);
+        }
+        #back-to-top i {
+            color: #fff;
+        }
+        .verybold{ font-weight: bolder; }
+        .outlineblack {text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;}
+        .img-responsive {
+            display: inline-block;
+        }
+        </style>
+	</head>
+	<body id="body" data-spy="scroll" data-target=".navbar">
+	
+	<header id="mainheader">
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainmenu-navbar-colapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+                    <a class="navbar-brand" href="#mainheader">SystemInfoSnapshot</a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="mainmenu-navbar-colapse">
+					<ul class="nav navbar-nav">
+						<li><a href="#systeminfo"><i class="glyphicon glyphicon-info-sign"></i> System Info</a></li>
+						<li><a href="#processes"><i class="glyphicon glyphicon-tasks"></i> Processes</a></li>
+						<li><a href="#services"><i class="fa fa-cogs"></i> Services</a></li>
+						<li><a href="#startupapps"><i class="glyphicon glyphicon-play"></i> Startup</a></li>
+						<li><a href="#programs"><i class="glyphicon glyphicon-wrench"></i> Programs</a></li>
+					</ul>
+
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="javascript:;">Version: <!--VERSION--></a></li>
+					</ul>
+				</div><!-- /.navbar-collapse -->
+			</div><!-- /.container-fluid -->
+		</nav>
+		<div class="jumbotron text-center">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAQAAABpN6lAAAADRklEQVR4Ae2dP24aURDGf0TGtfE1TGMJLoCI261cURAu4rDIokCuYyMqy3bhNLkEhStScIEcIGA6lMYbyUIPilk7ZtloH+/7TTf2aPU+zc6bFe8PH0MIIUSbO3pU2OSImFtalNikxpAhNTYp0eKWmCM2qdDjjjbY8fbz7fi8iUlebcqh85X5ufJesKbO8tW3pM6a7uo/Jxw43yHTlTe24+3nm/G5syBZ2WfnazjfjDUj5x2xZua8Def77HwLO95+vhmfO4mzc+eLNrxrHp3v0YyPnO98q/hzO/5jfEIoA4QyQCgDhDJAvEOV6NUSZwOilfU3vJGzsfONnW8zvu98g63iB2/EV9kxVySe2RU7pErioZ2wMyIvBYgkgGaBj9JlzotpiTN/+hR7JHO6pNAhSTcPBUi3jv0KNAmFJiaXwWTAJSbHTIMQYMoxKZRpcm7YwEsBBuZYmpSz9QEFJ0MfIJQBIksRrBL9R6vmUQSzTINXBfjezzANZm2EqkX43s/eCD1sLUBUoM/df4l8wKQTjACdNz6H916AOd3d9wH23/Of59UHZOdAAkgAseaUG34Y9uRlEXwyx3LDafrw/5DY5qEA6bZMk+CGJAgBEq5DF+CbXoEUTrne+yJ4bQxfrXDASAC1wsJRosts76fBGV8pYdIKphFq2TXgjFA4swX4RRCkj7TCJIhXYEIlfU5oEBnW91KAvjmWxjYzn1phdYISQOsD/KgB2dcHBDANTqlgchlMK9zD5D4YAe4waQcjQJsUYhZ7L8CCGAt1gmqEJIAEEDWGPBo29rIIjs2xDKmRQp1lID+O1jAZBdMIDe0a8KIKEPgrAHVGe14Ev6cWQbXCaoQkgAQQMc+8mObjhgl7JM/EpNAOZstMW+cHmPSC2TbXw6Ti1cbJAez6hxE45MyTrbMnO9s6q93jQhkgdIhKaMfoVEI/SCn7+oACk//6gIKT//qAgpP7+gB/TH2ABNCxuiEfrDwI+2jtE3aMTpcXygChDBDKAKEMEPM3L1z8zZqh8w7fuXCx6XyLd+MXzts043Ona1x5ecDEuHKzxtJYl3dhXLlZNq/MtONj9/yyHZ8/X7g3Lj21Ll2tM0q5dLVbgEtXhRBC/AWddWLcvoWOHAAAAABJRU5ErkJggg==" width="128" height="128" class="img-responsive" />
+            <h1>System Info Snapshot</h1>
+            <p class="lead"><i class="fa fa-quote-left"></i> Collect the computer and system info at a given time in order to track issues or problems.<br>
+            Share this report to your friend or someone of your trust who can help you detect your computer problem at a given moment. <i class="fa fa-quote-right"></i></p>
+			<h2><!--[TITLE]--></h2>
+		</div>
+	</header>
+	
+	<div class="container-fluid">
+		<div id="systeminfo" class="panel panel-primary">
+			<div class="panel-heading"><h1><i class="glyphicon glyphicon-info-sign pull-right"></i>System Info</h1></div>
+				<div class="panel-body">
+					<!--[SYSTEMINFO]-->
+			</div>
+		</div>
+		
+		<div id="processes" class="panel panel-primary">
+			<div class="panel-heading"><h1><i class="glyphicon glyphicon-tasks pull-right"></i>Processes <span class="count"></span></h1></div>
+				<div class="panel-body">
+					<!--[PROCESSES]-->
+			</div>
+		</div>
+		
+		<div id="services" class="panel panel-primary">
+			<div class="panel-heading"><h1><i class="fa fa-cogs pull-right"></i>Services <span class="count"></span></h1></div>
+				<div class="panel-body">
+					<!--[SERVICES]-->
+			</div>
+		</div>
+
+        <div id="startupapps" class="panel panel-primary">
+            <div class="panel-heading"><h1><i class="glyphicon glyphicon-play pull-right"></i>Startup Applications <span class="count"></span></h1></div>
+            <div class="panel-body">
+                <!--[STARTUPAPPS]-->
+            </div>
+        </div>
+
+        <div id="programs" class="panel panel-primary">
+            <div class="panel-heading"><h1><i class="glyphicon glyphicon-wrench pull-right"></i>Installed Programs <span class="count"></span></h1></div>
+            <div class="panel-body">
+                <!--[PROGRAMS]-->
+            </div>
+        </div>
+	</div>
+
+    <footer>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3">
+                    <h3 class="verybold outlineblack">System Info Snapshot</h3>
+                    <p>A portable free and open source project.<br>
+                        Written by: Tiago Conceição<br>
+                        Version: <!--VERSION--></p>
+                </div>
+                <div class="col-sm-offset-3 col-xs-6 col-lg-offset-6 col-sm-3 col-lg-2">
+                    <div id="writtenwith">
+                        <h3 class="verybold outlineblack">Written with</h3>
+                        <h4># CSharp</h4>
+                        <h4><i class="fa fa-html5"></i> HTML5</h4>
+                        <h4><i class="fa fa-css3"></i> CSS</h4>
+                        <h4><i class="fa fa-code"></i> JavaScript</h4>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-3 col-lg-1">
+                    <div id="support" class="text-right">
+                        <h3 class="verybold outlineblack">Support</h3>
+                        <h4><a href="http://systeminfosnapshot.com" target="_blank"><i class="fa fa-globe"></i> Webpage</a></h4>
+                        <h4><a href="https://github.com/sn4k3/SystemInfoSnapshot" target="_blank"><i class="fa fa-paypal"></i> Donate</a></h4>
+                        <h4><a href="https://github.com/sn4k3/SystemInfoSnapshot" target="_blank"><i class="fa fa-github"></i> Github</a></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+	
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/sortable/0.6.0/js/sortable.min.js"></script>
+	<script>
+	$(function($) {
+		//jQuery for page scrolling feature - requires jQuery Easing plugin
+		$('.navbar a').on('click', function(event) {
+			var $anchor = $(this);
+			$('html, body').stop().animate({
+				scrollTop: Math.max(0, $($anchor.attr('href')).offset().top)
+			}, 1000, 'swing');
+			event.preventDefault();
+		});
+
+        $('.panel-body table').each(function(index, value){
+            var items = $(this).find("tbody tr").length;
+            if(items)
+            {
+                $(this).parent().parent().find('.panel-heading .count').text("("+items+")");
+            }
+        });
+		
+		enableBackToTop ();
+	});
+	
+	function enableBackToTop () {
+		var backToTop = $('<a>', { 'id': 'back-to-top', 'href': '#top' });
+		var icon      = $('<i>', { 'class': 'fa fa-chevron-up' });
+
+		backToTop.appendTo ('body');
+		icon.appendTo (backToTop);
+
+		backToTop.hide();
+
+		$(window).scroll(function () {
+			if ($(this).scrollTop() > 150) {
+				backToTop.fadeIn ();
+			} else {
+				backToTop.fadeOut ();
+			}
+		});
+
+		backToTop.click (function (e) {
+			e.preventDefault ();
+
+			$('body, html').animate({
+				scrollTop: 0
+			}, 600, 'swing');
+		});
+    }
+	</script>
+	</body>
+</html>
