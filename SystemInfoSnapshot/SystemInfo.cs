@@ -27,7 +27,7 @@ namespace SystemInfoSnapshot
                          //"<th>Title</th>" +
                          "<th>Name</th>" +
                          //"<th>Window Title</th>" +
-                         "<th>Filename</th>" +
+                         "<th>File</th>" +
                          //"<th>Machine Name</th>" +
                          "<th>Up Time</th>" +
                          //"<th>CPU</th>" +
@@ -46,18 +46,18 @@ namespace SystemInfoSnapshot
                 {
                     var processinfo = ProcessHelper.GetProcessInfo(process);
                     result += "<tr>" +
-                              "<td>" + i + "</td>" +
-                              "<td>" + process.Id + "</td>" +
+                              "<td class=\"index\">" + i + "</td>" +
+                              "<td class=\"pid\">" + process.Id + "</td>" +
                         //"<td>" + proccess.Modules[0].ModuleName + "</td>" +
-                              "<td>" + process.ProcessName + "</td>" +
+                              "<td class=\"name\">" + process.ProcessName + "</td>" +
                               //"<td>" + process.MainWindowTitle + "</td>" +
-                              "<td>" + (processinfo[ProcessHelper.ExecutablePath] ?? string.Empty) + "</td>" +
+                              "<td class=\"file\">" + (processinfo[ProcessHelper.ExecutablePath] ?? string.Empty) + "</td>" +
                         //"<td>" + proccess.MachineName + "</td>" +
-                        "<td>" + (processinfo[ProcessHelper.StartTime] != null ? DateTime.Now.Subtract(ManagementDateTimeConverter.ToDateTime(processinfo[ProcessHelper.StartTime].ToString())).ToString() : string.Empty)  + "</td>" +
+                        "<td class=\"uptime\">" + (processinfo[ProcessHelper.StartTime] != null ? DateTime.Now.Subtract(ManagementDateTimeConverter.ToDateTime(processinfo[ProcessHelper.StartTime].ToString())).ToString() : string.Empty) + "</td>" +
                         //"<td>" + process.UserProcessorTime + "</td>" +
-                              "<td>" + process.Threads.Count + "</td>" +
-                              "<td data-value=\"" + process.WorkingSet64 + "\">" + (process.WorkingSet64 / 1024.0 / 1024.0).ToString("#.##") + "</td>" +
-                              "<td data-value=\"" + process.PeakWorkingSet64 + "\">" + (process.PeakWorkingSet64 / 1024.0 / 1024.0).ToString("#.##") + "</td>" +
+                              "<td class=\"threads\">" + process.Threads.Count + "</td>" +
+                              "<td class=\"memory\" data-value=\"" + process.WorkingSet64 + "\">" + (process.WorkingSet64 / 1024.0 / 1024.0).ToString("#.##") + "</td>" +
+                              "<td class=\"peakmemory\" data-value=\"" + process.PeakWorkingSet64 + "\">" + (process.PeakWorkingSet64 / 1024.0 / 1024.0).ToString("#.##") + "</td>" +
                               "</tr>";
                 }
                 catch (Exception)
@@ -96,14 +96,14 @@ namespace SystemInfoSnapshot
             {
                 i++;
                 result += "<tr>" +
-                          "<td>" + i + "</td>" +
-                          "<td>" + service.DisplayName + "</td>" +
-                          "<td>" + service.ServiceName + "</td>" +
+                          "<td class=\"index\">" + i + "</td>" +
+                          "<td class=\"displayname\">" + service.DisplayName + "</td>" +
+                          "<td class=\"servicename\">" + service.ServiceName + "</td>" +
                           "<td>" + service.ServiceType + "</td>" +
                           //"<td>" + service.MachineName + "</td>" +
-                          "<td class=\"text-center\" data-value=\"" + Convert.ToByte(service.CanPauseAndContinue) + "\">" + (service.CanPauseAndContinue ? "<span class=\"glyphicon glyphicon-ok text-success\"></span>" : "<span class=\"glyphicon glyphicon-remove text-error\"></span>") + "</td>" +
-                          "<td class=\"text-center\" data-value=\"" + Convert.ToByte(service.CanShutdown) + "\">" + (service.CanShutdown ? "<span class=\"glyphicon glyphicon-ok text-success\"></span>" : "<span class=\"glyphicon glyphicon-remove text-error\"></span>") + "</td>" +
-                          "<td class=\"text-center\" data-value=\"" + Convert.ToByte(service.CanStop) + "\">" + (service.CanStop ? "<span class=\"glyphicon glyphicon-ok text-success\"></span>" : "<span class=\"glyphicon glyphicon-remove text-error\"></span>") + "</td>" +
+                          "<td class=\"text-center canpause\" data-value=\"" + Convert.ToByte(service.CanPauseAndContinue) + "\">" + (service.CanPauseAndContinue ? "<span class=\"glyphicon glyphicon-ok text-success\"></span>" : "<span class=\"glyphicon glyphicon-remove text-error\"></span>") + "</td>" +
+                          "<td class=\"text-center canshutdown\" data-value=\"" + Convert.ToByte(service.CanShutdown) + "\">" + (service.CanShutdown ? "<span class=\"glyphicon glyphicon-ok text-success\"></span>" : "<span class=\"glyphicon glyphicon-remove text-error\"></span>") + "</td>" +
+                          "<td class=\"text-center canstop\" data-value=\"" + Convert.ToByte(service.CanStop) + "\">" + (service.CanStop ? "<span class=\"glyphicon glyphicon-ok text-success\"></span>" : "<span class=\"glyphicon glyphicon-remove text-error\"></span>") + "</td>" +
                           "<td class=\"";
                 switch (service.Status)
                 {
@@ -121,8 +121,7 @@ namespace SystemInfoSnapshot
                         break;
                 }
 
-                result +=
-                          "\">"+service.Status+"</td>" +
+                result += " status\">"+service.Status+"</td>" +
                           "</tr>";
                 
             }
@@ -149,10 +148,10 @@ namespace SystemInfoSnapshot
             {
                 i++;
                 result += "<tr>" +
-                            "<td>" + i + "</td>" +
-                            "<td>" + autorun.Key + "</td>" +
-                            "<td>" + autorun.Name + "</td>" +
-                            "<td>" + autorun.Path + "</td>" +
+                            "<td class=\"index\">" + i + "</td>" +
+                            "<td class=\"key\">" + autorun.Key + "</td>" +
+                            "<td class=\"program\">" + autorun.Name + "</td>" +
+                            "<td class=\"file\">" + autorun.Path + "</td>" +
                             "</tr>";
             }
             
@@ -180,11 +179,11 @@ namespace SystemInfoSnapshot
             {
                 i++;
                 result += "<tr>" +
-                            "<td>" + i + "</td>" +
-                            "<td>" + program.Name + "</td>" +
-                            "<td>" + program.Version + "</td>" +
-                            "<td>" + program.Publisher + "</td>" +
-                            "<td>" + program.InstallDate + "</td>" +
+                            "<td class=\"index\">" + i + "</td>" +
+                            "<td class=\"program\">" + program.Name + "</td>" +
+                            "<td class=\"version\">" + program.Version + "</td>" +
+                            "<td class=\"publisher\">" + program.Publisher + "</td>" +
+                            "<td class=\"installdate\">" + program.InstallDate + "</td>" +
                             "</tr>";
 
 
@@ -196,7 +195,7 @@ namespace SystemInfoSnapshot
 
         public static string GetSystemInfoHTML()
         {
-            var result = "<div class=\"row\">";
+            
 
             Dictionary<HardwareType, string> HardwareIcon = new Dictionary<HardwareType, string>
             {
@@ -237,7 +236,70 @@ namespace SystemInfoSnapshot
             };
             Computer computer = new Computer{CPUEnabled = true, FanControllerEnabled = true, GPUEnabled = true, HDDEnabled = true, MainboardEnabled = true, RAMEnabled = true};
             computer.Open();
-            foreach (var hardware in computer.Hardware)
+
+            var result = "<div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">"+
+                            "<div class=\"panel panel-default\">" +
+                               "<div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">" +
+                                   "<h4 class=\"panel-title\">" +
+                                       "<a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\" aria-expanded=\"false\" aria-controls=\"collapseOne\"><i class=\"fa fa-file-text-o\"></i> Detailed text report</a>" +
+                                   "</h4>" +
+                                "</div>" +
+                                "<div id=\"collapseOne\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingOne\">" +
+                                    "<div class=\"panel-body padding20\">" +
+                                        computer.GetReport().Replace(Environment.NewLine, Environment.NewLine+"<br>") +
+                                    "</div>" +
+                                "</div>" +
+                            "</div>" +
+                         "</div>" +
+                         "<div class=\"row\">";
+            result += renderHardware(computer.Hardware);
+            result += "</div>";
+            return result;
+        }
+
+        private static string renderHardware(IHardware[] ihardware)
+        {
+            Dictionary<HardwareType, string> HardwareIcon = new Dictionary<HardwareType, string>
+            {
+                {HardwareType.Mainboard, "fa fa-cloud fa-3x"},
+                {HardwareType.SuperIO, "fa fa-cubes fa-3x"},
+                {HardwareType.CPU, "fa fa-server fa-3x"},
+                {HardwareType.RAM, "fa fa-database fa-3x"},
+                {HardwareType.GpuNvidia, "fa fa-picture-o fa-3x"},
+                {HardwareType.GpuAti, "fa fa-picture-o fa-3x"},
+                {HardwareType.HDD, "fa fa-hdd-o fa-3x"},
+            };
+            Dictionary<SensorType, string> SensorIcon = new Dictionary<SensorType, string>
+            {
+                {SensorType.Clock, "fa fa-clock-o fa-2x"},
+                {SensorType.Control, "fa fa-tachometer fa-2x"},
+                {SensorType.Data, "fa fa-table fa-2x"},
+                {SensorType.Factor, "fa fa-picture-o fa-2x"},
+                {SensorType.Fan, "fa fa-spinner fa-2x"},
+                {SensorType.Flow, "fa fa-stack-overflow fa-2x"},
+                {SensorType.Level, "fa fa-flask fa-2x"},
+                {SensorType.Load, "fa fa-tasks fa-2x"},
+                {SensorType.Power, "fa fa-power-off fa-2x"},
+                {SensorType.Temperature, "fa fa-fire fa-2x"},
+                {SensorType.Voltage, "fa fa-bolt fa-2x"},
+            };
+            Dictionary<SensorType, string> SensorUnit = new Dictionary<SensorType, string>
+            {
+                {SensorType.Clock, "MHz"},
+                {SensorType.Control, "%"},
+                {SensorType.Data, "GB"},
+                {SensorType.Factor, ""},
+                {SensorType.Fan, "RPM"},
+                {SensorType.Flow, ""},
+                {SensorType.Level, ""},
+                {SensorType.Load, "%"},
+                {SensorType.Power, "W"},
+                {SensorType.Temperature, "ºC"},
+                {SensorType.Voltage, "V"},
+            };
+
+            var result = string.Empty;
+            foreach (var hardware in ihardware)
             {
                 hardware.Update();
 
@@ -252,13 +314,10 @@ namespace SystemInfoSnapshot
                 result += "<div class=\"well text-center\">";
                 if (HardwareIcon.ContainsKey(hardware.HardwareType))
                 {
-                    result += "<h1><i class=\""+HardwareIcon[hardware.HardwareType]+"\"></i></h1>";
+                    result += "<h1><i class=\"" + HardwareIcon[hardware.HardwareType] + "\"></i></h1>";
                 }
 
                 result += string.Format("<h2>{0}</h2><h3>{1}</h3><p>&nbsp;</p>", hardware.HardwareType, hardware.Name);
-
-                foreach (IHardware subHardware in hardware.SubHardware)
-                    subHardware.Update();
 
                 SensorType? lastSensorType = null;
                 result += "<div class=\"row\">";
@@ -273,16 +332,16 @@ namespace SystemInfoSnapshot
                     }
                     else
                     {
-                        result += "<div class=\"col-sm-4 col-md-3 col-lg-2\"><div class=\"well\">";    
+                        result += "<div class=\"col-sm-4 col-md-3 col-lg-2\"><div class=\"well\">";
                     }
-                    
+
                     if (SensorIcon.ContainsKey(sensor.SensorType))
                     {
                         result += "<h1><i class=\"" + SensorIcon[sensor.SensorType] + "\"></i></h1>";
                     }
-                    result += string.Format("{0} {1} = <strong>{2}{3}</strong>", 
+                    result += string.Format("{0} {1} = <strong>{2}{3}</strong>",
                         sensor.Name,
-                        sensor.Name.Equals(sensor.SensorType.ToString()) ? string.Empty : sensor.SensorType.ToString(), 
+                        sensor.Name.Contains(sensor.SensorType.ToString()) ? string.Empty : sensor.SensorType.ToString(),
                         sensor.Value.HasValue ? sensor.Value.Value.ToString("#.##") : "no value",
                         SensorUnit[sensor.SensorType]);
 
@@ -301,12 +360,12 @@ namespace SystemInfoSnapshot
                         {
                             progressbarType = "info";
                         }
-                        else 
+                        else
                         {
                             progressbarType = "success";
                         }
                         result += "<p></p><div class=\"progress\">" +
-                                  "<div class=\"progress-bar progress-bar-"+progressbarType+"\" role=\"progressbar\" aria-valuenow=\"" + (int)sensor.Value +
+                                  "<div class=\"progress-bar progress-bar-" + progressbarType + "\" role=\"progressbar\" aria-valuenow=\"" + (int)sensor.Value +
                                   "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: " + (int)sensor.Value +
                                   "%;\"><strong>" + sensor.Value.Value.ToString("#.##") + "%</strong></div></div>";
                     }
@@ -314,10 +373,10 @@ namespace SystemInfoSnapshot
                     result += "</div></div>";
                 }
 
+                result += renderHardware(hardware.SubHardware);
+
                 result += "</div></div></div>";
             }
-
-            result += "</div>";
             return result;
         }
     }
