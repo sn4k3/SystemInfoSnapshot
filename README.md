@@ -22,8 +22,9 @@ You can share the generated report with your friend or someone of your trust to 
 3. Open or send the report to someone who can read it and analyse or problem.
 
 
-Note: Program can be executed with '-s', '/s' or '--silent' argument to skip GUI. 
+Note: Program can be executed with '-s', '/s' or '--silent' argument to skip GUI. --
 Report will be generated and the html file will show on explorer after completion. 
+
 **Example:** "SystemInfoSnapshot.exe -s"
 
 
