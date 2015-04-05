@@ -52,7 +52,7 @@ Report will be generated and the html file will show on explorer after completio
 
 # Requirements
 * Windows Vista or above (Vista, Server 2008, 7, Server 2012, 8, 8.1, 10)
-* [Microsoft .NET Framework 4.5 (Already pre-installed on Windows 8 and 8.1)](http://www.microsoft.com/en-us/download/details.aspx?id=30653)
+* [Microsoft .NET Framework 4.5](http://www.microsoft.com/en-us/download/details.aspx?id=30653) (Already pre-installed on Windows 8 and 8.1)
 
 Small and lightweight application with just one executable file.
 No installation needed, this software is portable and free!
