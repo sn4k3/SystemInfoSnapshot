@@ -61,7 +61,7 @@ namespace SystemInfoSnapshot
 
             if (ApplicationArguments.OpenReport)
             {
-                HtmlTemplate.ShowInExplorer();
+                HtmlTemplate.OpenInDefaultBrowser();
             }
         }
     }
