@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * SystemInfoSnapshot
+ * Author: Tiago Conceição
+ * 
+ * http://systeminfosnapshot.com/
+ * https://github.com/sn4k3/SystemInfoSnapshot
+ */
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -69,28 +76,12 @@ namespace SystemInfoSnapshot
             }
             if (sender == btnOpenReport || sender == btnOpenReport2)
             {
-                if (!string.IsNullOrEmpty(Program.HtmlTemplate.LastSaveFilePath))
-                {
-                    using (Process process = new Process())
-                    {
-                        process.StartInfo.FileName = Program.HtmlTemplate.LastSaveFilePath;
-                        process.Start();
-                        process.Close();
-                    }
-
-                    return;
-                }
-
+                Program.HtmlTemplate.OpenInDefaultBrowser();
                 return;
             }
             if (sender == btnOpenFolder || sender == btnOpenFolder2)
             {
-                if (!string.IsNullOrEmpty(Program.HtmlTemplate.LastSaveFilePath))
-                {
-                    ProcessHelper.ShowInExplorer(Program.HtmlTemplate.LastSaveFilePath);
-
-                    return;
-                }
+                Program.HtmlTemplate.ShowInExplorer();
 
                 return;
             }

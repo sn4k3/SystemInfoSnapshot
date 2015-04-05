@@ -1,9 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿/*
+ * SystemInfoSnapshot
+ * Author: Tiago Conceição
+ * 
+ * http://systeminfosnapshot.com/
+ * https://github.com/sn4k3/SystemInfoSnapshot
+ */
+using System;
+using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SystemInfoSnapshot
 {
@@ -30,7 +34,7 @@ namespace SystemInfoSnapshot
                     AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
                     if (titleAttribute.Title.Length > 0) return titleAttribute.Title;
                 }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                return Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
             }
         }
 

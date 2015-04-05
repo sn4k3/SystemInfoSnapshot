@@ -225,7 +225,7 @@
             this.btnWebsite.Name = "btnWebsite";
             this.btnWebsite.Size = new System.Drawing.Size(476, 33);
             this.btnWebsite.TabIndex = 14;
-            this.btnWebsite.Text = "Visit Website: systeminfosnapshot.com";
+            this.btnWebsite.Text = "Open website: systeminfosnapshot.com";
             this.btnWebsite.UseVisualStyleBackColor = true;
             this.btnWebsite.Click += new System.EventHandler(this.ButtonClick);
             // 

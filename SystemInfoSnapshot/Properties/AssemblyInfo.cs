@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SystemInfoSnapshot")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Collect the computer and system info at a given time in order to track issues or problems.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SystemInfoSnapshot")]

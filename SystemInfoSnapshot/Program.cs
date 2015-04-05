@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * SystemInfoSnapshot
+ * Author: Tiago Conceição
+ * 
+ * http://systeminfosnapshot.com/
+ * https://github.com/sn4k3/SystemInfoSnapshot
+ */
+using System;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -8,6 +15,7 @@ namespace SystemInfoSnapshot
     {
         public const string Website = "http://systeminfosnapshot.com";
         public static HTMLTemplate HtmlTemplate;
+        public static ApplicationArguments ApplicationArguments;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -15,15 +23,15 @@ namespace SystemInfoSnapshot
         static void Main()
         {
             AppDomain.CurrentDomain.AssemblyResolve += EmbeddedAssembly.OnResolveAssembly;
+            ApplicationArguments = new ApplicationArguments();
 
             var args = Environment.GetCommandLineArgs().ToList();
             HtmlTemplate = new HTMLTemplate();
 
-            // Silent mode, skip GUI.
-            if (args.Contains("/s") || args.Contains("-s") || args.Contains("--silent"))
+            // Null or Silent mode, skip GUI.
+            if (ApplicationArguments.Null || ApplicationArguments.Silent)
             {
                 WriteTemplate();
-                ProcessHelper.ShowInExplorer(Program.HtmlTemplate.LastSaveFilePath);
                 return;
             }
 
@@ -45,6 +53,16 @@ namespace SystemInfoSnapshot
             HtmlTemplate.WriteStartup(SystemInfo.GetStartupHtml());
             HtmlTemplate.WritePrograms(SystemInfo.GetProgramsHtml());
             HtmlTemplate.WriteToFile();
+
+            if (ApplicationArguments.Silent)
+            {
+                HtmlTemplate.ShowInExplorer();
+            }
+
+            if (ApplicationArguments.OpenReport)
+            {
+                HtmlTemplate.ShowInExplorer();
+            }
         }
     }
 }

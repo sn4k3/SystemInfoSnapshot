@@ -1,6 +1,12 @@
-﻿using System;
+﻿/*
+ * SystemInfoSnapshot
+ * Author: Tiago Conceição
+ * 
+ * http://systeminfosnapshot.com/
+ * https://github.com/sn4k3/SystemInfoSnapshot
+ */
+using System;
 using System.IO;
-using System.Windows.Forms;
 using SystemInfoSnapshot.Properties;
 
 namespace SystemInfoSnapshot
@@ -130,6 +136,24 @@ namespace SystemInfoSnapshot
             }
 
             LastSaveFilePath = filename;
+        }
+
+        /// <summary>
+        /// Show and select generated html file in explorer.
+        /// </summary>
+        public void ShowInExplorer()
+        {
+            if (string.IsNullOrEmpty(Program.HtmlTemplate.LastSaveFilePath)) return;
+            ProcessHelper.ShowInExplorer(Program.HtmlTemplate.LastSaveFilePath);
+        }
+
+        /// <summary>
+        /// Show and select generated html file in explorer.
+        /// </summary>
+        public void OpenInDefaultBrowser()
+        {
+            if (string.IsNullOrEmpty(Program.HtmlTemplate.LastSaveFilePath)) return;
+            ProcessHelper.Open(Program.HtmlTemplate.LastSaveFilePath);
         }
         #endregion
 
