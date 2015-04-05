@@ -22,7 +22,7 @@ You can share the generated report with your friend or someone of your trust to 
 3. Open or send the report to someone who can read it and analyse or problem.
 
 
-Note: Program can be executed with '-s', '/s' or '--silent' argument to skip GUI. --
+Note: Program can be executed with '-s', '/s' or '--silent' argument to skip GUI.
 Report will be generated and the html file will show on explorer after completion. 
 
 **Example:** "SystemInfoSnapshot.exe -s"
@@ -52,7 +52,7 @@ Report will be generated and the html file will show on explorer after completio
 
 # Requirements
 * Windows Vista or above (Vista, Server 2008, 7, Server 2012, 8, 8.1, 10)
-* [http://www.microsoft.com/en-us/download/details.aspx?id=30653]: Microsoft .NET Framework 4.5 (Already pre-installed on Windows 8 and 8.1)
+* [Microsoft .NET Framework 4.5 (Already pre-installed on Windows 8 and 8.1)](http://www.microsoft.com/en-us/download/details.aspx?id=30653)
 
 Small and lightweight application with just one executable file.
 No installation needed, this software is portable and free!
