@@ -38,6 +38,7 @@ namespace SystemInfoSnapshot
         public string InstallDate { get; private set; }
         #endregion
 
+        #region Construtor
         public InstalledProgram(string name, string version, string publisher, string installdate)
         {
             Name = name;
@@ -45,7 +46,9 @@ namespace SystemInfoSnapshot
             Publisher = publisher;
             InstallDate = installdate;
         }
+        #endregion
 
+        #region Overrides
         private bool Equals(InstalledProgram other)
         {
             return string.Equals(Name, other.Name);
@@ -62,7 +65,9 @@ namespace SystemInfoSnapshot
         {
             return (Name != null ? Name.GetHashCode() : 0);
         }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// Gets a list of programs installed on this machine.
         /// </summary>
@@ -99,31 +104,47 @@ namespace SystemInfoSnapshot
                         {
                             using (RegistryKey subkey = key.OpenSubKey(subkeyName))
                             {
-                                var name = (string)subkey.GetValue("DisplayName");
-                                var version = (string)subkey.GetValue("DisplayVersion");
-                                var publisher = (string)subkey.GetValue("Publisher");
-                                var installDate = (string)subkey.GetValue("InstallDate");
-                                //var releaseType = (string)subkey.GetValue("ReleaseType");
-                                //var unistallString = (string)subkey.GetValue("UninstallString");
-                                var systemComponent = subkey.GetValue("SystemComponent");
-                                //var parentName = (string)subkey.GetValue("ParentDisplayName");
-
-                                
-                                if(!(!string.IsNullOrEmpty(name)
-                                //&& string.IsNullOrEmpty(releaseType)
-                                //&& string.IsNullOrEmpty(parentName)
-                                && (systemComponent == null)))
-                                    continue;
-
-                               
-                                if (!string.IsNullOrEmpty(installDate) && installDate.Length == 8)
+                                try
                                 {
-                                    installDate = string.Format("{0}-{1}-{2}", installDate.Substring(0, 4), installDate.Substring(4, 2), installDate.Substring(6, 2));
-                                }
+                                    object val;
+                                    val = subkey.GetValue("DisplayName");
+                                    var name = val == null ? string.Empty : val.ToString();
 
-                                var iprogram = new InstalledProgram(name, version, publisher, installDate);
-                                if (!result.Contains(iprogram))
-                                    result.Add(iprogram);
+                                    val = subkey.GetValue("DisplayVersion");
+                                    var version = val == null ? string.Empty : val.ToString();
+
+                                    val = subkey.GetValue("Publisher");
+                                    var publisher = val == null ? string.Empty : val.ToString();
+
+                                    val = subkey.GetValue("InstallDate");
+                                    var installDate = val == null ? string.Empty : val.ToString();
+
+                                    //var releaseType = (string)subkey.GetValue("ReleaseType");
+                                    //var unistallString = (string)subkey.GetValue("UninstallString");
+                                    var systemComponent = subkey.GetValue("SystemComponent");
+                                    //var parentName = (string)subkey.GetValue("ParentDisplayName");
+
+
+                                    if (!(!string.IsNullOrEmpty(name)
+                                        //&& string.IsNullOrEmpty(releaseType)
+                                        //&& string.IsNullOrEmpty(parentName)
+                                    && (systemComponent == null)))
+                                        continue;
+
+
+                                    if (!string.IsNullOrEmpty(installDate) && installDate.Length == 8)
+                                    {
+                                        installDate = string.Format("{0}-{1}-{2}", installDate.Substring(0, 4), installDate.Substring(4, 2), installDate.Substring(6, 2));
+                                    }
+
+                                    var iprogram = new InstalledProgram(name, version, publisher, installDate);
+                                    if (!result.Contains(iprogram))
+                                        result.Add(iprogram);
+                                }
+                                catch (Exception)
+                                {
+                                    // ignored
+                                }
                             }
                         }
                     }
@@ -134,6 +155,6 @@ namespace SystemInfoSnapshot
 
             return result;
         }
-
+        #endregion
     }
 }
