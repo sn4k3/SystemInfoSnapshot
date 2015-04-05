@@ -6,7 +6,7 @@ namespace SystemInfoSnapshot
 {
     static class Program
     {
-
+        public const string Website = "http://systeminfosnapshot.com";
         public static HTMLTemplate HtmlTemplate;
         /// <summary>
         /// The main entry point for the application.
@@ -23,13 +23,13 @@ namespace SystemInfoSnapshot
             if (args.Contains("/s") || args.Contains("-s") || args.Contains("--silent"))
             {
                 WriteTemplate();
+                ProcessHelper.ShowInExplorer(Program.HtmlTemplate.LastSaveFilePath);
+                return;
             }
-            else
-            {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new FrmMain());
-            }
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new FrmMain());
             
         }
 

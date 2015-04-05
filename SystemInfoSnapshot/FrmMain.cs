@@ -9,7 +9,14 @@ namespace SystemInfoSnapshot
 {
     public partial class FrmMain : Form
     {
+        #region Properties
+        /// <summary>
+        /// Button list to be disabled and enabled.
+        /// </summary>
         private readonly Button[] Buttons;
+        #endregion
+
+        #region Constructor
         public FrmMain()
         {
             InitializeComponent();
@@ -18,28 +25,46 @@ namespace SystemInfoSnapshot
                 btnRebuildReport,
                 btnOpenReport,
                 btnOpenReport2,
+                btnOpenFolder,
+                btnOpenFolder2,
                 btnExit
             };
         }
+        #endregion
 
         #region Overrides
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            lbStatus.Text = @"Generating the report. Please wait...";
             bgWorker.RunWorkerAsync();
         }
 
         #endregion
 
         #region Events
+
         private void ButtonClick(object sender, EventArgs e)
         {
+            if (sender == btnWebsite)
+            {
+                using (Process process = new Process())
+                {
+                    process.StartInfo.FileName = Program.Website;
+                    process.Start();
+                    process.Close();
+                }
+                return;
+            }
             if (sender == btnRebuildReport)
             {
                 ButtonsSetEnabled(false);
                 if (!bgWorker.IsBusy)
+                {
+                    lbStatus.Text = @"Generating the report. Please wait...";
                     bgWorker.RunWorkerAsync();
+                }
                 return;
             }
             if (sender == btnOpenReport || sender == btnOpenReport2)
@@ -52,6 +77,17 @@ namespace SystemInfoSnapshot
                         process.Start();
                         process.Close();
                     }
+
+                    return;
+                }
+
+                return;
+            }
+            if (sender == btnOpenFolder || sender == btnOpenFolder2)
+            {
+                if (!string.IsNullOrEmpty(Program.HtmlTemplate.LastSaveFilePath))
+                {
+                    ProcessHelper.ShowInExplorer(Program.HtmlTemplate.LastSaveFilePath);
 
                     return;
                 }
@@ -82,6 +118,7 @@ namespace SystemInfoSnapshot
             }
             lbFilename.Text = Path.GetFileName(Program.HtmlTemplate.LastSaveFilePath);
             //lbLocation.Text = location;
+            lbStatus.Text = @"Report completed!";
         }
 
         #endregion
@@ -107,6 +144,8 @@ namespace SystemInfoSnapshot
                 lbLocation.Text = @"Desktop";
             }
         }
+
         #endregion
     }
 }
+

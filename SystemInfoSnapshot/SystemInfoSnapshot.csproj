@@ -144,6 +144,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="outlineCPU.ico" />
+    <None Include="Resources\images\web.png" />
+    <None Include="Resources\images\folder_open.png" />
     <None Include="Resources\images\open.png" />
     <None Include="Resources\images\refresh.png" />
     <None Include="Resources\images\exit.png" />

@@ -54,5 +54,20 @@ namespace SystemInfoSnapshot
         {
             ManagementObjects.Clear();
         }
+
+        /// <summary>
+        /// Show and select a file in explorer
+        /// </summary>
+        /// <param name="path">Path to the file.</param>
+        public static void ShowInExplorer(string path)
+        {
+            using (Process process = new Process())
+            {
+                process.StartInfo.FileName = "explorer.exe";
+                process.StartInfo.Arguments = string.Format("/select,\"{0}\"", path);
+                process.Start();
+                process.Close();
+            }
+        }
     }
 }
