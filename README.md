@@ -1,5 +1,6 @@
 # System Info Snapshot
 Collect the computer and system info at a given time in order to track issues or problems.
+
 You can share the generated report with your friend or someone of your trust to help you detect your computer problem at a given moment.
 
 # Included Reports
@@ -16,9 +17,9 @@ You can share the generated report with your friend or someone of your trust to 
 
 
 # Usage
-1.Run program (.exe) as Administrator.
-2.Wait util report gets generated.
-3.Open or send the report to someone who can read it and analyse or problem.
+1. Run program (.exe) as Administrator.
+2. Wait util report gets generated.
+3. Open or send the report to someone who can read it and analyse or problem.
 
 
 Note: Program can be executed with '-s', '/s' or '--silent' argument to skip GUI.
@@ -56,5 +57,5 @@ Small and lightweight application with just one executable file.
 No installation needed, this software is portable and free!
 
 
-# Download
+# Download and demos
 http://systeminfosnapshot.com/
