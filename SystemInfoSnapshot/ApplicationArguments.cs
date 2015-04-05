@@ -37,7 +37,7 @@ namespace SystemInfoSnapshot
         public readonly Dictionary<string, string[]>  Arguments = new Dictionary<string, string[]>
         {
             {"Null",        new []{"-n", "/n", "--null"}},
-            {"Silent",      new []{"-n", "/n", "--silent"}},
+            {"Silent",      new []{"-s", "/s", "--silent"}},
             {"OpenReport",  new []{"-o", "/o", "--open-report"}}
         };
 
