@@ -7,7 +7,7 @@ namespace SystemInfoSnapshot
     static class Program
     {
 
-        public static HTMLTemplate htmlTemplate;
+        public static HTMLTemplate HtmlTemplate;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -17,8 +17,9 @@ namespace SystemInfoSnapshot
             AppDomain.CurrentDomain.AssemblyResolve += EmbeddedAssembly.OnResolveAssembly;
 
             var args = Environment.GetCommandLineArgs().ToList();
-            htmlTemplate = new HTMLTemplate();
+            HtmlTemplate = new HTMLTemplate();
 
+            // Silent mode, skip GUI.
             if (args.Contains("/s") || args.Contains("-s") || args.Contains("--silent"))
             {
                 WriteTemplate();
@@ -32,15 +33,18 @@ namespace SystemInfoSnapshot
             
         }
 
+        /// <summary>
+        /// Write all info into template and output the html file.
+        /// </summary>
         public static void WriteTemplate()
         {
-            htmlTemplate.WriteTitle(SystemInfo.GetTitleHTML());
-            htmlTemplate.WriteSystemInfo(SystemInfo.GetSystemInfoHTML());
-            htmlTemplate.WriteProcesses(SystemInfo.GetProcessesHTML());
-            htmlTemplate.WriteServices(SystemInfo.GetServicesHTML());
-            htmlTemplate.WriteStartup(SystemInfo.GetStartupHTML());
-            htmlTemplate.WritePrograms(SystemInfo.GetProgramsHTML());
-            htmlTemplate.WriteToFile();
+            HtmlTemplate.WriteTitle(SystemInfo.GetTitleHtml());
+            HtmlTemplate.WriteSystemInfo(SystemInfo.GetSystemInfoHTML());
+            HtmlTemplate.WriteProcesses(SystemInfo.GetProcessesHtml());
+            HtmlTemplate.WriteServices(SystemInfo.GetServicesHtml());
+            HtmlTemplate.WriteStartup(SystemInfo.GetStartupHtml());
+            HtmlTemplate.WritePrograms(SystemInfo.GetProgramsHtml());
+            HtmlTemplate.WriteToFile();
         }
     }
 }

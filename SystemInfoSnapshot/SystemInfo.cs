@@ -2,40 +2,49 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Management;
 using System.ServiceProcess;
-using Microsoft.Win32;
 using OpenHardwareMonitor.Hardware;
 
 namespace SystemInfoSnapshot
 {
-    public sealed class SystemInfo
+    /// <summary>
+    /// Provide methods to get system info
+    /// </summary>
+    public static class SystemInfo
     {
-        public static string GetTitleHTML()
+        /// <summary>
+        /// Gets the page title in html.
+        /// </summary>
+        /// <returns>A string with formated html.</returns>
+        public static string GetTitleHtml()
         {
             return string.Format("{0} - {1}", Environment.MachineName, DateTime.Now.ToString(CultureInfo.InvariantCulture));
         }
 
-        public static string GetProcessesHTML()
+        /// <summary>
+        /// Gets the system processes in html.
+        /// </summary>
+        /// <returns>A string with formated html.</returns>
+        public static string GetProcessesHtml()
         {
             var result = "<table data-sortable class=\"table table-striped table-bordered table-responsive table-hover sortable-theme-bootstrap\">" +
-                         "<thead>" +
-                         "<tr>" +
-                         "<th>#</th>" +
-                         "<th>PID</th>" +
-                         //"<th>Title</th>" +
-                         "<th>Name</th>" +
-                         //"<th>Window Title</th>" +
-                         "<th>File</th>" +
-                         //"<th>Machine Name</th>" +
-                         "<th>Up Time</th>" +
-                         //"<th>CPU</th>" +
-                         "<th>Threads</th>" +
-                         "<th>Memory (MB)</th>" +
-                         "<th>Peak Memory (MB)</th>" +
-                         "</tr>" +
-                         "</thead>" +
+                             "<thead>" +
+                                "<tr>" +
+                                    "<th>#</th>" +
+                                    "<th>PID</th>" +
+                                    //"<th>Title</th>" +
+                                    "<th>Name</th>" +
+                                    //"<th>Window Title</th>" +
+                                    "<th>File</th>" +
+                                    //"<th>Machine Name</th>" +
+                                    "<th>Up Time</th>" +
+                                    //"<th>CPU</th>" +
+                                    "<th>Threads</th>" +
+                                    "<th>Memory (MB)</th>" +
+                                    "<th>Peak Memory (MB)</th>" +
+                                "</tr>" +
+                             "</thead>" +
                          "<tbody>";
             var i = 0;
             foreach (var process in Process.GetProcesses())
@@ -46,53 +55,57 @@ namespace SystemInfoSnapshot
                 {
                     var processinfo = ProcessHelper.GetProcessInfo(process);
                     result += "<tr>" +
-                              "<td class=\"index\">" + i + "</td>" +
-                              "<td class=\"pid\">" + process.Id + "</td>" +
-                        //"<td>" + proccess.Modules[0].ModuleName + "</td>" +
-                              "<td class=\"name\">" + process.ProcessName + "</td>" +
-                              //"<td>" + process.MainWindowTitle + "</td>" +
-                              "<td class=\"file\">" + (processinfo[ProcessHelper.ExecutablePath] ?? string.Empty) + "</td>" +
-                        //"<td>" + proccess.MachineName + "</td>" +
-                        "<td class=\"uptime\">" + (processinfo[ProcessHelper.StartTime] != null ? DateTime.Now.Subtract(ManagementDateTimeConverter.ToDateTime(processinfo[ProcessHelper.StartTime].ToString())).ToString() : string.Empty) + "</td>" +
-                        //"<td>" + process.UserProcessorTime + "</td>" +
-                              "<td class=\"threads\">" + process.Threads.Count + "</td>" +
-                              "<td class=\"memory\" data-value=\"" + process.WorkingSet64 + "\">" + (process.WorkingSet64 / 1024.0 / 1024.0).ToString("#.##") + "</td>" +
-                              "<td class=\"peakmemory\" data-value=\"" + process.PeakWorkingSet64 + "\">" + (process.PeakWorkingSet64 / 1024.0 / 1024.0).ToString("#.##") + "</td>" +
+                                "<td class=\"index\">" + i + "</td>" +
+                                "<td class=\"pid\">" + process.Id + "</td>" +
+                                //"<td>" + proccess.Modules[0].ModuleName + "</td>" +
+                                "<td class=\"name\">" + process.ProcessName + "</td>" +
+                                //"<td>" + process.MainWindowTitle + "</td>" +
+                                "<td class=\"file\">" + (processinfo[ProcessHelper.ExecutablePath] ?? string.Empty) + "</td>" +
+                                //"<td>" + proccess.MachineName + "</td>" +
+                                "<td class=\"uptime\">" + (processinfo[ProcessHelper.StartTime] != null ? DateTime.Now.Subtract(ManagementDateTimeConverter.ToDateTime(processinfo[ProcessHelper.StartTime].ToString())).ToString() : string.Empty) + "</td>" +
+                                 //"<td>" + process.UserProcessorTime + "</td>" +
+                                "<td class=\"threads\">" + process.Threads.Count + "</td>" +
+                                "<td class=\"memory\" data-value=\"" + process.WorkingSet64 + "\">" + (process.WorkingSet64 / 1024.0 / 1024.0).ToString("#.##") + "</td>" +
+                                "<td class=\"peakmemory\" data-value=\"" + process.PeakWorkingSet64 + "\">" + (process.PeakWorkingSet64 / 1024.0 / 1024.0).ToString("#.##") + "</td>" +
                               "</tr>";
                 }
                 catch (Exception)
                 {
+                    // ignored
                 }
-                
             }
             result += "</tbody></table>";
             return result;
         }
 
-        public static string GetServicesHTML()
+        /// <summary>
+        /// Gets the system services.
+        /// </summary>
+        /// <returns>A string with formated html.</returns>
+        public static string GetServicesHtml()
         {
             // get list of Windows services
-            ServiceController[] services = ServiceController.GetServices();
+            var services = ServiceController.GetServices();
             
             var result = "<table data-sortable class=\"table table-striped table-bordered table-responsive table-hover sortable-theme-bootstrap\">" +
-                         "<thead>" +
-                         "<tr>" +
-                         "<th>#</th>" +
-                         "<th>Display Name</th>" +
-                         "<th>Service Name</th>" +
-                         "<th>Service Type</th>" +
-                         //"<th>Machine Name</th>" +
-                         "<th width=\"180\" class=\"text-center\">Can Pause/Continue</th>" +
-                         "<th width=\"180\" class=\"text-center\">Can Shutdown</th>" +
-                         "<th width=\"180\" class=\"text-center\">Can Stop</th>" +
-                         "<th>Status</th>" +
-                         "</tr>" +
-                         "</thead>" +
+                            "<thead>" +
+                                "<tr>" +
+                                    "<th>#</th>" +
+                                    "<th>Display Name</th>" +
+                                    "<th>Service Name</th>" +
+                                    "<th>Service Type</th>" +
+                                    //"<th>Machine Name</th>" +
+                                    "<th width=\"180\" class=\"text-center\">Can Pause/Continue</th>" +
+                                    "<th width=\"180\" class=\"text-center\">Can Shutdown</th>" +
+                                    "<th width=\"180\" class=\"text-center\">Can Stop</th>" +
+                                    "<th>Status</th>" +
+                                "</tr>" +
+                            "</thead>" +
                          "<tbody>";
 
             var i = 0;
             // try to find service name
-            foreach (ServiceController service in services)
+            foreach (var service in services)
             {
                 i++;
                 result += "<tr>" +
@@ -130,17 +143,21 @@ namespace SystemInfoSnapshot
             return result;
         }
 
-        public static string GetStartupHTML()
+        /// <summary>
+        /// Gets the system startup applications.
+        /// </summary>
+        /// <returns>A string with formated html.</returns>
+        public static string GetStartupHtml()
         {
             var result = "<table data-sortable class=\"table table-striped table-bordered table-responsive table-hover sortable-theme-bootstrap\">" +
-                         "<thead>" +
-                         "<tr>" +
-                         "<th>#</th>" +
-                         "<th>Key</th>" +
-                         "<th>Program</th>" +
-                         "<th>File</th>" +
-                         "</tr>" +
-                         "</thead>" +
+                            "<thead>" +
+                                "<tr>" +
+                                    "<th>#</th>" +
+                                    "<th>Key</th>" +
+                                    "<th>Program</th>" +
+                                    "<th>File</th>" +
+                                "</tr>" +
+                            "</thead>" +
                          "<tbody>";
             var i = 0;
             var autoruns = Autorun.GetAutoruns();
@@ -148,11 +165,11 @@ namespace SystemInfoSnapshot
             {
                 i++;
                 result += "<tr>" +
-                            "<td class=\"index\">" + i + "</td>" +
-                            "<td class=\"key\">" + autorun.Key + "</td>" +
-                            "<td class=\"program\">" + autorun.Name + "</td>" +
-                            "<td class=\"file\">" + autorun.Path + "</td>" +
-                            "</tr>";
+                            "<td class=\"index\">"   + i +              "</td>" +
+                            "<td class=\"key\">"     + autorun.Key +    "</td>" +
+                            "<td class=\"program\">" + autorun.Program +"</td>" +
+                            "<td class=\"file\">"    + autorun.Path +   "</td>" +
+                           "</tr>";
             }
             
 
@@ -160,31 +177,35 @@ namespace SystemInfoSnapshot
             return result;
         }
 
-        public static string GetProgramsHTML()
+        /// <summary>
+        /// Gets the installed programs in the system.
+        /// </summary>
+        /// <returns>A string with formated html.</returns>
+        public static string GetProgramsHtml()
         {
             var result = "<table data-sortable class=\"table table-striped table-bordered table-responsive table-hover sortable-theme-bootstrap\">" +
-                         "<thead>" +
-                         "<tr>" +
-                         "<th>#</th>" +
-                         "<th>Program</th>" +
-                         "<th>Version</th>" +
-                         "<th>Publisher</th>" +
-                         "<th>Install Date</th>" +
-                         "</tr>" +
-                         "</thead>" +
-                         "<tbody>";
+                            "<thead>" +
+                                "<tr>" +
+                                "<th>#</th>" +
+                                "<th>Program</th>" +
+                                "<th>Version</th>" +
+                                "<th>Publisher</th>" +
+                                "<th>Install Date</th>" +
+                                "</tr>" +
+                            "</thead>" +
+                            "<tbody>";
             var i = 0;
             var programs = InstalledProgram.GetInstalledPrograms();
             foreach (var program in programs)
             {
                 i++;
                 result += "<tr>" +
-                            "<td class=\"index\">" + i + "</td>" +
-                            "<td class=\"program\">" + program.Name + "</td>" +
-                            "<td class=\"version\">" + program.Version + "</td>" +
-                            "<td class=\"publisher\">" + program.Publisher + "</td>" +
+                            "<td class=\"index\">"       + i +                   "</td>" +
+                            "<td class=\"program\">"     + program.Name +        "</td>" +
+                            "<td class=\"version\">"     + program.Version +     "</td>" +
+                            "<td class=\"publisher\">"   + program.Publisher +   "</td>" +
                             "<td class=\"installdate\">" + program.InstallDate + "</td>" +
-                            "</tr>";
+                           "</tr>";
 
 
             }
@@ -192,7 +213,10 @@ namespace SystemInfoSnapshot
             return result;
         }
 
-
+        /// <summary>
+        /// Gets the geral system info in html
+        /// </summary>
+        /// <returns>A string with formated html.</returns>
         public static string GetSystemInfoHTML()
         {
             
@@ -257,9 +281,15 @@ namespace SystemInfoSnapshot
             return result;
         }
 
-        private static string renderHardware(IHardware[] ihardware)
+        /// <summary>
+        /// Gets a formated string from a collection of <see cref="IHardware"/>
+        /// </summary>
+        /// <param name="ihardware"></param>
+        /// <returns>A string with formated html.</returns>
+        private static string renderHardware(IEnumerable<IHardware> ihardware)
         {
-            Dictionary<HardwareType, string> HardwareIcon = new Dictionary<HardwareType, string>
+            // Icons to render
+            var HardwareIcon = new Dictionary<HardwareType, string>
             {
                 {HardwareType.Mainboard, "fa fa-cloud fa-3x"},
                 {HardwareType.SuperIO, "fa fa-cubes fa-3x"},
@@ -269,7 +299,7 @@ namespace SystemInfoSnapshot
                 {HardwareType.GpuAti, "fa fa-picture-o fa-3x"},
                 {HardwareType.HDD, "fa fa-hdd-o fa-3x"},
             };
-            Dictionary<SensorType, string> SensorIcon = new Dictionary<SensorType, string>
+            var SensorIcon = new Dictionary<SensorType, string>
             {
                 {SensorType.Clock, "fa fa-clock-o fa-2x"},
                 {SensorType.Control, "fa fa-tachometer fa-2x"},
@@ -283,7 +313,7 @@ namespace SystemInfoSnapshot
                 {SensorType.Temperature, "fa fa-fire fa-2x"},
                 {SensorType.Voltage, "fa fa-bolt fa-2x"},
             };
-            Dictionary<SensorType, string> SensorUnit = new Dictionary<SensorType, string>
+            var SensorUnit = new Dictionary<SensorType, string>
             {
                 {SensorType.Clock, "MHz"},
                 {SensorType.Control, "%"},
@@ -345,9 +375,10 @@ namespace SystemInfoSnapshot
                         sensor.Value.HasValue ? sensor.Value.Value.ToString("#.##") : "no value",
                         SensorUnit[sensor.SensorType]);
 
+                    // Print a progress bar for some sensor types.
                     if (sensor.Value.HasValue && (sensor.SensorType == SensorType.Temperature || sensor.SensorType == SensorType.Load || sensor.SensorType == SensorType.Control))
                     {
-                        string progressbarType = "info";
+                        string progressbarType;
                         if (sensor.Value >= 80)
                         {
                             progressbarType = "danger";
@@ -364,10 +395,13 @@ namespace SystemInfoSnapshot
                         {
                             progressbarType = "success";
                         }
-                        result += "<p></p><div class=\"progress\">" +
-                                  "<div class=\"progress-bar progress-bar-" + progressbarType + "\" role=\"progressbar\" aria-valuenow=\"" + (int)sensor.Value +
-                                  "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: " + (int)sensor.Value +
-                                  "%;\"><strong>" + sensor.Value.Value.ToString("#.##") + "%</strong></div></div>";
+                        result += "<p></p>" +
+                                  "<div class=\"progress\">" +
+                                    "<div class=\"progress-bar progress-bar-" + progressbarType + "\" role=\"progressbar\" aria-valuenow=\"" + (int)sensor.Value +
+                                    "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: " + (int)sensor.Value + "%;\">" +
+                                        "<strong>" + sensor.Value.Value.ToString("#.##") + "%</strong>" +
+                                    "</div>" +
+                                  "</div>";
                     }
 
                     result += "</div></div>";

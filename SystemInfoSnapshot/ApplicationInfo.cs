@@ -7,10 +7,19 @@ using System.Threading.Tasks;
 
 namespace SystemInfoSnapshot
 {
+    /// <summary>
+    /// Provide info about this application
+    /// </summary>
     public static class ApplicationInfo
     {
+        /// <summary>
+        /// Gets the application version.
+        /// </summary>
         public static Version Version { get { return Assembly.GetCallingAssembly().GetName().Version; } }
 
+        /// <summary>
+        /// Gets the application title
+        /// </summary>
         public static string Title
         {
             get
@@ -25,39 +34,53 @@ namespace SystemInfoSnapshot
             }
         }
 
+        /// <summary>
+        /// Gets the product name.
+        /// </summary>
         public static string ProductName
         {
             get
             {
                 object[] attributes = Assembly.GetCallingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-                return attributes.Length == 0 ? "" : ((AssemblyProductAttribute)attributes[0]).Product;
+                return attributes.Length == 0 ? string.Empty : ((AssemblyProductAttribute)attributes[0]).Product;
             }
         }
 
+
+        /// <summary>
+        /// Gets the description of this application.
+        /// </summary>
         public static string Description
         {
             get
             {
                 object[] attributes = Assembly.GetCallingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
-                return attributes.Length == 0 ? "" : ((AssemblyDescriptionAttribute)attributes[0]).Description;
+                return attributes.Length == 0 ? string.Empty : ((AssemblyDescriptionAttribute)attributes[0]).Description;
             }
         }
 
+        /// <summary>
+        /// Gets the copyright of this application.
+        /// </summary>
         public static string CopyrightHolder
         {
             get
             {
                 object[] attributes = Assembly.GetCallingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-                return attributes.Length == 0 ? "" : ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
+                return attributes.Length == 0 ? string.Empty : ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
             }
         }
 
+
+        /// <summary>
+        /// Gets the company name of this application.
+        /// </summary>
         public static string CompanyName
         {
             get
             {
                 object[] attributes = Assembly.GetCallingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-                return attributes.Length == 0 ? "" : ((AssemblyCompanyAttribute)attributes[0]).Company;
+                return attributes.Length == 0 ? string.Empty : ((AssemblyCompanyAttribute)attributes[0]).Company;
             }
         }
 

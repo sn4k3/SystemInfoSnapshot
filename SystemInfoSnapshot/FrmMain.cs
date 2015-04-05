@@ -44,11 +44,11 @@ namespace SystemInfoSnapshot
             }
             if (sender == btnOpenReport || sender == btnOpenReport2)
             {
-                if (!string.IsNullOrEmpty(Program.htmlTemplate.LastSaveFilePath))
+                if (!string.IsNullOrEmpty(Program.HtmlTemplate.LastSaveFilePath))
                 {
                     using (Process process = new Process())
                     {
-                        process.StartInfo.FileName = Program.htmlTemplate.LastSaveFilePath;
+                        process.StartInfo.FileName = Program.HtmlTemplate.LastSaveFilePath;
                         process.Start();
                         process.Close();
                     }
@@ -75,12 +75,12 @@ namespace SystemInfoSnapshot
         private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             ButtonsSetEnabled(true);
-            var location = Path.GetDirectoryName(Program.htmlTemplate.LastSaveFilePath);
+            var location = Path.GetDirectoryName(Program.HtmlTemplate.LastSaveFilePath);
             if (string.IsNullOrEmpty(location))
             {
                 location = Application.StartupPath;
             }
-            lbFilename.Text = Path.GetFileName(Program.htmlTemplate.LastSaveFilePath);
+            lbFilename.Text = Path.GetFileName(Program.HtmlTemplate.LastSaveFilePath);
             //lbLocation.Text = location;
         }
 

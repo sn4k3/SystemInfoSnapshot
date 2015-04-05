@@ -8,12 +8,32 @@ using Microsoft.Win32;
 
 namespace SystemInfoSnapshot
 {
+    /// <summary>
+    /// Represents a install program in the system.
+    /// </summary>
     public sealed class InstalledProgram
     {
+        #region Properties
+        /// <summary>
+        /// Program display name.
+        /// </summary>
         public string Name { get; private set; }
+
+        /// <summary>
+        /// Program display version.
+        /// </summary>
         public string Version { get; private set; }
+
+        /// <summary>
+        /// Program Publisher.
+        /// </summary>
         public string Publisher { get; private set; }
+
+        /// <summary>
+        /// Program installed dated.
+        /// </summary>
         public string InstallDate { get; private set; }
+        #endregion
 
         public InstalledProgram(string name, string version, string publisher, string installdate)
         {
@@ -40,6 +60,10 @@ namespace SystemInfoSnapshot
             return (Name != null ? Name.GetHashCode() : 0);
         }
 
+        /// <summary>
+        /// Gets a list of programs installed on this machine.
+        /// </summary>
+        /// <returns></returns>
         public static List<InstalledProgram> GetInstalledPrograms()
         {
             var programs = new Dictionary<RegistryKey, string[]>
@@ -89,7 +113,6 @@ namespace SystemInfoSnapshot
                                     continue;
 
                                
-
                                 if (!string.IsNullOrEmpty(installDate) && installDate.Length == 8)
                                 {
                                     installDate = string.Format("{0}-{1}-{2}", installDate.Substring(0, 4), installDate.Substring(4, 2), installDate.Substring(6, 2));

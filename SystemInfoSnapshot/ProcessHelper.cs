@@ -11,34 +11,11 @@ namespace SystemInfoSnapshot
         public const string StartTime = "CreationDate";
         public const string Caption = "Caption ";
 
+        /// <summary>
+        /// Cache for process info.
+        /// </summary>
         private static readonly List<ManagementObject> ManagementObjects = new List<ManagementObject>(); 
 
-        /*public static string ProcessExecutablePath(Process process)
-        {
-            try
-            {
-                return process.MainModule.FileName;
-            }
-            catch
-            {
-                string query = "SELECT ExecutablePath, ProcessID FROM Win32_Process where ProcessId='"+process.Id+"'";
-                var searcher = new ManagementObjectSearcher(query);
-
-                foreach (var o in searcher.Get())
-                {
-                    var item = (ManagementObject) o;
-                    object id = item["ProcessID"];
-                    object path = item["ExecutablePath"];
-
-                    if (path != null && id.ToString() == process.Id.ToString())
-                    {
-                        return path.ToString();
-                    }
-                }
-            }
-
-            return string.Empty;
-        }*/
 
         /// <summary>
         /// Get all avaliable process information from WMI.

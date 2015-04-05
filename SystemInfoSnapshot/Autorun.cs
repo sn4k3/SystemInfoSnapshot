@@ -8,19 +8,37 @@ using Microsoft.Win32;
 
 namespace SystemInfoSnapshot
 {
+    /// <summary>
+    /// Represent a autorun program.
+    /// </summary>
     public class Autorun
     {
+        /// <summary>
+        /// Short name for program entry location.
+        /// </summary>
         public string Key { get; private set; }
-        public string Name { get; private set; }
+
+        /// <summary>
+        /// Program name.
+        /// </summary>
+        public string Program { get; private set; }
+
+        /// <summary>
+        /// Program location.
+        /// </summary>
         public string Path { get; private set; }
+
+        /// <summary>
+        /// Autorun entry location.
+        /// </summary>
         public string Location { get; private set; }
 
 
 
-        public Autorun(string key, string name, string path, string location = null)
+        public Autorun(string key, string program, string path, string location = null)
         {
             Key = key;
-            Name = name;
+            Program = program;
             Path = path;
             Location = location;
         }
@@ -31,20 +49,24 @@ namespace SystemInfoSnapshot
             if (ReferenceEquals(this, obj)) return true;
             if (obj is string)
             {
-                return Name.Equals(obj.ToString());
+                return Program.Equals(obj.ToString());
             }
             if (obj is Autorun)
             {
-                return Name.Equals(((Autorun)obj).Name);
+                return Program.Equals(((Autorun)obj).Program);
             }
             return base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
-            return (Name != null ? Name.GetHashCode() : 0);
+            return (Program != null ? Program.GetHashCode() : 0);
         }
 
+        /// <summary>
+        /// Gets all autorun programs.
+        /// </summary>
+        /// <returns>A List with all found programs.</returns>
         public static List<Autorun> GetAutoruns()
         {
             var autoruns = new Dictionary<RegistryKey, KeyValuePair<string, string>[]>
@@ -85,16 +107,14 @@ namespace SystemInfoSnapshot
                 {
                     using (var startupKey = autorun.Key.OpenSubKey(runKey.Value))
                     {
-                        if (startupKey != null)
-                        {
-                            var valueNames = startupKey.GetValueNames();
+                        if (startupKey == null) continue;
+                        var valueNames = startupKey.GetValueNames();
 
-                            result.AddRange(from valueName in valueNames 
-                                            where !string.IsNullOrEmpty(valueName) 
-                                            where startupKey.GetValueKind(valueName) == RegistryValueKind.String
-                                            where !result.Contains(new Autorun(string.Empty, valueName, string.Empty))
-                                            select new Autorun(runKey.Key, valueName, startupKey.GetValue(valueName).ToString(), runKey.Value));
-                        }
+                        result.AddRange(from valueName in valueNames 
+                            where !string.IsNullOrEmpty(valueName) 
+                            where startupKey.GetValueKind(valueName) == RegistryValueKind.String
+                            where !result.Contains(new Autorun(string.Empty, valueName, string.Empty))
+                            select new Autorun(runKey.Key, valueName, startupKey.GetValue(valueName).ToString(), runKey.Value));
                     }
                 }
             }
