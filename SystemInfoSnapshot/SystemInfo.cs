@@ -406,7 +406,7 @@ namespace SystemInfoSnapshot
                                   "<div class=\"progress\">" +
                                     "<div class=\"progress-bar progress-bar-" + progressbarType + "\" role=\"progressbar\" aria-valuenow=\"" + (int)sensor.Value +
                                     "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: " + (int)sensor.Value + "%;\">" +
-                                        "<strong>" + sensor.Value.Value.ToString("#.##") + "%</strong>" +
+                                        "<strong>" + sensor.Value.Value.ToString("#.##") + SensorUnit[sensor.SensorType] + "</strong>" +
                                     "</div>" +
                                   "</div>";
                     }
