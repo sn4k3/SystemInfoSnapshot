@@ -120,11 +120,13 @@
     <None Include="..\.gitignore">
       <Link>.gitignore</Link>
     </None>
+    <None Include="..\CHANGELOG.md">
+      <Link>CHANGELOG.md</Link>
+    </None>
     <None Include="..\README.md">
       <Link>README.md</Link>
     </None>
     <None Include="app.manifest" />
-    <None Include="CHANGELOG.md" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
