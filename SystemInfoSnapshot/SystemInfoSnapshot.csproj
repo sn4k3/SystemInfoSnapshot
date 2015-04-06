@@ -90,6 +90,7 @@
     <Compile Include="ApplicationArguments.cs" />
     <Compile Include="ApplicationInfo.cs" />
     <Compile Include="Autorun.cs" />
+    <Compile Include="Devices.cs" />
     <Compile Include="EmbeddedAssembly.cs" />
     <Compile Include="FrmMain.cs">
       <SubType>Form</SubType>
@@ -123,6 +124,7 @@
       <Link>README.md</Link>
     </None>
     <None Include="app.manifest" />
+    <None Include="CHANGELOG.md" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

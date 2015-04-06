@@ -20,6 +20,8 @@ namespace SystemInfoSnapshot
         public const string VersionVar      = "<!--VERSION-->";
         public const string TitleVar        = "<!--[TITLE]-->";
         public const string SystemInfoVar   = "<!--[SYSTEMINFO]-->";
+        public const string NetworkDevicesVar   = "<!--[NETWORKDEVICES]-->";
+        public const string UsbDevicesVar   = "<!--[USBDEVICES]-->";
         public const string ProcessesVar    = "<!--[PROCESSES]-->";
         public const string ServicesVar     = "<!--[SERVICES]-->";
         public const string StartupVar      = "<!--[STARTUPAPPS]-->";
@@ -70,6 +72,24 @@ namespace SystemInfoSnapshot
         public void WriteSystemInfo(string html)
         {
             WriteFromVar(SystemInfoVar, html);
+        }
+
+        /// <summary>
+        /// Write network devices into template.
+        /// </summary>
+        /// <param name="html">Html to write.</param>
+        public void WriteNetworkDevices(string html)
+        {
+            WriteFromVar(NetworkDevicesVar, html);
+        }
+        
+        /// <summary>
+        /// Write pluged in usb devices into template.
+        /// </summary>
+        /// <param name="html">Html to write.</param>
+        public void WritePnPDevices(string html)
+        {
+            WriteFromVar(UsbDevicesVar, html);
         }
         
         /// <summary>
@@ -138,6 +158,28 @@ namespace SystemInfoSnapshot
             LastSaveFilePath = filename;
         }
 
+        public static string NormalizeBigString(string text)
+        {
+            const uint MaxLength = 50;
+            if (text.Length < MaxLength)
+            {
+                return text;
+            }
+            if (text.Split(' ').Length > 1)
+                return text;
+
+
+            while (text.Length > MaxLength)
+            {
+                int mid = text.Length/2;
+                text = text.Remove(mid);
+            }
+
+            text = text.Insert(text.Length / 2, "(...)");
+
+            return text;
+        }
+
         /// <summary>
         /// Show and select generated html file in explorer.
         /// </summary>
@@ -165,6 +207,5 @@ namespace SystemInfoSnapshot
         {
         }
         #endregion
-
     }
 }

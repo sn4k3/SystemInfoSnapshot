@@ -40,10 +40,13 @@
 				font-size: 16px;
 			}
 		}
+
         .text-center{ text-align:center !important; }
         .panel-body { padding: 0; }
         .padding20 {padding: 20px;}
         .table { margin-bottom: 0; }
+        td{vertical-align: middle !important;}
+        .overflowx { overflow-x: auto; }
         .navbar {
             margin: 0;
             border-radius: 0;
@@ -131,6 +134,8 @@
 				<div class="collapse navbar-collapse" id="mainmenu-navbar-colapse">
 					<ul class="nav navbar-nav">
 						<li><a href="#systeminfo"><i class="glyphicon glyphicon-info-sign"></i> System Info</a></li>
+						<li><a href="#networks"><i class="fa fa-wifi"></i> Networks</a></li>
+						<li><a href="#pnpdevices"><i class="fa fa-plug"></i> PnP Devices</a></li>
 						<li><a href="#processes"><i class="glyphicon glyphicon-tasks"></i> Processes</a></li>
 						<li><a href="#services"><i class="fa fa-cogs"></i> Services</a></li>
 						<li><a href="#startupapps"><i class="glyphicon glyphicon-play"></i> Startup</a></li>
@@ -155,35 +160,49 @@
 	<div class="container-fluid">
 		<div id="systeminfo" class="panel panel-primary">
 			<div class="panel-heading"><h1><i class="glyphicon glyphicon-info-sign pull-right"></i>System Info</h1></div>
-				<div class="panel-body">
-					<!--[SYSTEMINFO]-->
+			<div class="panel-body">
+			    <!--[SYSTEMINFO]-->
 			</div>
 		</div>
+
+        <div id="networks" class="panel panel-primary">
+            <div class="panel-heading"><h1><i class="fa fa-wifi pull-right"></i>Network Devices <span class="count"></span></h1></div>
+            <div class="panel-body overflowx">
+                <!--[NETWORKDEVICES]-->
+            </div>
+        </div>
+
+        <div id="pnpdevices" class="panel panel-primary">
+            <div class="panel-heading"><h1><i class="fa fa-plug pull-right"></i>PnP Devices <span class="count"></span></h1></div>
+            <div class="panel-body overflowx">
+                <!--[USBDEVICES]-->
+            </div>
+        </div>
 		
 		<div id="processes" class="panel panel-primary">
 			<div class="panel-heading"><h1><i class="glyphicon glyphicon-tasks pull-right"></i>Processes <span class="count"></span></h1></div>
-				<div class="panel-body">
+				<div class="panel-body overflowx">
 					<!--[PROCESSES]-->
 			</div>
 		</div>
 		
 		<div id="services" class="panel panel-primary">
 			<div class="panel-heading"><h1><i class="fa fa-cogs pull-right"></i>Services <span class="count"></span></h1></div>
-				<div class="panel-body">
+				<div class="panel-body overflowx">
 					<!--[SERVICES]-->
 			</div>
 		</div>
 
         <div id="startupapps" class="panel panel-primary">
             <div class="panel-heading"><h1><i class="glyphicon glyphicon-play pull-right"></i>Startup Applications <span class="count"></span></h1></div>
-            <div class="panel-body">
+            <div class="panel-body overflowx">
                 <!--[STARTUPAPPS]-->
             </div>
         </div>
 
         <div id="installedprograms" class="panel panel-primary">
             <div class="panel-heading"><h1><i class="glyphicon glyphicon-wrench pull-right"></i>Installed Programs <span class="count"></span></h1></div>
-            <div class="panel-body">
+            <div class="panel-body overflowx">
                 <!--[PROGRAMS]-->
             </div>
         </div>

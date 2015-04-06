@@ -48,6 +48,8 @@ namespace SystemInfoSnapshot
         {
             HtmlTemplate.WriteTitle(SystemInfo.GetTitleHtml());
             HtmlTemplate.WriteSystemInfo(SystemInfo.GetSystemInfoHTML());
+            HtmlTemplate.WriteNetworkDevices(SystemInfo.GetNetworkDevicesHtml());
+            HtmlTemplate.WritePnPDevices(SystemInfo.GetPnPDevicesHtml());
             HtmlTemplate.WriteProcesses(SystemInfo.GetProcessesHtml());
             HtmlTemplate.WriteServices(SystemInfo.GetServicesHtml());
             HtmlTemplate.WriteStartup(SystemInfo.GetStartupHtml());
