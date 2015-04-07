@@ -1,5 +1,11 @@
 # Changelog
 
+# 1.1.10.0
+
+* Added a timer on GUI to inform the elapsed time in seconds
+* Changed the whole reports system [Internal]
+
+
 # 1.1.0.0
 
 * Added PnP devices

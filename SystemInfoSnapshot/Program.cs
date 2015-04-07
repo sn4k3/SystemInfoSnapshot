@@ -5,8 +5,8 @@
  * http://systeminfosnapshot.com/
  * https://github.com/sn4k3/SystemInfoSnapshot
  */
+
 using System;
-using System.Linq;
 using System.Windows.Forms;
 using SystemInfoSnapshot.Reports;
 

@@ -5,6 +5,8 @@ You can share the generated report with your friend or someone of your trust to 
 
 # Included Reports
 1. System Info
+2. Networks
+3. PnP Devices
 2. Processes
 3. Services
 4. Startup Applications
