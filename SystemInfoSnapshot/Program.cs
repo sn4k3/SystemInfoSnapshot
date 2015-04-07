@@ -8,14 +8,16 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using SystemInfoSnapshot.Reports;
 
 namespace SystemInfoSnapshot
 {
     static class Program
     {
         public const string Website = "http://systeminfosnapshot.com";
-        public static HTMLTemplate HtmlTemplate;
+        public static HtmlTemplate HtmlTemplate;
         public static ApplicationArguments ApplicationArguments;
+        public static Report[] Reports;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -24,9 +26,7 @@ namespace SystemInfoSnapshot
         {
             AppDomain.CurrentDomain.AssemblyResolve += EmbeddedAssembly.OnResolveAssembly;
             ApplicationArguments = new ApplicationArguments();
-
-            var args = Environment.GetCommandLineArgs().ToList();
-            HtmlTemplate = new HTMLTemplate();
+            Reports = Report.GetReports();
 
             // Null or Silent mode, skip GUI.
             if (ApplicationArguments.Null || ApplicationArguments.Silent)
@@ -38,7 +38,6 @@ namespace SystemInfoSnapshot
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmMain());
-            
         }
 
         /// <summary>
@@ -46,15 +45,7 @@ namespace SystemInfoSnapshot
         /// </summary>
         public static void WriteTemplate()
         {
-            HtmlTemplate.WriteTitle(SystemInfo.GetTitleHtml());
-            HtmlTemplate.WriteSystemInfo(SystemInfo.GetSystemInfoHTML());
-            HtmlTemplate.WriteNetworkDevices(SystemInfo.GetNetworkDevicesHtml());
-            HtmlTemplate.WritePnPDevices(SystemInfo.GetPnPDevicesHtml());
-            HtmlTemplate.WriteProcesses(SystemInfo.GetProcessesHtml());
-            HtmlTemplate.WriteServices(SystemInfo.GetServicesHtml());
-            HtmlTemplate.WriteStartup(SystemInfo.GetStartupHtml());
-            HtmlTemplate.WritePrograms(SystemInfo.GetProgramsHtml());
-            HtmlTemplate.WriteToFile();
+            HtmlTemplate = Report.GenerateReports(Reports);
 
             if (ApplicationArguments.Silent)
             {

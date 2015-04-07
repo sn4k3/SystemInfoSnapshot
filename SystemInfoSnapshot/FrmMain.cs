@@ -21,6 +21,16 @@ namespace SystemInfoSnapshot
         /// Button list to be disabled and enabled.
         /// </summary>
         private readonly Button[] Buttons;
+
+        /// <summary>
+        /// Gets the datetime when report generation process started
+        /// </summary>
+        public DateTime StartDateTime { get; private set; }
+
+        /// <summary>
+        /// Gets the datetime when report generation process ended
+        /// </summary>
+        public DateTime EndDateTime { get; private set; }
         #endregion
 
         #region Constructor
@@ -36,6 +46,10 @@ namespace SystemInfoSnapshot
                 btnOpenFolder2,
                 btnExit
             };
+            tmClock.Tick += (sender, args) =>
+            {
+                lbStatus.Text = string.Format("Generating the report. Please wait... {0:0.##}s", (DateTime.Now - StartDateTime).TotalSeconds);
+            };
         }
         #endregion
 
@@ -44,8 +58,7 @@ namespace SystemInfoSnapshot
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            lbStatus.Text = @"Generating the report. Please wait...";
-            bgWorker.RunWorkerAsync();
+            StartWorker();
         }
 
         #endregion
@@ -67,11 +80,7 @@ namespace SystemInfoSnapshot
             if (sender == btnRebuildReport)
             {
                 ButtonsSetEnabled(false);
-                if (!bgWorker.IsBusy)
-                {
-                    lbStatus.Text = @"Generating the report. Please wait...";
-                    bgWorker.RunWorkerAsync();
-                }
+                StartWorker();
                 return;
             }
             if (sender == btnOpenReport || sender == btnOpenReport2)
@@ -109,12 +118,23 @@ namespace SystemInfoSnapshot
             }
             lbFilename.Text = Path.GetFileName(Program.HtmlTemplate.LastSaveFilePath);
             //lbLocation.Text = location;
-            lbStatus.Text = @"Report completed!";
+            EndDateTime = DateTime.Now;
+            tmClock.Stop();
+            lbStatus.Text = string.Format("Report completed in {0:0.##}s", (EndDateTime - StartDateTime).TotalSeconds);
         }
 
         #endregion
 
         #region Methods
+
+        private void StartWorker()
+        {
+            if (bgWorker.IsBusy) return;
+            StartDateTime = DateTime.Now;
+            lbStatus.Text = @"Generating the report. Please wait...";
+            tmClock.Start();
+            bgWorker.RunWorkerAsync();
+        }
 
         private void ButtonsSetEnabled(bool enabled = true)
         {

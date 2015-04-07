@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.btnOpenReport = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
@@ -45,6 +46,7 @@
             this.lbStatus = new System.Windows.Forms.Label();
             this.lbStatusT = new System.Windows.Forms.Label();
             this.btnWebsite = new System.Windows.Forms.Button();
+            this.tmClock = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // btnOpenReport
@@ -229,6 +231,10 @@
             this.btnWebsite.UseVisualStyleBackColor = true;
             this.btnWebsite.Click += new System.EventHandler(this.ButtonClick);
             // 
+            // tmClock
+            // 
+            this.tmClock.Interval = 500;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -279,6 +285,7 @@
         private System.Windows.Forms.Label lbStatus;
         private System.Windows.Forms.Label lbStatusT;
         private System.Windows.Forms.Button btnWebsite;
+        private System.Windows.Forms.Timer tmClock;
     }
 }
 

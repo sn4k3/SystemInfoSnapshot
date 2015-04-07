@@ -14,20 +14,8 @@ namespace SystemInfoSnapshot
     /// <summary>
     /// HTML Template
     /// </summary>
-    public sealed class HTMLTemplate : IDisposable
+    public sealed class HtmlTemplate
     {
-        #region Template placeholder Constants
-        public const string VersionVar      = "<!--VERSION-->";
-        public const string TitleVar        = "<!--[TITLE]-->";
-        public const string SystemInfoVar   = "<!--[SYSTEMINFO]-->";
-        public const string NetworkDevicesVar   = "<!--[NETWORKDEVICES]-->";
-        public const string UsbDevicesVar   = "<!--[USBDEVICES]-->";
-        public const string ProcessesVar    = "<!--[PROCESSES]-->";
-        public const string ServicesVar     = "<!--[SERVICES]-->";
-        public const string StartupVar      = "<!--[STARTUPAPPS]-->";
-        public const string ProgramsVar     = "<!--[PROGRAMS]-->";
-        #endregion
-
         #region Properties
         /// <summary>
         /// Gets the whole generated html
@@ -49,85 +37,13 @@ namespace SystemInfoSnapshot
         /// <summary>
         /// Constructor
         /// </summary>
-        public HTMLTemplate()
+        public HtmlTemplate()
         {
             TemplateHTML = Resources.template;
         }
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Write page title into template.
-        /// </summary>
-        /// <param name="html">Html to write.</param>
-        public void WriteTitle(string html)
-        {
-            WriteFromVar(TitleVar, html);
-        }
-
-        /// <summary>
-        /// Write system info into template.
-        /// </summary>
-        /// <param name="html">Html to write.</param>
-        public void WriteSystemInfo(string html)
-        {
-            WriteFromVar(SystemInfoVar, html);
-        }
-
-        /// <summary>
-        /// Write network devices into template.
-        /// </summary>
-        /// <param name="html">Html to write.</param>
-        public void WriteNetworkDevices(string html)
-        {
-            WriteFromVar(NetworkDevicesVar, html);
-        }
-        
-        /// <summary>
-        /// Write pluged in usb devices into template.
-        /// </summary>
-        /// <param name="html">Html to write.</param>
-        public void WritePnPDevices(string html)
-        {
-            WriteFromVar(UsbDevicesVar, html);
-        }
-        
-        /// <summary>
-        /// Write processes info into template.
-        /// </summary>
-        /// <param name="html">Html to write.</param>
-        public void WriteProcesses(string html)
-        {
-            WriteFromVar(ProcessesVar, html);
-        }
-        
-        /// <summary>
-        /// Write services info into template.
-        /// </summary>
-        /// <param name="html">Html to write.</param>
-        public void WriteServices(string html)
-        {
-            WriteFromVar(ServicesVar, html);
-        }
-
-        /// <summary>
-        /// Write startup info into template.
-        /// </summary>
-        /// <param name="html">Html to write.</param>
-        public void WriteStartup(string html)
-        {
-            WriteFromVar(StartupVar, html);
-        }
-
-        /// <summary>
-        /// Write installed programs into template.
-        /// </summary>
-        /// <param name="html">Html to write.</param>
-        public void WritePrograms(string html)
-        {
-            WriteFromVar(ProgramsVar, html);
-        }
-
         /// <summary>
         /// Write in a placeholder variable into template.
         /// </summary>
@@ -148,11 +64,10 @@ namespace SystemInfoSnapshot
 #if !DEBUG
             filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), filename);
 #endif
-            TemplateHTML = TemplateHTML.Replace(VersionVar, ApplicationInfo.Version.ToString());
-            using (var HtmlWriter = new StreamWriter(filename))
+            using (var htmlWriter = new StreamWriter(filename))
             {
-                HtmlWriter.Write(TemplateHTML);
-                HtmlWriter.Close();
+                htmlWriter.Write(TemplateHTML);
+                htmlWriter.Close();
             }
 
             LastSaveFilePath = filename;
@@ -160,8 +75,8 @@ namespace SystemInfoSnapshot
 
         public static string NormalizeBigString(string text)
         {
-            const uint MaxLength = 50;
-            if (text.Length < MaxLength)
+            const uint maxLength = 50;
+            if (text.Length < maxLength)
             {
                 return text;
             }
@@ -169,7 +84,7 @@ namespace SystemInfoSnapshot
                 return text;
 
 
-            while (text.Length > MaxLength)
+            while (text.Length > maxLength)
             {
                 int mid = text.Length/2;
                 text = text.Remove(mid);
@@ -196,15 +111,6 @@ namespace SystemInfoSnapshot
         {
             if (string.IsNullOrEmpty(Program.HtmlTemplate.LastSaveFilePath)) return;
             ProcessHelper.Open(Program.HtmlTemplate.LastSaveFilePath);
-        }
-        #endregion
-
-        #region Overrides
-        /// <summary>
-        /// Dispose and clean resources.
-        /// </summary>
-        public void Dispose()
-        {
         }
         #endregion
     }

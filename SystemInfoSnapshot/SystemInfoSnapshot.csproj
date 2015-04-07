@@ -98,11 +98,21 @@
     <Compile Include="FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="HTMLTemplate.cs" />
+    <Compile Include="HtmlTemplate.cs" />
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="InstalledProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\Report.cs" />
+    <Compile Include="Reports\SystemInfo.cs" />
+    <Compile Include="Reports\NetworkDevices.cs" />
+    <Compile Include="Reports\PnPDevices.cs" />
+    <Compile Include="Reports\Processes.cs" />
+    <Compile Include="Reports\Services.cs" />
+    <Compile Include="Reports\Startup.cs" />
+    <Compile Include="Reports\Programs.cs" />
+    <Compile Include="Reports\Title.cs" />
+    <Compile Include="Reports\Version.cs" />
     <Compile Include="SystemInfo.cs" />
     <EmbeddedResource Include="FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
