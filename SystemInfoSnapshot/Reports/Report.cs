@@ -129,6 +129,14 @@ namespace SystemInfoSnapshot.Reports
         public static HtmlTemplate GenerateReports(Report[] reports, bool saveReport = true)
         {
             var htmlTemplate = new HtmlTemplate();
+            /*Parallel.ForEach(reports, report =>
+            {
+                Debug.WriteLine(report.GetTemplateVar());
+                report.Generate();
+                
+                //if (ReferenceEquals(htmlTemplate, null)) continue;
+                htmlTemplate.WriteFromVar(report.GetTemplateVar(), report.Html);
+            });*/
             foreach (var report in reports)
             {
                 report.Generate();
@@ -158,6 +166,4 @@ namespace SystemInfoSnapshot.Reports
         }
         #endregion
     }
-
-
 }

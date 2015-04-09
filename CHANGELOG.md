@@ -1,5 +1,12 @@
 # Changelog
 
+# 1.2.0.0
+
+* Added a new report about system info
+* Changed old system info report to hardware
+* Fixed PnP Devices not showing
+
+
 # 1.1.10.0
 
 * Added a timer on GUI to inform the elapsed time in seconds

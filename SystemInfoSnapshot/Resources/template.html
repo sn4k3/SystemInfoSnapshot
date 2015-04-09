@@ -44,6 +44,7 @@
         .text-center{ text-align:center !important; }
         .panel-body { padding: 0; }
         .padding20 {padding: 20px;}
+        .lessmarginbottom20 { margin-bottom: -20px; }
         .table { margin-bottom: 0; }
         td{vertical-align: middle !important;}
         .overflowx { overflow-x: auto; }
@@ -134,6 +135,7 @@
 				<div class="collapse navbar-collapse" id="mainmenu-navbar-colapse">
 					<ul class="nav navbar-nav">
 						<li><a href="#systeminfo"><i class="glyphicon glyphicon-info-sign"></i> System Info</a></li>
+						<li><a href="#hardware"><i class="glyphicon glyphicon-tower"></i> Hardware</a></li>
 						<li><a href="#networks"><i class="fa fa-wifi"></i> Networks</a></li>
 						<li><a href="#pnpdevices"><i class="fa fa-plug"></i> PnP Devices</a></li>
 						<li><a href="#processes"><i class="glyphicon glyphicon-tasks"></i> Processes</a></li>
@@ -160,10 +162,17 @@
 	<div class="container-fluid">
 		<div id="systeminfo" class="panel panel-primary">
 			<div class="panel-heading"><h1><i class="glyphicon glyphicon-info-sign pull-right"></i>System Info</h1></div>
-			<div class="panel-body">
+			<div class="panel-body lessmarginbottom20">
 			    <!--[SYSTEMINFO]-->
 			</div>
 		</div>
+
+        <div id="hardware" class="panel panel-primary">
+            <div class="panel-heading"><h1><i class="glyphicon glyphicon-tower pull-right"></i>Hardware</h1></div>
+            <div class="panel-body lessmarginbottom20">
+                <!--[HARDWARE]-->
+            </div>
+        </div>
 
         <div id="networks" class="panel panel-primary">
             <div class="panel-heading"><h1><i class="fa fa-wifi pull-right"></i>Network Devices <span class="count"></span></h1></div>
@@ -175,7 +184,7 @@
         <div id="pnpdevices" class="panel panel-primary">
             <div class="panel-heading"><h1><i class="fa fa-plug pull-right"></i>PnP Devices <span class="count"></span></h1></div>
             <div class="panel-body overflowx">
-                <!--[USBDEVICES]-->
+                <!--[PNPDEVICES]-->
             </div>
         </div>
 		

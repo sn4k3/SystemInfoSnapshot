@@ -69,12 +69,7 @@ namespace SystemInfoSnapshot
         {
             if (sender == btnWebsite)
             {
-                using (Process process = new Process())
-                {
-                    process.StartInfo.FileName = Program.Website;
-                    process.Start();
-                    process.Close();
-                }
+                SystemHelper.OpenLink(Program.Website);
                 return;
             }
             if (sender == btnRebuildReport)
