@@ -4,6 +4,11 @@
     {
         public const string TemplateVar = "<!--[VERSION]-->";
 
+        public Version()
+        {
+            CanAsync = false;
+        }
+
         public override string GetTemplateVar()
         {
             return TemplateVar;

@@ -1,6 +1,15 @@
 # Changelog
 
+# 1.2.20.0
+## 10/04/2015
+
+* Added more information under Autoruns about almost everything that loads with the system
+* Added autorunsc.exe from Sysinternals into projected [Embedded]
+* Changed reports are now generated with parallel threads, 100% boost over single thread on most cases - More cores more benefits
+
+
 # 1.2.0.0
+## 09/04/2015
 
 * Added a new report about system info
 * Changed old system info report to hardware
@@ -8,12 +17,14 @@
 
 
 # 1.1.10.0
+## 08/04/2015
 
 * Added a timer on GUI to inform the elapsed time in seconds
 * Changed the whole reports system [Internal]
 
 
 # 1.1.0.0
+## 07/04/2015
 
 * Added PnP devices
 * Added Network devices
@@ -22,6 +33,8 @@
 * Improved template responsive styles
 * Internal improvements
 
+
 # 1.0.0.0
+## 06/04/2015
 
 * First Release

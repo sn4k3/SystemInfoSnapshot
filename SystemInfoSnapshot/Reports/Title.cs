@@ -7,6 +7,11 @@ namespace SystemInfoSnapshot.Reports
     {
         public const string TemplateVar = "<!--[TITLE]-->";
 
+        public Title()
+        {
+            CanAsync = false;
+        }
+
         public override string GetTemplateVar()
         {
             return TemplateVar;

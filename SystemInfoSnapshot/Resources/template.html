@@ -140,7 +140,7 @@
 						<li><a href="#pnpdevices"><i class="fa fa-plug"></i> PnP Devices</a></li>
 						<li><a href="#processes"><i class="glyphicon glyphicon-tasks"></i> Processes</a></li>
 						<li><a href="#services"><i class="fa fa-cogs"></i> Services</a></li>
-						<li><a href="#startupapps"><i class="glyphicon glyphicon-play"></i> Startup</a></li>
+						<li><a href="#autoruns"><i class="glyphicon glyphicon-play"></i> Autoruns</a></li>
 						<li><a href="#installedprograms"><i class="glyphicon glyphicon-wrench"></i> Programs</a></li>
 					</ul>
 
@@ -202,10 +202,10 @@
 			</div>
 		</div>
 
-        <div id="startupapps" class="panel panel-primary">
-            <div class="panel-heading"><h1><i class="glyphicon glyphicon-play pull-right"></i>Startup Applications <span class="count"></span></h1></div>
+        <div id="autoruns" class="panel panel-primary">
+            <div class="panel-heading"><h1><i class="glyphicon glyphicon-play pull-right"></i>Autoruns <span class="count"></span></h1></div>
             <div class="panel-body overflowx">
-                <!--[STARTUPAPPS]-->
+                <!--[AUTORUNS]-->
             </div>
         </div>
 
@@ -261,11 +261,11 @@
 			event.preventDefault();
 		});
 
-        $('.panel-body table').each(function(index, value){
+        $('.panel-body').each(function(index, value){
             var items = $(this).find("tbody tr").length;
             if(items)
             {
-                $(this).parent().parent().find('.panel-heading .count').text("("+items+")");
+                $(this).closest('.panel').find('.panel-heading .count').text("("+items+")");
             }
         });
 		

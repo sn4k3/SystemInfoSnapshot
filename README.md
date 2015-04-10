@@ -10,7 +10,7 @@ You can share the generated report with your friend or someone of your trust to 
 4. PnP Devices
 5. Processes
 6. Services
-7. Startup Applications
+7. Autoruns
 8. Installed programs
 
 # GUI Screenshot

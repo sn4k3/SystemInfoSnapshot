@@ -8,6 +8,11 @@ namespace SystemInfoSnapshot.Reports
     {
         public const string TemplateVar = "<!--[SYSTEMINFO]-->";
 
+        public SystemInfo()
+        {
+            CanAsync = false;
+        }
+
         public override string GetTemplateVar()
         {
             return TemplateVar;

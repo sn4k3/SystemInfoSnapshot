@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace SystemInfoSnapshot.Reports
 {
@@ -29,7 +30,16 @@ namespace SystemInfoSnapshot.Reports
         /// Html string
         /// </summary>
         public string Html { get; protected set; }
+
+        /// <summary>
+        /// Gets the report status
+        /// </summary>
         public ReportStatus Status { get; private set; }
+
+        /// <summary>
+        /// Gets if this report worth from async
+        /// </summary>
+        public bool CanAsync { get; protected set; }
         #endregion
 
         #region Constructor
@@ -40,6 +50,7 @@ namespace SystemInfoSnapshot.Reports
         {
             Html = string.Empty;
             Status = ReportStatus.None;
+            CanAsync = true;
         }
         #endregion
 
@@ -129,20 +140,31 @@ namespace SystemInfoSnapshot.Reports
         public static HtmlTemplate GenerateReports(Report[] reports, bool saveReport = true)
         {
             var htmlTemplate = new HtmlTemplate();
-            /*Parallel.ForEach(reports, report =>
-            {
-                Debug.WriteLine(report.GetTemplateVar());
-                report.Generate();
-                
-                //if (ReferenceEquals(htmlTemplate, null)) continue;
-                htmlTemplate.WriteFromVar(report.GetTemplateVar(), report.Html);
-            });*/
+            /*List<Report> asyncReports = new List<Report>();
             foreach (var report in reports)
             {
+                if (report.CanAsync)
+                {
+                    Debug.WriteLine(report.CanAsync);
+                    asyncReports.Add(report);
+                    continue;
+                }
                 report.Generate();
                 //if (ReferenceEquals(htmlTemplate, null)) continue;
                 htmlTemplate.WriteFromVar(report.GetTemplateVar(), report.Html);
-            }
+            }*/
+
+            Parallel.ForEach(reports, report =>
+            {
+                //Debug.WriteLine(report.GetTemplateVar());
+                report.Generate();
+
+                lock (htmlTemplate.TemplateHTML)
+                {
+                    htmlTemplate.WriteFromVar(report.GetTemplateVar(), report.Html);
+                }
+            });
+            
 
             if (/*!ReferenceEquals(htmlTemplate, null) && */saveReport)
             {

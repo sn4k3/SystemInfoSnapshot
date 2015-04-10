@@ -90,6 +90,7 @@
     <Compile Include="ApplicationArguments.cs" />
     <Compile Include="ApplicationInfo.cs" />
     <Compile Include="Autorun.cs" />
+    <Compile Include="Autoruns.cs" />
     <Compile Include="Devices.cs" />
     <Compile Include="EmbeddedAssembly.cs" />
     <Compile Include="FrmMain.cs">
@@ -160,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="outlineCPU.ico" />
+    <None Include="Resources\executables\autorunsc.exe" />
     <None Include="Resources\images\web.png" />
     <None Include="Resources\images\folder_open.png" />
     <None Include="Resources\images\open.png" />
