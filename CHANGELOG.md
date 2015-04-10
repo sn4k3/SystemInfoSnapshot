@@ -5,6 +5,7 @@
 
 * Added a new argument 'single thread': Generate all the reports one by one without use parallel tasks. Best used with single core CPUs or for debuging.
 * Fixed application always crash on autoruns collection when tab icons are null
+* Fixed auto accept the eula dialog from autorunsc, this was blocking the application
 * Removed unused namespaces
 
 
