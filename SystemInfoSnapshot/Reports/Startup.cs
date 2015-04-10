@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace SystemInfoSnapshot.Reports
 {
@@ -64,6 +63,7 @@ namespace SystemInfoSnapshot.Reports
                 {"LSA Providers", "fa fa-shield"},
                 {"Network Providers", "fa fa-wifi"},
                 {"WDM", ""},
+                {"WMI", ""},
                 {"Sidebar Gadgets", ""},
             };
             var autoruns = new Autoruns();
@@ -73,13 +73,15 @@ namespace SystemInfoSnapshot.Reports
             var result = "<ul class=\"nav nav-tabs\" role=\"tablist\">";
             foreach (var autorunDict in autorunsDict)
             {
-                result += string.Format("<li role=\"presentation\" class=\"{0}\"><a href=\"#autorun_{2}\" aria-controls=\"{2}\" role=\"tab\" data-toggle=\"tab\"><i class=\"{4}\"></i> {1} ({3})</a></li>", (autorunDict.Key.Equals("Logon") ? "active" : string.Empty), autorunDict.Key, autorunDict.Key.Replace(" ", ""), autorunDict.Value.Count, icons[autorunDict.Key]);
+                result += string.Format("<li role=\"presentation\" class=\"{0}\"><a href=\"#autorun_{2}\" aria-controls=\"{2}\" role=\"tab\" data-toggle=\"tab\"><i class=\"{4}\"></i> {1} ({3})</a></li>", 
+                    autorunDict.Key.Equals("Logon") ? "active" : string.Empty, 
+                    autorunDict.Key, autorunDict.Key.Replace(" ", ""), 
+                    autorunDict.Value.Count, 
+                    icons.ContainsKey(autorunDict.Key) ? icons[autorunDict.Key] : string.Empty);
             }
             result += "</ul>";
 
 
-
-            var i = 0;
             result += "<div class=\"tab-content\">";
             foreach (var autorunDict in autorunsDict)
             {
@@ -101,7 +103,7 @@ namespace SystemInfoSnapshot.Reports
                                 "</tr>" +
                             "</thead>" +
                          "<tbody>";
-                i = 0;
+                var i = 0;
                 foreach (var autorunEntry in autorunDict.Value)
                 {
                     i++;

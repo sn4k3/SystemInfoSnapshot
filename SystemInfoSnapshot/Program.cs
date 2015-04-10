@@ -45,7 +45,7 @@ namespace SystemInfoSnapshot
         /// </summary>
         public static void WriteTemplate()
         {
-            HtmlTemplate = Report.GenerateReports(Reports);
+            HtmlTemplate = Report.GenerateReports(Reports, true, ApplicationArguments.UseSingleThread);
 
             if (ApplicationArguments.Silent)
             {

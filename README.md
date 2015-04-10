@@ -43,10 +43,15 @@ Report will be generated and the html file will show on explorer after completio
 * **Description:** Run program without showing the GUI. After the report is generated that will be shown on explorer after completion.
 * **Example:** "SystemInfoSnapshot.exe -s"
 
-##Open report on completion
+## Open report on completion
 * **Arguments:** '-o', '/o' or '--open-report'
 * **Description:** After the report is generated that will be opened automatically in the default browser.
 * **Example:** "SystemInfoSnapshot.exe -o"
+
+## Use single thread instead (No parallelism)
+* **Arguments:** '-st', '/st' or '--single-thread'
+* **Description:** Generate all the reports one by one without use parallel tasks. Best used with single core CPUs or for debuging.
+* **Example:** "SystemInfoSnapshot.exe -st"
 
 ## Examples
 1. "SystemInfoSnapshot.exe --null -o" - Generate and open the report in the default browser without showing the GUI.

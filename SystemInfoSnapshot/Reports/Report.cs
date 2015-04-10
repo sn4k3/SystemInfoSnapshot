@@ -137,33 +137,44 @@ namespace SystemInfoSnapshot.Reports
         /// <param name="reports">List of reports to generate.</param>
         /// <param name="saveReport">True for save reports in the html file.</param>
         /// <returns><see cref="HtmlTemplate"/> with the reports already written in the template.</returns>
-        public static HtmlTemplate GenerateReports(Report[] reports, bool saveReport = true)
+        public static HtmlTemplate GenerateReports(Report[] reports, bool saveReport = true, bool useSingleThread = false)
         {
             var htmlTemplate = new HtmlTemplate();
-            /*List<Report> asyncReports = new List<Report>();
-            foreach (var report in reports)
-            {
-                if (report.CanAsync)
-                {
-                    Debug.WriteLine(report.CanAsync);
-                    asyncReports.Add(report);
-                    continue;
-                }
-                report.Generate();
-                //if (ReferenceEquals(htmlTemplate, null)) continue;
-                htmlTemplate.WriteFromVar(report.GetTemplateVar(), report.Html);
-            }*/
+            //List<Report> asyncReports = new List<Report>();
 
-            Parallel.ForEach(reports, report =>
+            if (useSingleThread)
             {
-                //Debug.WriteLine(report.GetTemplateVar());
-                report.Generate();
-
-                lock (htmlTemplate.TemplateHTML)
+                foreach (var report in reports)
                 {
+                    //if (report.CanAsync)
+                    //{
+                    //    asyncReports.Add(report);
+                    //    continue;
+                    //}
+                    report.Generate();
                     htmlTemplate.WriteFromVar(report.GetTemplateVar(), report.Html);
                 }
-            });
+            }
+            else
+            {
+#if DEBUG
+                var options = new ParallelOptions { MaxDegreeOfParallelism = 1 };
+#else
+                var options = new ParallelOptions { MaxDegreeOfParallelism = -1 };
+#endif
+                Parallel.ForEach(reports, options, report =>
+                {
+                    //Debug.WriteLine(report.GetTemplateVar());
+                    report.Generate();
+
+                    lock (htmlTemplate.TemplateHTML)
+                    {
+                        htmlTemplate.WriteFromVar(report.GetTemplateVar(), report.Html);
+                    }
+                });
+            }
+
+
             
 
             if (/*!ReferenceEquals(htmlTemplate, null) && */saveReport)

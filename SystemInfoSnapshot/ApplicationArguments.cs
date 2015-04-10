@@ -32,13 +32,19 @@ namespace SystemInfoSnapshot
         public bool OpenReport { get; private set; }
 
         /// <summary>
+        /// Gets if the reports will be generated under a single thread.
+        /// </summary>
+        public bool UseSingleThread { get; private set; }
+
+        /// <summary>
         /// Variable - Arguments list
         /// </summary>
         public readonly Dictionary<string, string[]>  Arguments = new Dictionary<string, string[]>
         {
-            {"Null",        new []{"-n", "/n", "--null"}},
-            {"Silent",      new []{"-s", "/s", "--silent"}},
-            {"OpenReport",  new []{"-o", "/o", "--open-report"}}
+            {"Null",            new []{"-n", "/n", "--null"}},
+            {"Silent",          new []{"-s", "/s", "--silent"}},
+            {"OpenReport",      new []{"-o", "/o", "--open-report"}},
+            {"UseSingleThread", new []{"-st", "/st", "--single-thread"}}
         };
 
         /// <summary>

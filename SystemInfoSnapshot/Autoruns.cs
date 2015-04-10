@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
+using SystemInfoSnapshot.Properties;
 
 namespace SystemInfoSnapshot
 {
@@ -88,12 +88,12 @@ namespace SystemInfoSnapshot
                 if (string.IsNullOrEmpty(ExecutableFile))
                 {
                     ExecutableFile = Path.Combine(Path.GetTempPath(), "autorunsc.exe");
-                    File.WriteAllBytes(ExecutableFile, Properties.Resources.autorunsc);
+                    File.WriteAllBytes(ExecutableFile, Resources.autorunsc);
                 }
                 using (var proc = new Process())
                 {
                     proc.StartInfo.FileName = ExecutableFile;
-                    proc.StartInfo.Arguments = "-a * -m -c";
+                    proc.StartInfo.Arguments = "-a * -m -c -accepteula";
                     proc.StartInfo.CreateNoWindow = true;
                     proc.StartInfo.UseShellExecute = false;
                     proc.StartInfo.RedirectStandardOutput = true;

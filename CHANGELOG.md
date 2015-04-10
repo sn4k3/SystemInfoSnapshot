@@ -1,5 +1,13 @@
 # Changelog
 
+# 1.2.20.2
+## 10/04/2015
+
+* Added a new argument 'single thread': Generate all the reports one by one without use parallel tasks. Best used with single core CPUs or for debuging.
+* Fixed application always crash on autoruns collection when tab icons are null
+* Removed unused namespaces
+
+
 # 1.2.20.0
 ## 10/04/2015
 
