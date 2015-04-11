@@ -1,5 +1,17 @@
 # Changelog
 
+# 1.3.0.0
+## 11/04/2015
+
+* Added a new dashboard with information about the reports
+* Added a new section with controls to navigate between items and display them
+* Added the items with warning and danger classes can now be easily browsed and followed with the navigation controls in order to quickly find the problems
+* Added comments on javascript code
+* Fixed Html navbar overlaps to content on small resolutions
+* Changed some javascript code to improve page performance
+* Updated bootstrap version from 3.3.2 to 3.3.4
+
+
 # 1.2.20.2
 ## 10/04/2015
 

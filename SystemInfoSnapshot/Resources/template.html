@@ -8,10 +8,12 @@
         <meta name="author" content="Tiago Conceição">
         <meta name="description" content="Collect the computer and system info at a given time in order to track issues or problems.">
         <title>System Info Snapshot - <!--[TITLE]--></title>
-        <link href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/yeti/bootstrap.min.css" rel="stylesheet">
+        <link href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/yeti/bootstrap.min.css" rel="stylesheet">
         <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <link href="http://cdnjs.cloudflare.com/ajax/libs/sortable/0.6.0/css/sortable-theme-bootstrap.css" rel="stylesheet">
-        <style>
+
+        <style type="text/css">
+        /* Document and body */
         body {
             margin-top: 20px;
             position: relative;
@@ -41,19 +43,28 @@
 			}
 		}
 
+        /* Fixs and ajusts */
         .text-center{ text-align:center !important; }
         .panel-body { padding: 0; }
-        .padding20 {padding: 20px;}
-        .lessmarginbottom20 { margin-bottom: -20px; }
         .table { margin-bottom: 0; }
-        td{vertical-align: middle !important;}
+         td{vertical-align: middle !important;
+             word-wrap: break-word;
+             -webkit-hyphens: auto;
+             -moz-hyphens: auto;
+             -ms-hyphens: auto;
+             -o-hyphens: auto;
+             hyphens: auto;
+         }
         .overflowx { overflow-x: auto; }
         .navbar {
             margin: 0;
             border-radius: 0;
         }
-        /* Footer */
+        .img-responsive {
+            display: inline-block;
+        }
 
+        /* Footer */
         footer{
             border-top: #222222;
             background-color: #333333;
@@ -76,6 +87,32 @@
         footer a:hover{
             color:#008cba;
         }
+
+        /* Controls */
+        #controls {
+            width: 250px;
+            position: fixed;
+            top:70px;
+            right:20px;
+            background: rgba(250, 250, 250, 0.90);
+            border: rgba(0, 0, 0, 0.75) solid 1px;
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1000;
+
+            opacity: .4;
+            -webkit-transition: opacity .5s;
+            -moz-transition: opacity .5s;
+            transition: opacity .5s;
+        }
+
+        #controls:hover { opacity: 1; }
+
+        #controls #controls-wrapper{
+            position: relative;
+            text-align: center;
+        }
+
 
         /*[ Back to Top / #back-to-top ]*/
         #back-to-top {
@@ -104,21 +141,26 @@
         #back-to-top i {
             color: #fff;
         }
+
+        /* Utilities */
+        .padding20 {padding: 20px;}
+        .lessmarginbottom20 { margin-bottom: -20px; }
+        .border-warning { outline: #e99002 solid 5px; }
+        .border-danger { outline: #f04124 solid 5px; }
         .verybold{ font-weight: bolder; }
-        .outlineblack {text-shadow:
-        -1px -1px 0 #000,
-        1px -1px 0 #000,
-        -1px 1px 0 #000,
-        1px 1px 0 #000;}
-        .img-responsive {
-            display: inline-block;
+        .outlineblack {
+            text-shadow:
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
         }
         </style>
 	</head>
 	<body id="body" data-spy="scroll" data-target=".navbar">
 
 	<header id="mainheader">
-		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<nav id="main-navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="container-fluid">
 				<!-- Brand and toggle get grouped for better mobile display -->
 				<div class="navbar-header">
@@ -134,6 +176,7 @@
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="mainmenu-navbar-colapse">
 					<ul class="nav navbar-nav">
+						<li><a href="#dashboard"><i class="glyphicon glyphicon-dashboard"></i> Dashboard</a></li>
 						<li><a href="#systeminfo"><i class="glyphicon glyphicon-info-sign"></i> System Info</a></li>
 						<li><a href="#hardware"><i class="glyphicon glyphicon-tower"></i> Hardware</a></li>
 						<li><a href="#networks"><i class="fa fa-wifi"></i> Networks</a></li>
@@ -158,8 +201,69 @@
 			<h2><!--[TITLE]--></h2>
 		</div>
 	</header>
+
+    <div id="controls">
+        <div id="controls-wrapper">
+            <!--<p><strong>Controls</strong></p>-->
+            <div class="report">
+                <a href="javascript:;" class="navigation first" data-toggle="tooltip" data-placement="top" title="Go to the first"><i class="fa fa-angle-double-left pull-left"></i></a>
+                <a href="javascript:;" class="navigation back" data-toggle="tooltip" data-placement="top" title="Go back"><i class="fa fa-angle-left pull-left"></i></a>
+
+                <span class="text">Dashboard</span>
+
+                <a href="javascript:;" class="navigation last" data-toggle="tooltip" data-placement="top" title="Go to the last"><i class="fa fa-angle-double-right pull-right"></i></a>
+                <a href="javascript:;" class="navigation next" data-toggle="tooltip" data-placement="top" title="Go next"><i class="fa fa-angle-right pull-right"></i></a>
+            </div>
+
+            <div class="warnings">
+                <a href="javascript:;" class="navigation first" data-toggle="tooltip" data-placement="top" title="Go to the first"><i class="fa fa-angle-double-left pull-left"></i></a>
+                <a href="javascript:;" class="navigation back" data-toggle="tooltip" data-placement="top" title="Go back"><i class="fa fa-angle-left pull-left"></i></a>
+
+                <span class="text-warning"><span class="text">0</span> of <strong class="text-total">0</strong></span>
+
+                <a href="javascript:;" class="navigation last" data-toggle="tooltip" data-placement="top" title="Go to the last"><i class="fa fa-angle-double-right pull-right"></i></a>
+                <a href="javascript:;" class="navigation next" data-toggle="tooltip" data-placement="top" title="Go next"><i class="fa fa-angle-right pull-right"></i></a>
+
+                <i class="fa fa-exclamation-triangle pull-right" data-toggle="tooltip" data-placement="bottom" title="Warnings">&nbsp;&nbsp;</i>
+            </div>
+
+            <div class="problems">
+                <a href="javascript:;" class="navigation first" data-toggle="tooltip" data-placement="top" title="Go to the first"><i class="fa fa-angle-double-left pull-left"></i></a>
+                <a href="javascript:;" class="navigation back" data-toggle="tooltip" data-placement="top" title="Go back"><i class="fa fa-angle-left pull-left"></i></a>
+
+                <span class="text-danger"><span class="text">0</span> of <strong class="text-total">0</strong></span>
+
+                <a href="javascript:;" class="navigation last" data-toggle="tooltip" data-placement="top" title="Go to the last"><i class="fa fa-angle-double-right pull-right"></i></a>
+                <a href="javascript:;" class="navigation next" data-toggle="tooltip" data-placement="top" title="Go next"><i class="fa fa-angle-right pull-right"></i></a>
+                <i class="fa fa-times pull-right" data-toggle="tooltip" data-placement="bottom" title="Problems">&nbsp;&nbsp;</i>
+            </div>
+        </div>
+    </div>
 	
 	<div class="container-fluid">
+        <div id="dashboard" class="panel panel-primary">
+            <div class="panel-heading"><h1><i class="glyphicon glyphicon-dashboard pull-right"></i>Dashboard</h1></div>
+            <div class="panel-body lessmarginbottom20">
+                <!--DASHBOARD-->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="alert alert-warning text-center">
+                            <h1><i class="fa fa-exclamation-triangle fa-3x"></i></h1>
+                            <h2>Warning(s)</h2>
+                            <h1 id="dashboard-warnings">0</h1>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="alert alert-danger text-center">
+                            <h1><i class="fa fa-times fa-3x"></i></h1>
+                            <h2>Problem(s)</h2>
+                            <h1 id="dashboard-problems">0</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 		<div id="systeminfo" class="panel panel-primary">
 			<div class="panel-heading"><h1><i class="glyphicon glyphicon-info-sign pull-right"></i>System Info</h1></div>
 			<div class="panel-body lessmarginbottom20">
@@ -248,11 +352,78 @@
     </footer>
 	
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/sortable/0.6.0/js/sortable.min.js"></script>
-	<script>
+	<script type="text/javascript">
+    /*
+    * Global Variables
+    */
+    var messages = {
+        'warnings' : {
+            'index' : -1,
+            'items' : []
+        },
+        'problems' : {
+            'index' : -1,
+            'items' : []
+        }
+    };
+
+    /*
+    * Global Functions
+    */
+    function GoToMessage(oldindex, index, isWarning)
+    {
+        var obj = messages[isWarning ? 'warnings' : 'problems'];
+        if(index < 0 || index >= obj.items.length)
+            return;
+
+        var item = obj.items[index];
+        if(item['hastab'])
+        {
+            $('a[href="#'+$(item['tabelement']).attr('id')+'"]').click();
+        }
+
+        if(oldindex > -1)
+        {
+            $(obj.items[oldindex]['highlightelement']).removeClass('border-' + (isWarning ? 'warning' : 'danger'));
+        }
+
+        $('#controls .'+(isWarning ? 'warnings' : 'problems')+' .text').text(index+1);
+
+
+        $(item['highlightelement']).addClass('border-' + (isWarning ? 'warning' : 'danger'));
+        var top = Math.max(0, $(item['highlightelement']).offset().top - 100);
+        $('body, html').stop().animate({
+            scrollTop: top
+        }, 600, 'swing');
+    }
+
+    function GoToWarning(oldindex, index){
+        GoToMessage(oldindex, index, true);
+    }
+    function GoToProblem(oldindex, index){
+        GoToMessage(oldindex, index, false);
+    }
+
+    function updateResize()
+    {
+        var navbarHeight = parseInt($('#main-navbar').css("height"));
+        $('body').css('margin-top', navbarHeight);
+        $('#controls').css('top', navbarHeight+25);
+    }
+
+    /*
+    * Document Ready functions
+    */
 	$(function($) {
-		//jQuery for page scrolling feature - requires jQuery Easing plugin
+        /*
+        * Attributions and global assignments
+        */
+        $('[data-toggle="tooltip"]').tooltip();
+
+
+		//jQuery for page scrolling feature on nav click
 		$('.navbar a').on('click', function(event) {
 			var $anchor = $(this);
 			$('html, body').stop().animate({
@@ -261,6 +432,9 @@
 			event.preventDefault();
 		});
 
+        /*
+        * Update items count for each report
+        */
         $('.panel-body').each(function(index, value){
             var items = $(this).find("tbody tr").length;
             if(items)
@@ -268,10 +442,120 @@
                 $(this).closest('.panel').find('.panel-heading .count').text("("+items+")");
             }
         });
-		
+
+        /*
+        * Controls events
+        */
+        // Update current report on controls
+        $('.navbar li').on('activate.bs.scrollspy', function () {
+            $('#controls .report .text').html($(this).children().html());
+        });
+
+        // Events for navigation
+        $('#controls .report a').on('click', function(event) {
+            var text = $(this).parent().find('.text:first').text();
+            if($(this).hasClass('first'))
+            {
+                $('ul.nav:first a:first').click();
+                return;
+            }
+            if($(this).hasClass('back') || $(this).hasClass('next'))
+            {
+                var element = $("ul.nav:first li:contains('"+text+"')");
+                if(!element.length)
+                    return;
+
+                var newelement = $(this).hasClass('back') ? element.prev() : element.next();
+                if(!newelement.length)
+                    return;
+
+                $(newelement).children().click();
+
+                return;
+            }
+            if($(this).hasClass('last'))
+            {
+                $('ul.nav:first a:last').click();
+                return;
+            }
+
+        });
+
+        $('#controls .warnings a, #controls .problems a').on('click', function() {
+            var isWarning = $(this).closest('div').hasClass('warnings');
+            var obj = messages[isWarning ? 'warnings' : 'problems'];
+            var oldindex = obj.index;
+            var newindex = oldindex;
+
+            if($(this).hasClass('first'))
+            {
+                newindex = 0;
+            }
+            else if($(this).hasClass('back'))
+            {
+                if(newindex > 0)
+                {
+                    newindex--;
+                }
+            }
+            else if($(this).hasClass('next'))
+            {
+                if(newindex+1 < obj.items.length)
+                {
+                    newindex++;
+                }
+            }
+            else if($(this).hasClass('last'))
+            {
+                newindex = obj.items.length-1;
+            }
+
+            obj.index = newindex;
+
+            GoToMessage(oldindex, newindex, isWarning);
+        });
+
+        /*
+        * Build messages from html elements
+        */
+        $('[class*="progress-bar-warning"], tr[class*="warning"], [class*="progress-bar-danger"], tr[class*="danger"]').each(function(){
+            var tabelement = $(this).closest('div[class*="tab-pane"]');
+            var hastab = (tabelement.length > 0);
+            var highlightelement = this;
+            if($(this).hasClass('progress-bar'))
+            {
+                highlightelement = $(this).closest('div[class="well"]');
+            }
+            var item = {
+                'element'           : this,
+                'highlightelement'  : highlightelement,
+                'hastab'            : hastab,
+                'tabelement'        : tabelement
+            };
+
+            if($(this).is('[class*="warning"]'))
+                messages.warnings.items.push(item);
+            else
+                messages.problems.items.push(item);
+        });
+
+        /*
+        * Update Html Elements
+        */
+        updateResize();
+        $('#controls .report .text').html($('ul.nav a:first').html());
+        $('#dashboard-warnings, .warnings .text-total').text(messages.warnings.items.length);
+        $('#dashboard-problems, .problems .text-total').text(messages.problems.items.length);
+
+        // Call functions
 		enableBackToTop ();
 	});
-	
+
+    $(window).resize(updateResize);
+
+    /*
+    * Back to top functions
+    */
 	function enableBackToTop () {
 		var backToTop = $('<a>', { 'id': 'back-to-top', 'href': '#top' });
 		var icon      = $('<i>', { 'class': 'fa fa-chevron-up' });
@@ -290,7 +574,7 @@
 		});
 
 		backToTop.click (function (e) {
-			e.preventDefault ();
+			e.preventDefault();
 
 			$('body, html').animate({
 				scrollTop: 0
