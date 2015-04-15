@@ -5,9 +5,9 @@
  * http://systeminfosnapshot.com/
  * https://github.com/sn4k3/SystemInfoSnapshot
  */
+
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -48,7 +48,7 @@ namespace SystemInfoSnapshot
             };
             tmClock.Tick += (sender, args) =>
             {
-                lbStatus.Text = string.Format("Generating the report. Please wait... {0:0.##}s", (DateTime.Now - StartDateTime).TotalSeconds);
+                lbStatus.Text = string.Format("Generating the report. Please wait... {0:0.##}s", Math.Ceiling((DateTime.Now - StartDateTime).TotalSeconds));
             };
         }
         #endregion

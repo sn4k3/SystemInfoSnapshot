@@ -16,7 +16,6 @@ namespace SystemInfoSnapshot
     {
         public const string Website = "http://systeminfosnapshot.com";
         public static HtmlTemplate HtmlTemplate;
-        public static ApplicationArguments ApplicationArguments;
         public static Report[] Reports;
         /// <summary>
         /// The main entry point for the application.
@@ -25,11 +24,10 @@ namespace SystemInfoSnapshot
         static void Main()
         {
             AppDomain.CurrentDomain.AssemblyResolve += EmbeddedAssembly.OnResolveAssembly;
-            ApplicationArguments = new ApplicationArguments();
             Reports = Report.GetReports();
 
             // Null or Silent mode, skip GUI.
-            if (ApplicationArguments.Null || ApplicationArguments.Silent)
+            if (ApplicationArguments.Instance.Null || ApplicationArguments.Instance.Silent)
             {
                 WriteTemplate();
                 return;
@@ -45,14 +43,14 @@ namespace SystemInfoSnapshot
         /// </summary>
         public static void WriteTemplate()
         {
-            HtmlTemplate = Report.GenerateReports(Reports, true, ApplicationArguments.UseSingleThread);
+            HtmlTemplate = Report.GenerateReports(Reports, true, ApplicationArguments.Instance.UseSingleThread);
 
-            if (ApplicationArguments.Silent)
+            if (ApplicationArguments.Instance.Silent)
             {
                 HtmlTemplate.ShowInExplorer();
             }
 
-            if (ApplicationArguments.OpenReport)
+            if (ApplicationArguments.Instance.OpenReport)
             {
                 HtmlTemplate.OpenInDefaultBrowser();
             }

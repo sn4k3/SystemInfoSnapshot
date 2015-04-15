@@ -19,8 +19,7 @@ namespace SystemInfoSnapshot.Reports
 
         protected override void Build()
         {
-            Html = string.Format("{0} - {1}", Environment.MachineName,
-                DateTime.Now.ToString(CultureInfo.InvariantCulture));
+            HtmlWriter.Write("{0} - {1}", Environment.MachineName, DateTime.Now.ToString(CultureInfo.CurrentCulture));
         }
     }
 }

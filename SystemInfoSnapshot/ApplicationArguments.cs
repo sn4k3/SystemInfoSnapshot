@@ -16,6 +16,22 @@ namespace SystemInfoSnapshot
     /// </summary>
     public sealed class ApplicationArguments
     {
+        #region Singleton
+        /// <summary>
+        /// A instance of this class
+        /// </summary>
+        private static ApplicationArguments _instance;
+
+        /// <summary>
+        /// Gets the singleton instance of this class
+        /// </summary>
+        public static ApplicationArguments Instance
+        {
+            get { return _instance ?? (_instance = new ApplicationArguments());  }
+        }
+        #endregion
+
+        #region Properties
         /// <summary>
         /// Gets if Null mode as passed as argument.
         /// </summary>
@@ -35,7 +51,9 @@ namespace SystemInfoSnapshot
         /// Gets if the reports will be generated under a single thread.
         /// </summary>
         public bool UseSingleThread { get; private set; }
+        #endregion
 
+        #region Arguments Variable
         /// <summary>
         /// Variable - Arguments list
         /// </summary>
@@ -46,11 +64,13 @@ namespace SystemInfoSnapshot
             {"OpenReport",      new []{"-o", "/o", "--open-report"}},
             {"UseSingleThread", new []{"-st", "/st", "--single-thread"}}
         };
+        #endregion
 
+        #region Constructor
         /// <summary>
         /// Constructor. Auto initalize arguments.
         /// </summary>
-        public ApplicationArguments()
+        private ApplicationArguments()
         {
             var args = Environment.GetCommandLineArgs().ToList();
 
@@ -67,5 +87,6 @@ namespace SystemInfoSnapshot
                 }
             }
         }
+        #endregion
     }
 }

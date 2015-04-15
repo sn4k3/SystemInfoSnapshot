@@ -91,6 +91,42 @@ namespace SystemInfoSnapshot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 4loot Toolbar
+        ///Adssite ToolBar
+        ///Allin1Convert Toolbar
+        ///ALOT Toolbar
+        ///Anywhere.me Toolbar
+        ///Appbario toolbar
+        ///Appmarket Search
+        ///Appmarket Toolbar
+        ///Ask.com Toolbar
+        ///Babylon Toolbar
+        ///Baidu Toolbar
+        ///BeFrugal Toolbar
+        ///Bellsouth Toolbar
+        ///Bflix Toolbar
+        ///Binkiland.com Search
+        ///Bitlord Toolbar
+        ///Blubster Toolbar
+        ///Claro LTD Toolbar
+        ///ClixSense Toolbar
+        ///Conduit Search (Search Protect)
+        ///Connect Toolbar
+        ///ConnectSo Toolbar
+        ///CoolWebSearch
+        ///Coupon Alert Toolbar
+        ///Coupon Server
+        ///CouponXplorer Toolbar
+        ///Crawler Toolbar
+        ///CricBuzz T [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string malware {
+            get {
+                return ResourceManager.GetString("malware", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap open {

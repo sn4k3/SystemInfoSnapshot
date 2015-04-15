@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web.UI;
 using OpenHardwareMonitor.Hardware;
 
 namespace SystemInfoSnapshot.Reports
@@ -18,7 +19,52 @@ namespace SystemInfoSnapshot.Reports
             Computer computer = new Computer { CPUEnabled = true, FanControllerEnabled = true, GPUEnabled = true, HDDEnabled = true, MainboardEnabled = true, RAMEnabled = true };
             computer.Open();
 
-            var result = "<div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">" +
+            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Id, "accordion");
+            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "panel-group");
+            HtmlWriter.AddAttribute("role", "tablist");
+            HtmlWriter.AddAttribute("aria-multiselectable", "true");
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+
+            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "panel panel-default");
+            HtmlWriter.AddAttribute("role", "tab");
+            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Id, "headingOne");
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+
+            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "panel-heading");
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+
+            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "panel-title");
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.H4);
+
+            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Href, "#collapseOne");
+            HtmlWriter.AddAttribute("data-toggle", "collapse");
+            HtmlWriter.AddAttribute("data-parent", "#accordion");
+            HtmlWriter.AddAttribute("aria-expanded", "false");
+            HtmlWriter.AddAttribute("aria-controls", "collapseOne");
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.A);
+
+            HtmlWriter.RenderTag(HtmlTextWriterTag.I, HtmlTextWriterAttribute.Class, "fa fa-file-text-o", string.Empty);
+            HtmlWriter.Write(" Detailed text report");
+            HtmlWriter.RenderEndTag(); // </a>
+            HtmlWriter.RenderEndTag(); // </h4>
+            HtmlWriter.RenderEndTag(); // </div>
+
+            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Id, "collapseOne");
+            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "panel-collapse collapse");
+            HtmlWriter.AddAttribute("role", "tabpanel");
+            HtmlWriter.AddAttribute("aria-labelledby", "headingOne");
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+
+            HtmlWriter.RenderTag(HtmlTextWriterTag.Div, HtmlTextWriterAttribute.Class, "panel-body padding20", computer.GetReport().Replace(Environment.NewLine, string.Format("{0}<br>", Environment.NewLine)));
+
+            HtmlWriter.RenderEndTag(); // </div>
+            HtmlWriter.RenderEndTag(); // </div>
+            HtmlWriter.RenderEndTag(); // </div>
+
+            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "row");
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+
+            /*var result = "<div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">" +
                             "<div class=\"panel panel-default\">" +
                                "<div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">" +
                                    "<h4 class=\"panel-title\">" +
@@ -32,21 +78,15 @@ namespace SystemInfoSnapshot.Reports
                                 "</div>" +
                             "</div>" +
                          "</div>" +
-                         "<div class=\"row\">";
-            result += RenderHardware(computer.Hardware);
-            result += "</div>";
-            Html = result;
+                         "<div class=\"row\">";*/
+         
+            RenderHardware(computer.Hardware);
+
+            HtmlWriter.RenderEndTag(); // </div>
         }
 
-        /// <summary>
-        /// Gets a formated string from a collection of <see cref="IHardware"/>
-        /// </summary>
-        /// <param name="ihardware"></param>
-        /// <returns>A string with formated html.</returns>
-        private static string RenderHardware(IEnumerable<IHardware> ihardware)
-        {
-            // Icons to render
-            var HardwareIcon = new Dictionary<HardwareType, string>
+        // Icons to render
+        readonly Dictionary<HardwareType, string> HardwareIcon = new Dictionary<HardwareType, string>
             {
                 {HardwareType.Mainboard, "fa fa-cloud fa-3x"},
                 {HardwareType.SuperIO, "fa fa-cubes fa-3x"},
@@ -56,7 +96,8 @@ namespace SystemInfoSnapshot.Reports
                 {HardwareType.GpuAti, "fa fa-picture-o fa-3x"},
                 {HardwareType.HDD, "fa fa-hdd-o fa-3x"},
             };
-            var SensorIcon = new Dictionary<SensorType, string>
+
+        readonly Dictionary<SensorType, string> SensorIcon = new Dictionary<SensorType, string>
             {
                 {SensorType.Clock, "fa fa-clock-o fa-2x"},
                 {SensorType.Control, "fa fa-tachometer fa-2x"},
@@ -70,7 +111,8 @@ namespace SystemInfoSnapshot.Reports
                 {SensorType.Temperature, "fa fa-fire fa-2x"},
                 {SensorType.Voltage, "fa fa-bolt fa-2x"},
             };
-            var SensorUnit = new Dictionary<SensorType, string>
+
+        readonly Dictionary<SensorType, string> SensorUnit = new Dictionary<SensorType, string>
             {
                 {SensorType.Clock, "MHz"},
                 {SensorType.Control, "%"},
@@ -85,48 +127,78 @@ namespace SystemInfoSnapshot.Reports
                 {SensorType.Voltage, "V"},
             };
 
-            var result = string.Empty;
+        /// <summary>
+        /// Gets a formated string from a collection of <see cref="IHardware"/>
+        /// </summary>
+        /// <param name="ihardware"></param>
+        private void RenderHardware(IEnumerable<IHardware> ihardware)
+        {
             foreach (var hardware in ihardware)
             {
                 hardware.Update();
 
                 if (hardware.HardwareType == HardwareType.HDD)
                 {
-                    result += "<div class=\"col-sm-6 col-md-4 col-lg-4\">";
+                    HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "col-sm-6 col-md-4 col-lg-4");
+                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
                 }
                 else
                 {
-                    result += "<div class=\"col-sm-12\">";
+                    HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "col-sm-12");
+                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
                 }
-                result += "<div class=\"well text-center\">";
+                HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "well text-center");
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+                
                 if (HardwareIcon.ContainsKey(hardware.HardwareType))
                 {
-                    result += "<h1><i class=\"" + HardwareIcon[hardware.HardwareType] + "\"></i></h1>";
+                    if (HardwareIcon.ContainsKey(hardware.HardwareType))
+                    {
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.H1);
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.I, HtmlTextWriterAttribute.Class, HardwareIcon[hardware.HardwareType], string.Empty);
+                        HtmlWriter.RenderEndTag();
+                    }
                 }
 
-                result += string.Format("<h2>{0}</h2><h3>{1}</h3><p>&nbsp;</p>", hardware.HardwareType, hardware.Name);
+                HtmlWriter.RenderTag(HtmlTextWriterTag.H2, hardware.HardwareType.ToString());
+                HtmlWriter.RenderTag(HtmlTextWriterTag.H3, hardware.Name);
+                HtmlWriter.RenderTag(HtmlTextWriterTag.P, "&nbsp;");
 
                 SensorType? lastSensorType = null;
-                result += "<div class=\"row\">";
+                HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "row");
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
                 foreach (var sensor in hardware.Sensors)
                 {
-                    if (hardware.Sensors.Length > 3 && lastSensorType.HasValue && lastSensorType.Value != sensor.SensorType)
-                        result += "</div><div class=\"clearfix\"></div><div class=\"row\">";
+                    if (hardware.Sensors.Length > 3 && lastSensorType.HasValue &&
+                        lastSensorType.Value != sensor.SensorType)
+                    {
+                        HtmlWriter.RenderEndTag(); // </div>
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Div, HtmlTextWriterAttribute.Class, "clearfix", string.Empty);
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "row");
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+                    }
                     lastSensorType = sensor.SensorType;
                     if (hardware.HardwareType == HardwareType.HDD)
                     {
-                        result += "<div class=\"col-sm-6\"><div class=\"well\">";
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "col-sm-6");
                     }
                     else
                     {
-                        result += "<div class=\"col-sm-4 col-md-3 col-lg-2\"><div class=\"well\">";
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "col-sm-4 col-md-3 col-lg-2");
                     }
+
+                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+                    HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "well");
+                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
 
                     if (SensorIcon.ContainsKey(sensor.SensorType))
                     {
-                        result += "<h1><i class=\"" + SensorIcon[sensor.SensorType] + "\"></i></h1>";
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.H1);
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.I, HtmlTextWriterAttribute.Class, SensorIcon[sensor.SensorType], string.Empty);
+                        HtmlWriter.RenderEndTag();
                     }
-                    result += string.Format("{0} {1} = <strong>{2}{3}</strong>",
+
+                    HtmlWriter.Write("{0} {1} = <strong>{2}{3}</strong>", 
                         sensor.Name,
                         sensor.Name.Contains(sensor.SensorType.ToString()) ? string.Empty : sensor.SensorType.ToString(),
                         sensor.Value.HasValue ? sensor.Value.Value.ToString("#.##") : "no value",
@@ -135,6 +207,10 @@ namespace SystemInfoSnapshot.Reports
                     // Print a progress bar for some sensor types.
                     if (sensor.Value.HasValue && (sensor.SensorType == SensorType.Temperature || sensor.SensorType == SensorType.Load || sensor.SensorType == SensorType.Control))
                     {
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.P, string.Empty);
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "progress");
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+
                         string progressbarType;
                         if (sensor.Value >= 80)
                         {
@@ -152,23 +228,30 @@ namespace SystemInfoSnapshot.Reports
                         {
                             progressbarType = "success";
                         }
-                        result += "<p></p>" +
-                                  "<div class=\"progress\">" +
-                                    "<div class=\"progress-bar progress-bar-" + progressbarType + "\" role=\"progressbar\" aria-valuenow=\"" + (int)sensor.Value +
-                                    "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: " + (int)sensor.Value + "%;\">" +
-                                        "<strong>" + sensor.Value.Value.ToString("#.##") + SensorUnit[sensor.SensorType] + "</strong>" +
-                                    "</div>" +
-                                  "</div>";
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "progress-bar");
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, string.Format("progress-bar-{0}", progressbarType));
+                        HtmlWriter.AddAttribute("role", "progressbar");
+                        HtmlWriter.AddAttribute("aria-valuenow", ((int)sensor.Value).ToString());
+                        HtmlWriter.AddAttribute("aria-valuemin", "0");
+                        HtmlWriter.AddAttribute("aria-valuemax", "100");
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Style, string.Format("width:{0}%", (int)sensor.Value));
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Strong, string.Format("{0}{1}", sensor.Value.Value.ToString("#.##"), SensorUnit[sensor.SensorType]));
+                        HtmlWriter.RenderEndTag(); // </div>
+                        HtmlWriter.RenderEndTag(); // </div>
                     }
 
-                    result += "</div></div>";
+                    HtmlWriter.RenderEndTag(); // </div>
+                    HtmlWriter.RenderEndTag(); // </div>
                 }
 
-                result += RenderHardware(hardware.SubHardware);
+                RenderHardware(hardware.SubHardware);
 
-                result += "</div></div></div>";
+                HtmlWriter.RenderEndTag(); // </div>
+                HtmlWriter.RenderEndTag(); // </div>
+                HtmlWriter.RenderEndTag(); // </div>
             }
-            return result;
         }
     }
 }

@@ -233,7 +233,7 @@
             // 
             // tmClock
             // 
-            this.tmClock.Interval = 500;
+            this.tmClock.Interval = 1000;
             // 
             // FrmMain
             // 

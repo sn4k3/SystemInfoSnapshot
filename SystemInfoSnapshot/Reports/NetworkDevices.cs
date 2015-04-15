@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Net.NetworkInformation;
+using System.Web.UI;
 
 namespace SystemInfoSnapshot.Reports
 {
@@ -14,87 +15,114 @@ namespace SystemInfoSnapshot.Reports
 
         protected override void Build()
         {
-            var result = "<table data-sortable class=\"table table-striped table-bordered table-responsive table-hover sortable-theme-bootstrap\">" +
-                            "<thead>" +
-                                "<tr>" +
-                                "<th>#</th>" +
-                                "<th>Device ID</th>" +
-                                "<th>Name</th>" +
-                                "<th>Description</th>" +
-                                "<th>Properties</th>" +
-                                "<th>Statistics</th>" +
-                                "<th class=\"text-center\">Status</th>" +
-                                "</tr>" +
-                            "</thead>" +
-                            "<tbody>";
+            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
+            HtmlWriter.AddAttribute("data-sortable", "true");
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);
+
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Thead);
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
+
+            HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "#");
+            HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Device ID");
+            HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Name / Description");
+            //HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Description");
+            HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Properties");
+            HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Statistics");
+            HtmlWriter.RenderTag(HtmlTextWriterTag.Th, HtmlTextWriterAttribute.Class, "text-center", "Status");
+
+            HtmlWriter.RenderEndTag(); // </tr>
+            HtmlWriter.RenderEndTag(); // </thead>
+
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tbody);
+
             var i = 0;
             foreach (var adapter in NetworkInterface.GetAllNetworkInterfaces())
             {
                 var properties = adapter.GetIPProperties();
-                var statistics = adapter.GetIPStatistics();
+                var statistics = adapter.GetIPv4Statistics();
 
                 i++;
-                result += "<tr>" +
-                          "<td class=\"index\">" + i + "</td>" +
-                          "<td class=\"deviceid\">" + adapter.Id +
-                                "<br>MAC Address: " + string.Join(":", adapter.GetPhysicalAddress().GetAddressBytes().Select(b => b.ToString("X2"))) +
-                                "<br>Type: " + adapter.NetworkInterfaceType + "</td>" +
-                          "<td class=\"name\">" + adapter.Name + "</td>" +
-                          "<td class=\"description\">" + adapter.Description + "</td>" +
-                          "<td class=\"properties\">";
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
 
-                result += "<strong>Unicast Addresses:</strong>" +
-                          "<ol>";
-                result = properties.UnicastAddresses.Aggregate(result, (current, address) => current + string.Format("<li>{0}</li>", address.Address));
-                result += "</ol>";
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "index", i.ToString());
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "deviceid", string.Format("{0}<br>" + "MAC Address: {1}<br>Type: {2}", 
+                    adapter.Id, string.Join(":", adapter.GetPhysicalAddress().GetAddressBytes().Select(b => b.ToString("X2"))), adapter.NetworkInterfaceType));
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "name", string.Format("<strong>Name:</strong> {0}<br><strong>Description:</strong> {1}", adapter.Name, adapter.Description));
+                //HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "description", adapter.Description);
 
-                result += "<strong>DHCP Server Addresses:</strong>" +
-                          "<ol>";
-                result = properties.DhcpServerAddresses.Aggregate(result, (current, address) => current + string.Format("<li>{0}</li>", address));
-                result += "</ol>";
-
-                result += "<strong>Gateway Addresses:</strong>" +
-                          "<ol>";
-                result = properties.GatewayAddresses.Aggregate(result, (current, address) => current + string.Format("<li>{0}</li>", address.Address));
-                result += "</ol>";
-
-                result += "<strong>DNS Addresses:</strong>" +
-                          "<ol>";
-                result = properties.DnsAddresses.Aggregate(result, (current, address) => current + string.Format("<li>{0}</li>", address));
-                result += "</ol>";
+                HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "properties");
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td);
 
 
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Strong, "Unicast Addresses:");
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Ol);
+                foreach (var address in properties.UnicastAddresses)
+                {
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Li, address.Address.ToString());
+                }
+                HtmlWriter.RenderEndTag();
 
-                result += "</td>" +
-                          "<td class=\"statistics\">" +
-                          "<strong>Megabytes Received:</strong> " + (statistics.BytesReceived / 1024 / 1024) + "mb" +
-                          "<br><strong>Megabytes Sent:</strong> " + (statistics.BytesSent / 1024 / 1024) + "mb" +
-                          "</td>";
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Strong, "DHCP Server Addresses:");
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Ol);
+                foreach (var address in properties.DhcpServerAddresses)
+                {
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Li, address.ToString());
+                }
+                HtmlWriter.RenderEndTag();
+
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Strong, "Gateway Addresses:");
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Ol);
+                foreach (var address in properties.GatewayAddresses)
+                {
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Li, address.Address.ToString());
+                }
+                HtmlWriter.RenderEndTag();
+
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Strong, "DNS Addresses:");
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Ol);
+                foreach (var address in properties.DnsAddresses)
+                {
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Li, address.ToString());
+                }
+                HtmlWriter.RenderEndTag();
+
+
+                HtmlWriter.RenderEndTag(); // </td>
+
+
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td);
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Strong, "Megabytes Received:");
+                HtmlWriter.Write(" {0} MB<br>", (statistics.BytesReceived / 1024 / 1024));
+
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Strong, "Megabytes Sent:");
+                HtmlWriter.Write(" {0} MB<br>", (statistics.BytesSent / 1024 / 1024));
+                HtmlWriter.RenderEndTag(); // </td>
 
 
 
-                result += "<td class=\"status text-center ";
+                HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "status text-center");
 
                 switch (adapter.OperationalStatus)
                 {
                     case OperationalStatus.Up:
-                        result += "text-success";
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "text-success");
                         break;
                     case OperationalStatus.Down:
-                        result += "text-danger";
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "text-danger");
                         break;
                     default:
-                        result += "text-warning";
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "text-warning");
                         break;
                 }
 
-                result += "\">" + adapter.OperationalStatus + "</td>" +
-                           "</tr>";
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td);
+                HtmlWriter.Write(adapter.OperationalStatus);
+                HtmlWriter.RenderEndTag(); // </td>
 
-
+                HtmlWriter.RenderEndTag(); // </tr>
             }
-            result += "</tbody></table>";
-            Html = result;
+            HtmlWriter.RenderEndTag(); // </tbody>
+            HtmlWriter.RenderEndTag(); // </table>
         }
     }
 }

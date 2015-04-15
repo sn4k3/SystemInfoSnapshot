@@ -1,5 +1,24 @@
 # Changelog
 
+# 1.4.0.0
+## 16/04/2015
+
+* Added a malware database to detect bad programs on the system (Windows only)
+* Added 204 toolbars to malware list (Windows only)
+* Added support to Linux and others mono compatible systems
+* Added a 'build.bat' file to compile project under Windows (Visual Studio required)
+* Added a 'Makefile' file to compile project under Linux systems using Mono (mono-complete required)
+* Changed program will now be executed using 64bit process under 64bit systems, otherwise 32bit will be used
+* Changed GUI update timer interval to 1s rather than 500ms
+* Changed uptime values are now represented by: days.hours:minutes:seconds
+* Changed controls postion to bottom left instead of top right
+* Changed page title build date to use CurrentCulture instead of InvariantCulture
+* Changed rewrite whole reports using HtmlTextWriter wich use a StringBuilder instead a single string with concatenation
+* Changed program will now run with less privileges (from full to admin)
+* Improved report generation performance
+* Removed Service type from report
+
+
 # 1.3.0.0
 ## 11/04/2015
 

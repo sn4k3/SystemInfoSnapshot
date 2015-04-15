@@ -92,13 +92,15 @@
         #controls {
             width: 250px;
             position: fixed;
-            top:70px;
-            right:20px;
+            /*top:70px;
+            right:20px;*/
+            bottom:20px;
+            left:15px;
             background: rgba(250, 250, 250, 0.90);
             border: rgba(0, 0, 0, 0.75) solid 1px;
             border-radius: 5px;
             padding: 10px;
-            z-index: 1000;
+            z-index: 10000;
 
             opacity: .4;
             -webkit-transition: opacity .5s;
@@ -410,7 +412,7 @@
     {
         var navbarHeight = parseInt($('#main-navbar').css("height"));
         $('body').css('margin-top', navbarHeight);
-        $('#controls').css('top', navbarHeight+25);
+        //$('#controls').css('top', navbarHeight+25);
     }
 
     /*
@@ -542,14 +544,14 @@
         /*
         * Update Html Elements
         */
-        updateResize();
         $('#controls .report .text').html($('ul.nav a:first').html());
         $('#dashboard-warnings, .warnings .text-total').text(messages.warnings.items.length);
         $('#dashboard-problems, .problems .text-total').text(messages.problems.items.length);
 
         // Call functions
 		enableBackToTop ();
-	});
+        updateResize();
+    });
 
     $(window).resize(updateResize);
 

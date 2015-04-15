@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.Web.UI;
+using SystemInfoSnapshot.Extensions;
+using SystemInfoSnapshot.Malware;
 
 namespace SystemInfoSnapshot.Reports
 {
@@ -14,35 +17,60 @@ namespace SystemInfoSnapshot.Reports
 
         protected override void Build()
         {
-            var result = "<table data-sortable class=\"table table-striped table-bordered table-responsive table-hover sortable-theme-bootstrap\">" +
-                            "<thead>" +
-                                "<tr>" +
-                                "<th>#</th>" +
-                                "<th>Program</th>" +
-                                "<th>Version</th>" +
-                                "<th>Publisher</th>" +
-                                "<th>Install Date</th>" +
-                                "</tr>" +
-                            "</thead>" +
-                            "<tbody>";
             var i = 0;
-            var programs = InstalledProgram.GetInstalledPrograms();
-            foreach (var program in programs)
+            if (SystemHelper.IsWindows)
             {
-                i++;
-                result += "<tr>" +
-                            "<td class=\"index\">" + i + "</td>" +
-                            "<td class=\"program\">" + program.Name + "</td>" +
-                            "<td class=\"version\">" + program.Version + "</td>" +
-                            "<td class=\"publisher\">" + program.Publisher + "</td>" +
-                            "<td class=\"installdate\">" + program.InstallDate + "</td>" +
-                           "</tr>";
+                var programs = InstalledProgram.GetInstalledPrograms();
 
+                HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
+                HtmlWriter.AddAttribute("data-sortable", "true");
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);
 
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Thead);
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
+
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "#");
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Program");
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Version");
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Publisher");
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Install Date");
+
+                HtmlWriter.RenderEndTag(); // </tr>
+                HtmlWriter.RenderEndTag(); // </thead>
+
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tbody);
+
+                foreach (var program in programs)
+                {
+                    i++;
+                    if (MalwareManager.Instance.Contains(program.Name))
+                    {
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "danger");
+                    }
+                    else if (program.Name.Contains("toolbar", StringComparison.OrdinalIgnoreCase))
+                    {
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "warning");
+                    }
+
+                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
+
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "index", i.ToString());
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "program", program.Name);
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "version", program.Version);
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "publisher", program.Publisher);
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "installdate", program.InstallDate);
+
+                    HtmlWriter.RenderEndTag();
+
+                }
+
+                HtmlWriter.RenderEndTag(); // </tbody>
+                HtmlWriter.RenderEndTag(); // </table>
             }
-            result += "</tbody></table>";
-
-            Html = result;
+            else
+            {
+                WriteNotSupportedMsg();
+            }
         }
     }
 }

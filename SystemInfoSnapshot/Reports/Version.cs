@@ -16,7 +16,7 @@
 
         protected override void Build()
         {
-            Html = ApplicationInfo.Version.ToString();
+            HtmlWriter.Write(ApplicationInfo.Version);
         }
     }
 }

@@ -72,6 +72,7 @@ namespace SystemInfoSnapshot
 
             public AutorunEntry()
             {
+                IsValidFile = true;
             }
         }
         public string ExecutableFile { get; private set; }
@@ -153,9 +154,14 @@ namespace SystemInfoSnapshot
                         argc++;
                         entry.LunchString = args[argc];
 
-                        if (!entry.ImagePath.StartsWith("File not found:"))
+                        if (entry.ImagePath.StartsWith("File not found:"))
                         {
-                            entry.IsValidFile = true;
+                            entry.IsValidFile = false;
+                        }
+                        if (entry.ImagePath.EndsWith("SystemInfoSnapshot.sys"))
+                        {
+                            i--;
+                            continue;
                         }
 
                         AutorunEntries.Add(entry);

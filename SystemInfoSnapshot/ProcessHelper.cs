@@ -72,7 +72,7 @@ namespace SystemInfoSnapshot
             using (var process = new Process())
             {
                 process.StartInfo.FileName = filename;
-                process.StartInfo.Arguments = arguments;
+                if (arguments != null) process.StartInfo.Arguments = arguments;
                 process.Start();
                 process.Close();
             }
@@ -84,13 +84,7 @@ namespace SystemInfoSnapshot
         /// <param name="path">Path to the file.</param>
         public static void ShowInExplorer(string path)
         {
-            using (var process = new Process())
-            {
-                process.StartInfo.FileName = "explorer.exe";
-                process.StartInfo.Arguments = string.Format("/select,\"{0}\"", path);
-                process.Start();
-                process.Close();
-            }
+            SystemHelper.OpenExplorer(path, true);
         }
     }
 }

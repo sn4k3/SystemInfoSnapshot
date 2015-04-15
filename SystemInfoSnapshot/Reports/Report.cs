@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Web.UI;
+using SystemInfoSnapshot.Components;
 
 namespace SystemInfoSnapshot.Reports
 {
     /// <summary>
     /// Represents a report
     /// </summary>
-    public abstract class Report
+    public abstract class Report : IDisposable
     {
         #region Enums
         /// <summary>
@@ -22,14 +26,23 @@ namespace SystemInfoSnapshot.Reports
         }
         #endregion
 
-        #region Events
+        #region Constants
+        public const string TABLE_CLASS ="table table-striped table-bordered table-responsive table-hover sortable-theme-bootstrap";
+        public const string NOT_SUPPORTED = "This operating system is not suported yet!";
         #endregion
 
         #region Properties
         /// <summary>
         /// Html string
         /// </summary>
-        public string Html { get; protected set; }
+        //public string Html { get; protected set; }
+
+        public string Html {
+            get { return HtmlStringWriter.ToString(); } }
+
+        public StringWriter HtmlStringWriter { get; private set; }
+
+        public HtmlTextWriterEx HtmlWriter { get; private set; }
 
         /// <summary>
         /// Gets the report status
@@ -48,7 +61,8 @@ namespace SystemInfoSnapshot.Reports
         /// </summary>
         protected Report()
         {
-            Html = string.Empty;
+            HtmlStringWriter = new StringWriter();
+            HtmlWriter = new HtmlTextWriterEx(HtmlStringWriter);
             Status = ReportStatus.None;
             CanAsync = true;
         }
@@ -78,7 +92,7 @@ namespace SystemInfoSnapshot.Reports
             if (Status == ReportStatus.Generating)
                 return;
 
-            Html = string.Empty;
+            HtmlStringWriter.GetStringBuilder().Clear();
             Status = ReportStatus.Generating;
             Build();
             Status = ReportStatus.Completed;
@@ -103,6 +117,15 @@ namespace SystemInfoSnapshot.Reports
             }
 
             return Html;
+        }
+
+        public void WriteNotSupportedMsg()
+        {
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.P);
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Strong);
+            HtmlWriter.Write(NOT_SUPPORTED);
+            HtmlWriter.RenderEndTag();
+            HtmlWriter.RenderEndTag();
         }
         #endregion
 
@@ -136,13 +159,14 @@ namespace SystemInfoSnapshot.Reports
         /// </summary>
         /// <param name="reports">List of reports to generate.</param>
         /// <param name="saveReport">True for save reports in the html file.</param>
+        /// <param name="useSingleThread">True to generate the reports without parallel tasks</param>
         /// <returns><see cref="HtmlTemplate"/> with the reports already written in the template.</returns>
         public static HtmlTemplate GenerateReports(Report[] reports, bool saveReport = true, bool useSingleThread = false)
         {
             var htmlTemplate = new HtmlTemplate();
             //List<Report> asyncReports = new List<Report>();
 
-            if (useSingleThread)
+            /*if (useSingleThread)
             {
                 foreach (var report in reports)
                 {
@@ -156,23 +180,22 @@ namespace SystemInfoSnapshot.Reports
                 }
             }
             else
-            {
+            {*/
 #if DEBUG
-                var options = new ParallelOptions { MaxDegreeOfParallelism = 1 };
+            var options = new ParallelOptions { MaxDegreeOfParallelism = 1 };
 #else
-                var options = new ParallelOptions { MaxDegreeOfParallelism = -1 };
+            var options = new ParallelOptions { MaxDegreeOfParallelism = useSingleThread ? 1 : -1 };
 #endif
-                Parallel.ForEach(reports, options, report =>
-                {
-                    //Debug.WriteLine(report.GetTemplateVar());
-                    report.Generate();
+            Parallel.ForEach(reports, options, report =>
+            {
+                Debug.WriteLine(report.GetTemplateVar());
+                report.Generate();
 
-                    lock (htmlTemplate.TemplateHTML)
-                    {
-                        htmlTemplate.WriteFromVar(report.GetTemplateVar(), report.Html);
-                    }
-                });
-            }
+                lock (htmlTemplate)
+                {
+                    htmlTemplate.WriteFromVar(report.GetTemplateVar(), report.Html);
+                }
+            });
 
 
             
@@ -197,6 +220,13 @@ namespace SystemInfoSnapshot.Reports
         {
             return Html;
         }
+
+        public void Dispose()
+        {
+            HtmlWriter.Dispose();
+            HtmlStringWriter.Dispose();
+        }
+
         #endregion
     }
 }

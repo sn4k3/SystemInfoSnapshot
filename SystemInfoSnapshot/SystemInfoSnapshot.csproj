@@ -36,6 +36,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -45,6 +46,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
@@ -77,22 +79,19 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
     <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationArguments.cs" />
     <Compile Include="ApplicationInfo.cs" />
     <Compile Include="Autorun.cs" />
     <Compile Include="Autoruns.cs" />
+    <Compile Include="Components\HtmlTextWritterEx.cs" />
     <Compile Include="Devices.cs" />
     <Compile Include="EmbeddedAssembly.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +99,9 @@
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="HtmlTemplate.cs" />
+    <Compile Include="Malware\MalwareManager.cs" />
+    <Compile Include="Malware\MalwareItem.cs" />
+    <Compile Include="Malware\MalwareType.cs" />
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="InstalledProgram.cs" />
@@ -132,8 +134,14 @@
     <None Include="..\.gitignore">
       <Link>.gitignore</Link>
     </None>
+    <None Include="..\build.bat">
+      <Link>build.bat</Link>
+    </None>
     <None Include="..\CHANGELOG.md">
       <Link>CHANGELOG.md</Link>
+    </None>
+    <None Include="..\Makefile">
+      <Link>Makefile</Link>
     </None>
     <None Include="..\README.md">
       <Link>README.md</Link>
@@ -161,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="outlineCPU.ico" />
+    <Content Include="Resources\data\malware.txt" />
     <None Include="Resources\executables\autorunsc.exe" />
     <None Include="Resources\images\web.png" />
     <None Include="Resources\images\folder_open.png" />
@@ -187,7 +196,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\bin\signtool.exe" sign /f "$(ProjectDir)sign.pfx" /p mudar11 /v "$(TargetPath)"</PostBuildEvent>
+    <PostBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\bin\signtool.exe" sign /f "$(ProjectDir)sign.pfx" /p mudar11 /v "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -62,7 +62,9 @@ namespace SystemInfoSnapshot
             var filename = Filename ?? "SystemInfoSnapshot";
             filename += string.Format("_{0}.html", DateTime.Now).Replace(':', '-').Replace('/', '-').Replace(' ', '_');
 #if !DEBUG
-            filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), filename);
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            
+            filename = Directory.Exists(path) ? Path.Combine(path, filename) : filename;
 #endif
             using (var htmlWriter = new StreamWriter(filename))
             {

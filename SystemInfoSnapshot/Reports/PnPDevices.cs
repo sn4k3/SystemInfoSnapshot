@@ -1,4 +1,6 @@
-﻿namespace SystemInfoSnapshot.Reports
+﻿using System.Web.UI;
+
+namespace SystemInfoSnapshot.Reports
 {
     public sealed class PnPDevices : Report
     {
@@ -11,32 +13,45 @@
 
         protected override void Build()
         {
-            var devices = Devices.GetPnPDevices();
-            var result = "<table data-sortable class=\"table table-striped table-bordered table-responsive table-hover sortable-theme-bootstrap\">" +
-                            "<thead>" +
-                                "<tr>" +
-                                "<th>#</th>" +
-                                "<th>Device ID</th>" +
-                                "<th>Description</th>" +
-                                "<th>Manufacturer</th>" +
-                                "</tr>" +
-                            "</thead>" +
-                            "<tbody>";
-            var i = 0;
-            foreach (var device in devices)
+            if (SystemHelper.IsWindows)
             {
-                i++;
-                result += "<tr>" +
-                            "<td class=\"index\">" + i + "</td>" +
-                            "<td class=\"deviceid\">" + device.DeviceID + "</td>" +
-                            "<td class=\"description\">" + device.Description + "</td>" +
-                            "<td class=\"manufacturer\">" + device.Manufacturer + "</td>" +
-                           "</tr>";
+                HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
+                HtmlWriter.AddAttribute("data-sortable", "true");
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);
 
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Thead);
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
 
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "#");
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Device ID");
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Description");
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Manufacturer");
+
+                HtmlWriter.RenderEndTag(); // </tr>
+                HtmlWriter.RenderEndTag(); // </thead>
+
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tbody);
+            
+                var devices = Devices.GetPnPDevices();
+                var i = 0;
+                foreach (var device in devices)
+                {
+                    i++;
+                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
+
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "index", i.ToString());
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "deviceid", device.DeviceID);
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "description", device.Description);
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "manufacturer", device.Manufacturer);
+                    HtmlWriter.RenderEndTag(); // </tr>
+                }
+                HtmlWriter.RenderEndTag(); // </tbody>
+                HtmlWriter.RenderEndTag(); // </table>
             }
-            result += "</tbody></table>";
-            Html = result;
+            else
+            {
+                WriteNotSupportedMsg();
+            }
         }
     }
 }
