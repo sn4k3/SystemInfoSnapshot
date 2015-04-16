@@ -72,7 +72,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="OpenHardwareMonitorLib">
-      <HintPath>Libraries\OpenHardwareMonitorLib.dll</HintPath>
+      <HintPath>Resources\libraries\OpenHardwareMonitorLib.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -89,6 +89,9 @@
     <Compile Include="Autorun.cs" />
     <Compile Include="Autoruns.cs" />
     <Compile Include="Components\HtmlTextWritterEx.cs" />
+    <Compile Include="Core\Disk\DiskItem.cs" />
+    <Compile Include="Core\Disk\DiskManager.cs" />
+    <Compile Include="Core\Disk\DiskSmart.cs" />
     <Compile Include="Devices.cs" />
     <Compile Include="EmbeddedAssembly.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
@@ -165,7 +168,7 @@
     <None Include="Resources\template.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Libraries\OpenHardwareMonitorLib.dll" />
+    <EmbeddedResource Include="Resources\libraries\OpenHardwareMonitorLib.dll" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="outlineCPU.ico" />

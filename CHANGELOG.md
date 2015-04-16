@@ -1,5 +1,12 @@
 # Changelog
 
+# Current
+## ??/04/2015
+
+* Added a disk manager holding all devices informations such as SMART
+* Moved Malware folder into Core
+* Moved Libraries into Resources
+
 # 1.4.0.0
 ## 16/04/2015
 
