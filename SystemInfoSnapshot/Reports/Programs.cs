@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Web.UI;
+using SystemInfoSnapshot.Core.Malware;
 using SystemInfoSnapshot.Extensions;
-using SystemInfoSnapshot.Malware;
 
 namespace SystemInfoSnapshot.Reports
 {

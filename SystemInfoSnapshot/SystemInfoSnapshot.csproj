@@ -99,9 +99,9 @@
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="HtmlTemplate.cs" />
-    <Compile Include="Malware\MalwareManager.cs" />
-    <Compile Include="Malware\MalwareItem.cs" />
-    <Compile Include="Malware\MalwareType.cs" />
+    <Compile Include="Core\Malware\MalwareManager.cs" />
+    <Compile Include="Core\Malware\MalwareItem.cs" />
+    <Compile Include="Core\Malware\MalwareType.cs" />
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="InstalledProgram.cs" />
