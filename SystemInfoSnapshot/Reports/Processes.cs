@@ -18,7 +18,6 @@ namespace SystemInfoSnapshot.Reports
         protected override void Build()
         {
             HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
-            HtmlWriter.AddAttribute("data-sortable", "true");
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);
 
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Thead);
@@ -87,13 +86,13 @@ namespace SystemInfoSnapshot.Reports
                     HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "threads", process.Threads.Count.ToString());
 
                     HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "memory");
-                    HtmlWriter.AddAttribute("data-value", process.WorkingSet64.ToString());
+                    HtmlWriter.AddAttribute("data-order", process.WorkingSet64.ToString());
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td);
                     HtmlWriter.Write((process.WorkingSet64 / 1024.0 / 1024.0).ToString("#.##"));
                     HtmlWriter.RenderEndTag();
 
                     HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "peakmemory");
-                    HtmlWriter.AddAttribute("data-value", process.PeakWorkingSet64.ToString());
+                    HtmlWriter.AddAttribute("data-order", process.PeakWorkingSet64.ToString());
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td);
                     HtmlWriter.Write((process.PeakWorkingSet64 / 1024.0 / 1024.0).ToString("#.##"));
                     HtmlWriter.RenderEndTag();

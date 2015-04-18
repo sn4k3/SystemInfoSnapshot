@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.UI;
+using System.Windows.Forms;
+using SystemInfoSnapshot.Core.Disk;
 using OpenHardwareMonitor.Hardware;
 
 namespace SystemInfoSnapshot.Reports
@@ -14,8 +16,13 @@ namespace SystemInfoSnapshot.Reports
             return TemplateVar;
         }
 
+        private DiskManager diskManager;
         protected override void Build()
         {
+            if (SystemHelper.IsWindows)
+            {
+                diskManager = new DiskManager();
+            }
             Computer computer = new Computer { CPUEnabled = true, FanControllerEnabled = true, GPUEnabled = true, HDDEnabled = true, MainboardEnabled = true, RAMEnabled = true };
             computer.Open();
 
@@ -139,7 +146,7 @@ namespace SystemInfoSnapshot.Reports
 
                 if (hardware.HardwareType == HardwareType.HDD)
                 {
-                    HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "col-sm-6 col-md-4 col-lg-4");
+                    HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, string.Format("col-sm-12 col-md-12 col-lg-6 col-xl-4 hardware_{0}", hardware.HardwareType.ToString().ToLower()));
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
                 }
                 else
@@ -247,6 +254,134 @@ namespace SystemInfoSnapshot.Reports
                 }
 
                 RenderHardware(hardware.SubHardware);
+
+                if (hardware.HardwareType == HardwareType.HDD && SystemHelper.IsWindows)
+                {
+                    var disk = diskManager[hardware.Name];
+                    if (!ReferenceEquals(disk, null))
+                    {
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "text-left");
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+
+                        // Disk Info
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);
+
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Caption, HtmlTextWriterAttribute.Class, "text-center", "<h3>Information</h3>");
+
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Thead);
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
+
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Property");
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Value");
+
+                        HtmlWriter.RenderEndTag(); // </tr>
+                        HtmlWriter.RenderEndTag(); // </thead>
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tbody);
+
+                        var props = disk.GetType().GetProperties();
+                        foreach (var propertyInfo in props)
+                        {
+                            if (propertyInfo.Name.Equals("Attributes"))
+                                continue;
+                            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
+                            HtmlWriter.RenderTag(HtmlTextWriterTag.Td, propertyInfo.Name);
+                            HtmlWriter.RenderTag(HtmlTextWriterTag.Td, propertyInfo.GetValue(disk).ToString());
+                            HtmlWriter.RenderEndTag();
+                        }
+
+                        HtmlWriter.RenderEndTag(); // </tbody>
+                        HtmlWriter.RenderEndTag(); // </table>
+
+
+                        // Disk SMART
+
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);
+
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Caption, HtmlTextWriterAttribute.Class, "text-center", "<h3>S.M.A.R.T.</h3>");
+
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Thead);
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
+
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Attribute");
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Current");
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Worst");
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Threshold");
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Raw");
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Th, HtmlTextWriterAttribute.Class, "text-center", "Status");
+
+                        HtmlWriter.RenderEndTag(); // </tr>
+                        HtmlWriter.RenderEndTag(); // </thead>
+
+                        HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tbody);
+
+                        foreach (var attribute in disk.Attributes)
+                        {
+                            if (!attribute.Value.HasData)
+                                continue;
+
+                            if (!attribute.Value.IsOK)
+                            {
+                                HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "danger");
+                            }
+                            else
+                            {
+                                if (attribute.Value.Threshold > 0 && !attribute.Value.AttributeName.Contains("time"))
+                                {
+                                    if (attribute.Value.Raw > 0)
+                                    {
+                                        if (attribute.Value.Raw >= attribute.Value.Threshold)
+                                        {
+                                            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "danger");
+                                        }
+                                        else
+                                        {
+                                            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "warning");
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (attribute.Value.IsCritical && attribute.Value.Raw > 0)
+                                    {
+                                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "warning");
+                                    }
+                                }
+                            }
+
+                            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
+                            HtmlWriter.RenderTag(HtmlTextWriterTag.Td, (attribute.Value.IsCritical ? "<span class=\"text-danger\">*</span> " : String.Empty) + attribute.Value.AttributeName);
+                            HtmlWriter.RenderTag(HtmlTextWriterTag.Td, attribute.Value.Current.ToString());
+                            HtmlWriter.RenderTag(HtmlTextWriterTag.Td, attribute.Value.Worst.ToString());
+                            HtmlWriter.RenderTag(HtmlTextWriterTag.Td, attribute.Value.Threshold.ToString());
+                            HtmlWriter.RenderTag(HtmlTextWriterTag.Td, attribute.Value.Raw.ToString());
+
+                            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "text-center isok");
+                            HtmlWriter.AddAttribute("data-order", Convert.ToByte(attribute.Value.IsOK).ToString());
+                            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td);
+                            HtmlWriter.Write(attribute.Value.IsOK
+                                ? "<span class=\"glyphicon glyphicon-ok text-success\"></span>"
+                                : "<span class=\"glyphicon glyphicon-remove text-error\"></span>");
+                            HtmlWriter.RenderEndTag();
+
+                            HtmlWriter.RenderEndTag();
+                        }
+
+                        HtmlWriter.RenderEndTag(); // </tbody>
+                        HtmlWriter.RenderEndTag(); // </table>
+
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.P, "<span class=\"text-danger\">*</span> Potential indicators of imminent electromechanical failure.");
+
+                        if (disk.Status.Equals("Pred Fail"))
+                        {
+                            HtmlWriter.RenderTag(HtmlTextWriterTag.Div, HtmlTextWriterAttribute.Class, "alert alert-danger", "<strong>This drive is failing and/or in bad condition! Consider making a backup of whole disk or your critical data and replace this disk.<br>" +
+                                                                                                                             "If the health keeps declining you will not be able to recover the disk at some point.</strong>");
+                        }
+
+                        HtmlWriter.RenderEndTag(); // </div>
+                    }
+                }
 
                 HtmlWriter.RenderEndTag(); // </div>
                 HtmlWriter.RenderEndTag(); // </div>

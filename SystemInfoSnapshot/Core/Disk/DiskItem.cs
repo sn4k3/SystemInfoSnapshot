@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace SystemInfoSnapshot.Core.Disk
@@ -10,36 +11,337 @@ namespace SystemInfoSnapshot.Core.Disk
     {
         #region Properties
         /// <summary>
-        /// Gets or sets the HDD index
-        /// </summary>
-        public int Index { get; set; }
-
-        /// <summary>
         /// Gets or sets if the HDD is ok
         /// </summary>
         public bool IsOK { get; set; }
 
+        
+
+        #region Win32_DiskDrive
         /// <summary>
-        /// Gets or sets the HDD Model
+        /// Physical drive number of the given drive. 
+        /// This property is filled by the GetDriveMapInfo method. 
+        /// A value of 0xFF indicates that the given drive does not map to a physical drive.
+        /// </summary>
+        public uint Index { get; set; }
+
+        /// <summary>
+        /// Number of bytes in each sector for the physical disk drive.
+        /// </summary>
+        public uint BytesPerSector { get; set; }
+
+        /// <summary>
+        /// Description of the object. 
+        /// This property is inherited from CIM_ManagedSystemElement.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Unique identifier of the disk drive with other devices on the system. 
+        /// This property is inherited from CIM_LogicalDevice.
+        /// </summary>
+        public string DeviceID { get; set; }
+
+        /// <summary>
+        /// Revision for the disk drive firmware that is assigned by the manufacturer.
+        /// </summary>
+        public string FirmwareRevision { get; set; }
+
+        /// <summary>
+        /// Revision for the disk drive firmware that is assigned by the manufacturer.
+        /// </summary>
+        public string Manufacturer { get; set; }
+
+        /// <summary>
+        /// If True, the media for a disk drive is loaded, which means that the device has a readable file system and is accessible. For fixed disk drives, this property will always be TRUE.
+        /// </summary>
+        public bool MediaLoaded { get; set; }
+
+        /// <summary>
+        /// Type of media used or accessed by this device.
+        /// Starting with Windows Vista, possible values are:
+        /// External hard disk media
+        /// Removable media other than floppy
+        /// Fixed hard disk media
+        /// Format is unknown
+        /// </summary>
+        public string MediaType { get; set; }
+
+        /// <summary>
+        /// Interface type of physical disk drive.
+        /// The values are:
+        /// SCSI
+        /// HDC
+        /// IDE
+        /// USB
+        /// 1394
+        /// </summary>
+        public string InterfaceType { get; set; }
+
+        /// <summary>
+        /// Manufacturer's model number of the disk drive.
         /// </summary>
         public string Model { get; set; }
 
         /// <summary>
-        /// Gets or sets the HDD type
+        /// Name of the disk drive manufacturer.
         /// </summary>
-        public string Type { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the HDD serial number
+        /// If True, the media access device needs cleaning. Whether manual or automatic cleaning is possible is indicated in the Capabilities property. 
+        /// This property is inherited from CIM_MediaAccessDevice.
         /// </summary>
-        public string Serial { get; set; }
+        public bool NeedsCleaning { get; set; }
+
+        /// <summary>
+        /// Maximum number of media which can be supported or inserted (when the media access device supports multiple individual media). 
+        /// This property is inherited from CIM_MediaAccessDevice.
+        /// </summary>
+        public uint NumberOfMediaSupported { get; set; }
+
+        /// <summary>
+        /// Number of partitions on this physical disk drive that are recognized by the operating system.
+        /// </summary>
+        public uint Partitions { get; set; }
+
+        /// <summary>
+        /// Windows Plug and Play device identifier of the logical device. 
+        /// This property is inherited from CIM_LogicalDevice.
+        /// </summary>
+        public string PNPDeviceID { get; set; }
+
+        /// <summary>
+        /// SCSI bus number of the disk drive.
+        /// </summary>
+        public uint SCSIBus { get; set; }
+
+        /// <summary>
+        /// SCSI logical unit number (LUN) of the disk drive.
+        /// </summary>
+        public ushort SCSILogicalUnit { get; set; }
+
+        /// <summary>
+        /// SCSI port number of the disk drive.
+        /// </summary>
+        public ushort SCSIPort { get; set; }
+
+        /// <summary>
+        /// SCSI identifier number of the disk drive.
+        /// </summary>
+        public ushort SCSITargetId { get; set; }
+
+        /// <summary>
+        /// Number of sectors in each track for this physical disk drive.
+        /// </summary>
+        public uint SectorsPerTrack { get; set; }
+
+        /// <summary>
+        /// Number allocated by the manufacturer to identify the physical media.
+        /// </summary>
+        public string SerialNumber { get; set; }
+
+        /// <summary>
+        /// Disk identification. This property can be used to identify a shared resource.
+        /// </summary>
+        public uint Signature { get; set; }
+
+        /// <summary>
+        /// Size of the disk drive. 
+        /// It is calculated by multiplying the total number of cylinders, tracks in each cylinder, sectors in each track, and bytes in each sector.
+        /// </summary>
+        public ulong Size { get; set; }
+
+        /// <summary>
+        /// Current status of the object. Various operational and nonoperational statuses can be defined. Operational statuses include: "OK", "Degraded", and "Pred Fail" (an element, such as a SMART-enabled hard disk drive, may be functioning properly but predicting a failure in the near future). Nonoperational statuses include: "Error", "Starting", "Stopping", and "Service". The latter, "Service", could apply during mirror-resilvering of a disk, reload of a user permissions list, or other administrative work. Not all such work is online, yet the managed element is neither "OK" nor in one of the other states. This property is inherited from CIM_ManagedSystemElement.
+        /// Values are:
+        /// "OK"
+        /// "Error"
+        /// "Degraded"
+        /// "Unknown"
+        /// "Pred Fail"
+        /// "Starting"
+        /// "Stopping"
+        /// "Service"
+        /// "Stressed"
+        /// "NonRecover"
+        /// "No Contact"
+        /// "Lost Comm"
+        /// </summary>
+        public string Status { get; set; }
+
+        /// <summary>
+        /// Total number of cylinders on the physical disk drive. 
+        /// Note: the value for this property is obtained through extended functions of BIOS interrupt 13h. 
+        /// The value may be inaccurate if the drive uses a translation scheme to support high-capacity disk sizes. Consult the manufacturer for accurate drive specifications.
+        /// </summary>
+        public ulong TotalCylinders { get; set; }
+
+        /// <summary>
+        /// Total number of heads on the disk drive. 
+        /// Note: the value for this property is obtained through extended functions of BIOS interrupt 13h. The value may be inaccurate if the drive uses a translation scheme to support high-capacity disk sizes. Consult the manufacturer for accurate drive specifications.
+        /// </summary>
+        public uint TotalHeads { get; set; }
+
+        /// <summary>
+        /// Total number of sectors on the physical disk drive. 
+        /// Note: the value for this property is obtained through extended functions of BIOS interrupt 13h. 
+        /// The value may be inaccurate if the drive uses a translation scheme to support high-capacity disk sizes. Consult the manufacturer for accurate drive specifications.
+        /// </summary>
+        public uint TotalSectors { get; set; }
+
+        /// <summary>
+        /// Total number of tracks on the physical disk drive. 
+        /// Note: the value for this property is obtained through extended functions of BIOS interrupt 13h. 
+        /// The value may be inaccurate if the drive uses a translation scheme to support high-capacity disk sizes. Consult the manufacturer for accurate drive specifications.
+        /// </summary>
+        public ulong TotalTracks { get; set; }
+
+        /// <summary>
+        /// Number of tracks in each cylinder on the physical disk drive. 
+        /// Note: the value for this property is obtained through extended functions of BIOS interrupt 13h. 
+        /// The value may be inaccurate if the drive uses a translation scheme to support high-capacity disk sizes. Consult the manufacturer for accurate drive specifications.
+        /// </summary>
+        public uint TracksPerCylinder { get; set; }
+        #endregion
+
+        #region Win32_PhysicalMedia
+        /*
+        /// <summary>
+        /// Gets or sets the HDD serial number, Manufacturer-allocated number used to identify the physical media.
+        /// </summary>
+        public string SerialNumber { get; set; }
+
+        /// <summary>
+        /// Short, one-line textual description of the object.
+        /// </summary>
+        public string Caption { get; set; }
+
+        /// <summary>
+        /// Textual description of the object.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// When the object was installed. This property does not require a value to indicate that the object is installed.
+        /// </summary>
+        public DateTime InstallDate { get; set; }
+
+        /// <summary>
+        /// Label by which the object is known. When subclassed, the Name property can be overridden to be a Key property.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Current status of the object. 
+        /// Various operational and nonoperational statuses can be defined. 
+        /// Operational statuses are "OK", "Degraded", and "Pred Fail". 
+        /// "Pred Fail" indicates that an element may function properly at the present, but predicts a failure in the near future. For example, a SMART-enabled hard disk drive. Nonoperational statuses can also be specified. These are, "Error", "Starting", "Stopping," and "Service". The "Service" status applies to administrative work, such as mirror-resilvering of a disk or reload of a user permissions list. Not all such work is online, yet the managed element is neither "OK" nor in one of the other states.
+        /// "OK"
+        /// "Error"
+        /// "Degraded"
+        /// "Unknown"
+        /// "Pred Fail"
+        /// "Starting"
+        /// "Stopping"
+        /// "Service"
+        /// "Stressed"
+        /// "NonRecover"
+        /// "No Contact"
+        /// "Lost Comm"
+        /// </summary>
+        public string Status { get; set; }
+
+        /// <summary>
+        /// Name of the class or subclass used in the creation of an instance. 
+        /// When used with other key properties of this class, CreationClassName allows all instances of this class and its subclasses to be uniquely identified.
+        /// </summary>
+        public string CreationClassName { get; set; }
+
+        /// <summary>
+        /// Name of the organization responsible for producing the physical element. 
+        /// This can be the entity from whom the element is purchased, but this is not necessarily the case as this information is contained in the Vendor property.
+        /// </summary>
+        public string Manufacturer { get; set; }
+
+        /// <summary>
+        /// Stock keeping unit number for this physical element.
+        /// </summary>
+        public string SKU { get; set; }
+
+        /// <summary>
+        /// Version of the physical element.
+        /// </summary>
+        public string Version { get; set; }
+
+        /// <summary>
+        /// Part number assigned by the manufacturer of the physical element.
+        /// </summary>
+        public string PartNumber { get; set; }
+
+        /// <summary>
+        /// Additional data, beyond asset tag information, that can be used to identify a physical element. One example is bar code data associated with an element that also has an asset tag. Note that if only bar code data is available, is unique, and it can be used as an element key, this property is NULL and the bar code data used is the class key in the Tag property.
+        /// </summary>
+        public string OtherIdentifyingInfo { get; set; }
+
+        /// <summary>
+        /// If TRUE the physical element is powered on.
+        /// </summary>
+        public bool PoweredOn { get; set; }
+
+        /// <summary>
+        /// If TRUE, the physical component is designed to be taken in and out of the physical container in which it is normally found, without impairing the function of the overall packaging. A component can still be removable if the power must be "off" to perform the removal. If power can be "on" and the component removed, the element is removable and can be hot-swapped.
+        /// </summary>
+        public bool Removable { get; set; }
+
+        /// <summary>
+        /// If TRUE, this physical media component can be replaced with a physically different one. For example, some computer systems allow the main processor chip to be upgraded to one of a higher clock rating. In this case, the processor is said to be replaceable. All removable components are inherently replaceable.
+        /// </summary>
+        public bool Replaceable { get; set; }
+
+        /// <summary>
+        /// If TRUE, this physical media component can be replaced with a physically different but equivalent one while the containing package has the power applied. For example, a fan component may be designed to be hot-swapped. 
+        /// All components that can be hot-swapped are inherently removable and replaceable.
+        /// </summary>
+        public bool HotSwappable { get; set; }
+         
+        /// <summary>
+        /// Number of bytes that can be read from or written to this physical media component. 
+        /// This property does not apply to "Hard Copy" or cleaner media. 
+        /// Data compression should not be assumed as it would increase the value of this property. 
+        /// For tapes, it should be assumed that no filemarks or blank space areas are recorded on the media.
+        /// </summary>
+        public ulong Capacity { get; set; }
+
+        /// <summary>
+        /// The type of the media, as an enumerated integer. The MediaDescription property provides a more explicit definition of the media type.
+        /// </summary>
+        public ushort MediaType { get; set; }
+
+        /// <summary>
+        /// Additional detail related to the MediaType property. 
+        /// For example, if MediaType has the value 3 (QIC Cartridge) the MediaDescription property can indicate whether the tape is wide or quarter inch.
+        /// </summary>
+        public string MediaDescription { get; set; }
+
+        /// <summary>
+        /// If TRUE, the media is currently write protected by some kind of physical mechanism, such as a protect tab on a floppy disk.
+        /// </summary>
+        public bool WriteProtectOn { get; set; }
+
+        /// <summary>
+        /// If TRUE, the physical media is used for cleaning purposes and not data storage.
+        /// </summary>
+        public bool CleanerMedia { get; set; }
+         */
+        #endregion
 
         /// <summary>
         /// Gets the HDD Smart attributes
         /// </summary>
         public Dictionary<int, DiskSmart> Attributes { get; private set; }
         #endregion
-
+         
         #region Constructor
         /// <summary>
         /// Constructor
@@ -114,8 +416,8 @@ namespace SystemInfoSnapshot.Core.Disk
                 Index,
                 IsOK ? "OK" : "Fail",
                 Model,
-                Serial,
-                Type
+                SerialNumber,
+                InterfaceType
                 ));
 
             foreach (var attribute in Attributes)
@@ -130,7 +432,7 @@ namespace SystemInfoSnapshot.Core.Disk
 
         private bool Equals(DiskItem other)
         {
-            return string.Equals(Serial, other.Serial);
+            return string.Equals(SerialNumber, other.SerialNumber);
         }
 
         public override bool Equals(object obj)
@@ -140,9 +442,14 @@ namespace SystemInfoSnapshot.Core.Disk
             return obj is DiskItem && Equals((DiskItem) obj);
         }
 
+        public bool Equals(string name)
+        {
+            return SerialNumber.Equals(name);
+        }
+
         public override int GetHashCode()
         {
-            return (Serial != null ? Serial.GetHashCode() : 0);
+            return (SerialNumber != null ? SerialNumber.GetHashCode() : 0);
         }
 
         #endregion

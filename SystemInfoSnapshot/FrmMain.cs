@@ -48,8 +48,10 @@ namespace SystemInfoSnapshot
             };
             tmClock.Tick += (sender, args) =>
             {
-                lbStatus.Text = string.Format("Generating the report. Please wait... {0:0.##}s", Math.Ceiling((DateTime.Now - StartDateTime).TotalSeconds));
+                lbStatus.Text = string.Format("Generating the report. Please wait... {0:0.##}s", Math.Round((DateTime.Now - StartDateTime).TotalSeconds));
             };
+
+            Text += string.Format(" v{0}", ApplicationInfo.Version);
         }
         #endregion
 

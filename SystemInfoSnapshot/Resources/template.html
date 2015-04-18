@@ -10,9 +10,12 @@
         <title>System Info Snapshot - <!--[TITLE]--></title>
         <link href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/yeti/bootstrap.min.css" rel="stylesheet">
         <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-        <link href="http://cdnjs.cloudflare.com/ajax/libs/sortable/0.6.0/css/sortable-theme-bootstrap.css" rel="stylesheet">
+        <link href="http://cdn.datatables.net/plug-ins/1.10.6/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+        <!--<link href="http://cdn.datatables.net/colvis/1.1.2/css/dataTables.colVis.css" rel="stylesheet">-->
 
         <style type="text/css">
+        /* XL Grids for Bootstrap */
+        .visible-xl,.visible-xl-block,.visible-xl-inline,.visible-xl-inline-block{display:none!important}@media (min-width:1600px){.container{width:1570px}.col-xl-1,.col-xl-10,.col-xl-11,.col-xl-12,.col-xl-2,.col-xl-3,.col-xl-4,.col-xl-5,.col-xl-6,.col-xl-7,.col-xl-8,.col-xl-9{float:left}.col-xl-12{width:100%}.col-xl-11{width:91.66666667%}.col-xl-10{width:83.33333333%}.col-xl-9{width:75%}.col-xl-8{width:66.66666667%}.col-xl-7{width:58.33333333%}.col-xl-6{width:50%}.col-xl-5{width:41.66666667%}.col-xl-4{width:33.33333333%}.col-xl-3{width:25%}.col-xl-2{width:16.66666667%}.col-xl-1{width:8.33333333%}.col-xl-pull-12{right:100%}.col-xl-pull-11{right:91.66666667%}.col-xl-pull-10{right:83.33333333%}.col-xl-pull-9{right:75%}.col-xl-pull-8{right:66.66666667%}.col-xl-pull-7{right:58.33333333%}.col-xl-pull-6{right:50%}.col-xl-pull-5{right:41.66666667%}.col-xl-pull-4{right:33.33333333%}.col-xl-pull-3{right:25%}.col-xl-pull-2{right:16.66666667%}.col-xl-pull-1{right:8.33333333%}.col-xl-pull-0{right:auto}.col-xl-push-12{left:100%}.col-xl-push-11{left:91.66666667%}.col-xl-push-10{left:83.33333333%}.col-xl-push-9{left:75%}.col-xl-push-8{left:66.66666667%}.col-xl-push-7{left:58.33333333%}.col-xl-push-6{left:50%}.col-xl-push-5{left:41.66666667%}.col-xl-push-4{left:33.33333333%}.col-xl-push-3{left:25%}.col-xl-push-2{left:16.66666667%}.col-xl-push-1{left:8.33333333%}.col-xl-push-0{left:auto}.col-xl-offset-12{margin-left:100%}.col-xl-offset-11{margin-left:91.66666667%}.col-xl-offset-10{margin-left:83.33333333%}.col-xl-offset-9{margin-left:75%}.col-xl-offset-8{margin-left:66.66666667%}.col-xl-offset-7{margin-left:58.33333333%}.col-xl-offset-6{margin-left:50%}.col-xl-offset-5{margin-left:41.66666667%}.col-xl-offset-4{margin-left:33.33333333%}.col-xl-offset-3{margin-left:25%}.col-xl-offset-2{margin-left:16.66666667%}.col-xl-offset-1{margin-left:8.33333333%}.col-xl-offset-0{margin-left:0}.visible-xl{display:block!important}table.visible-xl{display:table}tr.visible-xl{display:table-row!important}td.visible-xl,th.visible-xl{display:table-cell!important}.visible-xl-block{display:block!important}.visible-xl-inline{display:inline!important}.visible-xl-inline-block{display:inline-block!important}.hidden-xl{display:none!important}}
         /* Document and body */
         body {
             margin-top: 20px;
@@ -46,7 +49,7 @@
         /* Fixs and ajusts */
         .text-center{ text-align:center !important; }
         .panel-body { padding: 0; }
-        .table { margin-bottom: 0; }
+        table.table, table.dataTable { margin: 0 !important; }
          td{vertical-align: middle !important;
              word-wrap: break-word;
              -webkit-hyphens: auto;
@@ -55,6 +58,11 @@
              -o-hyphens: auto;
              hyphens: auto;
          }
+        table.floatThead-table {
+            border-top: none;
+            border-bottom: none;
+            background-color: #F5F5F5;
+        }
         .overflowx { overflow-x: auto; }
         .navbar {
             margin: 0;
@@ -143,6 +151,11 @@
         #back-to-top i {
             color: #fff;
         }
+
+        /* DataTables */
+        div.DTTT { margin-bottom: 0.5em; float: right; }
+        div.dataTables_wrapper { clear: both; }
+
 
         /* Utilities */
         .padding20 {padding: 20px;}
@@ -282,42 +295,42 @@
 
         <div id="networks" class="panel panel-primary">
             <div class="panel-heading"><h1><i class="fa fa-wifi pull-right"></i>Network Devices <span class="count"></span></h1></div>
-            <div class="panel-body overflowx">
+            <div class="panel-body">
                 <!--[NETWORKDEVICES]-->
             </div>
         </div>
 
         <div id="pnpdevices" class="panel panel-primary">
             <div class="panel-heading"><h1><i class="fa fa-plug pull-right"></i>PnP Devices <span class="count"></span></h1></div>
-            <div class="panel-body overflowx">
+            <div class="panel-body">
                 <!--[PNPDEVICES]-->
             </div>
         </div>
 		
 		<div id="processes" class="panel panel-primary">
 			<div class="panel-heading"><h1><i class="glyphicon glyphicon-tasks pull-right"></i>Processes <span class="count"></span></h1></div>
-				<div class="panel-body overflowx">
+				<div class="panel-body">
 					<!--[PROCESSES]-->
 			</div>
 		</div>
 		
 		<div id="services" class="panel panel-primary">
 			<div class="panel-heading"><h1><i class="fa fa-cogs pull-right"></i>Services <span class="count"></span></h1></div>
-				<div class="panel-body overflowx">
+				<div class="panel-body">
 					<!--[SERVICES]-->
 			</div>
 		</div>
 
         <div id="autoruns" class="panel panel-primary">
             <div class="panel-heading"><h1><i class="glyphicon glyphicon-play pull-right"></i>Autoruns <span class="count"></span></h1></div>
-            <div class="panel-body overflowx">
+            <div class="panel-body">
                 <!--[AUTORUNS]-->
             </div>
         </div>
 
         <div id="installedprograms" class="panel panel-primary">
             <div class="panel-heading"><h1><i class="glyphicon glyphicon-wrench pull-right"></i>Installed Programs <span class="count"></span></h1></div>
-            <div class="panel-body overflowx">
+            <div class="panel-body">
                 <!--[PROGRAMS]-->
             </div>
         </div>
@@ -326,13 +339,13 @@
     <footer>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-6">
                     <h3 class="verybold outlineblack">System Info Snapshot</h3>
                     <p>A portable free and open source project.<br>
                         Written by: Tiago Conceição<br>
                         Version: <!--[VERSION]--></p>
                 </div>
-                <div class="col-sm-offset-3 col-xs-6 col-lg-offset-5 col-sm-3 col-lg-2">
+                <div class="col-xs-6 col-lg-offset-2 col-sm-3 col-lg-2">
                     <div id="writtenwith" class="pull-right">
                         <h3 class="verybold outlineblack">Written with</h3>
                         <h4># CSharp</h4>
@@ -355,7 +368,11 @@
 	
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/sortable/0.6.0/js/sortable.min.js"></script>
+	<script src="http://cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/floatthead/1.2.10/jquery.floatThead.min.js"></script>
+	<!--<script src="http://cdn.datatables.net/colvis/1.1.2/js/dataTables.colVis.min.js"></script>-->
+	<script src="http://cdn.datatables.net/plug-ins/1.10.6/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+
 	<script type="text/javascript">
     /*
     * Global Variables
@@ -395,7 +412,7 @@
 
 
         $(item['highlightelement']).addClass('border-' + (isWarning ? 'warning' : 'danger'));
-        var top = Math.max(0, $(item['highlightelement']).offset().top - 100);
+        var top = Math.max(0, $(item['highlightelement']).offset().top - navbarHeight - 100);
         $('body, html').stop().animate({
             scrollTop: top
         }, 600, 'swing');
@@ -408,9 +425,10 @@
         GoToMessage(oldindex, index, false);
     }
 
+    var navbarHeight;
     function updateResize()
     {
-        var navbarHeight = parseInt($('#main-navbar').css("height"));
+        navbarHeight = parseInt($('#main-navbar').css("height"));
         $('body').css('margin-top', navbarHeight);
         //$('#controls').css('top', navbarHeight+25);
     }
@@ -423,7 +441,7 @@
         * Attributions and global assignments
         */
         $('[data-toggle="tooltip"]').tooltip();
-
+        updateResize();
 
 		//jQuery for page scrolling feature on nav click
 		$('.navbar a').on('click', function(event) {
@@ -550,10 +568,52 @@
 
         // Call functions
 		enableBackToTop ();
-        updateResize();
+
+        $('table.table').each(function(){
+            $(this).find('thead tr:first').addClass('active');
+            var table = $(this).dataTable( {
+                "paging":   false,
+                "info":     false,
+                //"scrollX":  true,
+                "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]]
+            } );
+
+            $(table).wrap('<div class="table-responsive"></div>');
+            $(table).floatThead({
+                scrollingTop: navbarHeight
+            });
+            /*new $.fn.dataTable.FixedHeader(table, {
+                "offsetTop": navbarHeight
+            });*/
+
+            /*var colvis = new $.fn.dataTable.ColVis( table,  {
+                exclude: [ 0, 1 ],
+                restore: "Restore",
+                showAll: "Show all",
+                showNone: "Show none",
+                "fnStateChange": function ( iColumn, bVisible ) {
+                    $('table.table').floatThead("reflow");
+                }
+            } );
+            $( colvis.button() ).insertBefore('div.dataTables_wrapper#'+$(this).attr('id')+'_wrapper');*/
+
+        });
     });
 
-    $(window).resize(updateResize);
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var element = $($(e.target).attr('href'));
+        if(!element.length)
+            return;
+
+        element.find('table.table:first').floatThead("reflow");
+    });
+
+    boxes = $('.hardware_hdd > .well:first-child');
+    maxHeight = Math.max.apply(
+            Math, boxes.map(function() {
+                return $(this).height();
+            }).get());
+    boxes.css('min-height', (maxHeight+90)+'px');
 
     /*
     * Back to top functions
@@ -583,6 +643,8 @@
 			}, 600, 'swing');
 		});
     }
-	</script>
+
+    $(window).resize(updateResize);
+    </script>
 	</body>
 </html>

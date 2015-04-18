@@ -1,11 +1,24 @@
 # Changelog
 
 # Current
-## ??/04/2015
+## 18/04/2015
 
 * Added a disk manager holding all devices informations such as SMART
+* Added more information to disks under Hadware > HDDs including SMART, problems will be reported too
+* Added the program version to the GUI title
+* Added a search box to every table to be able to filter the results
+* Added DataTable js script and style
+* Added floatThead js script
+* Changed the html tables code to use DataTables that gives much more customization features
+* Changed the background color to lightgrey of the tables head
+* Changed the tables head to be fixed and always show on scroll while a table is visible
+* Changed the tables are now wrapped inside a '<div class="responsive"></div>'
+* Improved tables sort are now more realible
+* Fixed the tables big font-size aren't the default from theme
 * Moved Malware folder into Core
 * Moved Libraries into Resources
+* Removed table-responsive class from tables (wrong usage)
+
 
 # 1.4.0.0
 ## 16/04/2015

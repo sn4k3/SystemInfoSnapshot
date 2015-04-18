@@ -24,7 +24,7 @@ namespace SystemInfoSnapshot.Reports
             HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "row");
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
 
-            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "col-sm-6 col-md-4 col-lg-3");
+            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "col-sm-6 col-md-6 col-lg-6");
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
 
             HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "well text-center");
@@ -42,7 +42,7 @@ namespace SystemInfoSnapshot.Reports
             HtmlWriter.RenderEndTag(); // </div>
             HtmlWriter.RenderEndTag(); // </div>
 
-            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "col-sm-6 col-md-4 col-lg-3");
+            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "col-sm-6 col-md-6 col-lg-6");
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
 
             HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "well text-center");

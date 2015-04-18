@@ -15,5 +15,21 @@ namespace SystemInfoSnapshot.Extensions
         {
             return source.IndexOf(toCheck, comp) >= 0;
         }
+
+        public static string GetNotNull(this string source, string defaultString = "")
+        {
+            if (!string.IsNullOrEmpty(source))
+                return defaultString;
+
+            return source;
+        }
+
+        /*public static bool SetIfNull(this string source, string value)
+        {
+            if (!string.IsNullOrEmpty(source))
+                return false;
+            source = value;
+            return true;
+        }*/
     }
 }

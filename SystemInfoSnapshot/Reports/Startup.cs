@@ -138,7 +138,6 @@ namespace SystemInfoSnapshot.Reports
                     }
 
                     HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
-                    HtmlWriter.AddAttribute("data-sortable", "true");
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Thead);
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
@@ -175,19 +174,6 @@ namespace SystemInfoSnapshot.Reports
 
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tbody);
 
-                    /*result +=
-                        "<table data-sortable class=\"table table-striped table-bordered table-responsive table-hover sortable-theme-bootstrap\">" +
-                        "<thead>" +
-                        "<tr>" +
-                        "<th>#</th>" +
-                        "<th width=\"100\">Enabled</th>" +
-                        "<th>Entry</th>" +
-                        "<th>Description</th>" +
-                        "<th>Publisher</th>" +
-                        "<th>Image Path</th>" +
-                        "</tr>" +
-                        "</thead>" +
-                        "<tbody>";*/
                     var i = 0;
                     foreach (var autorunEntry in autorunDict.Value)
                     {
@@ -201,7 +187,7 @@ namespace SystemInfoSnapshot.Reports
                         HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "index", i.ToString());
 
                         HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "text-center enabled");
-                        HtmlWriter.AddAttribute("data-value", Convert.ToByte(autorunEntry.Enabled).ToString());
+                        HtmlWriter.AddAttribute("data-order", Convert.ToByte(autorunEntry.Enabled).ToString());
                         HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td);
                         HtmlWriter.Write(autorunEntry.Enabled
                                       ? "<span class=\"glyphicon glyphicon-ok text-success\"></span>"
@@ -216,7 +202,7 @@ namespace SystemInfoSnapshot.Reports
                         HtmlWriter.RenderEndTag(); // </tr>
                         /*result += "<tr class=\"" + extraClass + "\">" +
                                   "<td class=\"index\">" + i + "</td>" +
-                                  "<td class=\"text-center enabled\" data-value=\"" +
+                                  "<td class=\"text-center enabled\" data-order=\"" +
                                   Convert.ToByte(autorunEntry.Enabled) + "\">" +
                                   (autorunEntry.Enabled
                                       ? "<span class=\"glyphicon glyphicon-ok text-success\"></span>"

@@ -16,7 +16,6 @@ namespace SystemInfoSnapshot.Reports
             if (SystemHelper.IsWindows)
             {
                 HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
-                HtmlWriter.AddAttribute("data-sortable", "true");
                 HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);
 
                 HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Thead);

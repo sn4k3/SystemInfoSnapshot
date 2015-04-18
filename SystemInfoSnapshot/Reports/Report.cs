@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.UI;
+using System.Windows.Forms;
 using SystemInfoSnapshot.Components;
 
 namespace SystemInfoSnapshot.Reports
@@ -27,7 +28,7 @@ namespace SystemInfoSnapshot.Reports
         #endregion
 
         #region Constants
-        public const string TABLE_CLASS ="table table-striped table-bordered table-responsive table-hover sortable-theme-bootstrap";
+        public const string TABLE_CLASS ="table table-striped table-bordered table-hover";
         public const string NOT_SUPPORTED = "This operating system is not suported yet!";
         #endregion
 
