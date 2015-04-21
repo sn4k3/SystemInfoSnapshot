@@ -1,14 +1,12 @@
-﻿using System;
-using System.Web.UI;
-using SystemInfoSnapshot.Core.InstalledProgram;
-using SystemInfoSnapshot.Core.Malware;
-using SystemInfoSnapshot.Extensions;
+﻿using System.Web.UI;
+using System.Windows.Forms;
+using SystemInfoSnapshot.Core.SpecialFile;
 
 namespace SystemInfoSnapshot.Reports
 {
-    public sealed class Programs : Report
+    public sealed class SpecialFiles : Report
     {
-        public const string TemplateVar = "<!--[PROGRAMS]-->";
+        public const string TemplateVar = "<!--[SPECIALFILES]-->";
 
         public override string GetTemplateVar()
         {
@@ -17,9 +15,35 @@ namespace SystemInfoSnapshot.Reports
 
         protected override void Build()
         {
+            var specialFileManager = new SpecialFileManager();
             var i = 0;
-            var programManager = new InstalledProgramManager();
-            HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
+
+            foreach (var specialFile in specialFileManager)
+            {
+                i++;
+                HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "panel panel-success");
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+
+                HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "panel-heading");
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+
+                
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.H2);
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Div, HtmlTextWriterAttribute.Class, "pull-right", string.Format("<span class=\"badge\" style=\"font-size:34px;\">{0}</span>", i));
+                HtmlWriter.Write("<i class=\"fa fa-file-o\"></i> {0}", specialFile.Filename);
+                HtmlWriter.RenderEndTag(); // </h2>
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Span, specialFile.FullPath);
+                HtmlWriter.RenderEndTag(); // </div>
+
+                HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "panel-body");
+                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Pre, specialFile.Content.ToString());
+                HtmlWriter.RenderEndTag(); // </div>
+                
+                HtmlWriter.RenderEndTag(); // </div>
+            }
+
+            /*HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);
 
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Thead);
@@ -65,7 +89,7 @@ namespace SystemInfoSnapshot.Reports
             }
 
             HtmlWriter.RenderEndTag(); // </tbody>
-            HtmlWriter.RenderEndTag(); // </table>
+            HtmlWriter.RenderEndTag(); // </table>*/
         }
     }
 }

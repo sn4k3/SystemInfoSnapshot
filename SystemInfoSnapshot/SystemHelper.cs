@@ -16,6 +16,18 @@ namespace SystemInfoSnapshot
         MacOSX,
         Other
     }
+
+    public enum LinuxDistribution : byte
+    {
+        Debian = 0,
+        RHEL,
+        FreeBSD,
+        Gentoo,
+        Arch,
+        Cygwin,
+        Slackware,
+        Other
+    }
     #endregion
 
     /// <summary>

@@ -49,6 +49,7 @@ namespace SystemInfoSnapshot.Reports
                 {
                     var file = string.Empty;
                     var uptime = DateTime.Now.Subtract(process.StartTime).ToString(@"d\.hh\:mm\:ss");
+                    var name = "???";
 
                     try // Try if process is executed under 32bit and system is 64bits we need to handle permission exceptions
                     {
@@ -75,12 +76,22 @@ namespace SystemInfoSnapshot.Reports
                         }
                     }
 
+                    try
+                    {
+                        name = process.ProcessName;
+                    }
+                    catch (Exception)
+                    {
+                        if(string.IsNullOrEmpty(file))
+                            continue;
+                    }
+
 
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
 
                     HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "index", i.ToString());
                     HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "pid", process.Id.ToString());
-                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "name", process.ProcessName);
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "name", name);
                     HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "file", file);
                     HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "uptime", uptime);
                     HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "threads", process.Threads.Count.ToString());
@@ -107,7 +118,6 @@ namespace SystemInfoSnapshot.Reports
 
             HtmlWriter.RenderEndTag(); // </tbody>
             HtmlWriter.RenderEndTag(); // </table>
-            //result += "</tbody></table>";
         }
     }
 }

@@ -1,6 +1,15 @@
 # Changelog
 
-# Current
+# v1.6.0.0
+## 21/04/2015
+
+* Added a new report 'SpecialFiles' it shows some special files from the system and its contents, ie: hosts
+* Added support for installed programs under Mac OSX and most linux distributions (Debian, Ubuntu, Mint, Centos, Fedora, RedHat, Arch, etc)
+* Fixed a critical bug under linux and OSX that cause program crash if not possible to obtain the hardware
+* Fixed a critical bug under linux and OSX that cause the processes report to broke all the html when any process name is null
+* Changed the InstalledProgram class was been rewrited and moved into Core
+
+# v1.5.0.0
 ## 18/04/2015
 
 * Added a disk manager holding all devices informations such as SMART

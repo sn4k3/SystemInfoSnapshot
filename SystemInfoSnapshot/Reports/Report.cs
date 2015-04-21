@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.UI;
-using System.Windows.Forms;
 using SystemInfoSnapshot.Components;
 
 namespace SystemInfoSnapshot.Reports
@@ -198,7 +197,10 @@ namespace SystemInfoSnapshot.Reports
                 }
             });
 
-
+            /*foreach (var report in reports)
+            {
+                htmlTemplate.WriteFromVar(report.GetTemplateVar(), report.Html);
+            }*/
             
 
             if (/*!ReferenceEquals(htmlTemplate, null) && */saveReport)

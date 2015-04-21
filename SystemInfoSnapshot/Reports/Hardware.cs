@@ -24,7 +24,16 @@ namespace SystemInfoSnapshot.Reports
                 diskManager = new DiskManager();
             }
             Computer computer = new Computer { CPUEnabled = true, FanControllerEnabled = true, GPUEnabled = true, HDDEnabled = true, MainboardEnabled = true, RAMEnabled = true };
-            computer.Open();
+            try
+            {
+                computer.Open();
+            }
+            catch
+            {
+                WriteNotSupportedMsg();
+                return;
+            }
+
 
             HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Id, "accordion");
             HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "panel-group");
