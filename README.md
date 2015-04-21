@@ -12,6 +12,7 @@ You can share the generated report with your friend or someone of your trust to 
 6. Services
 7. Autoruns
 8. Installed programs
+9. Special files
 
 # GUI Screenshot
 ![GUI][gui_screenshot]
