@@ -141,7 +141,7 @@ namespace SystemInfoSnapshot.Reports
                     Where(t =>
                         (t.IsClass) &&
                         (!t.IsAbstract) &&
-                        (String.Equals(t.Namespace, "SystemInfoSnapshot.Reports", StringComparison.Ordinal)) && 
+                        (string.Equals(t.Namespace, "SystemInfoSnapshot.Reports", StringComparison.Ordinal)) && 
                         (t.IsSubclassOf(typeof(Report)))
                 ).ToArray();
 
@@ -159,11 +159,15 @@ namespace SystemInfoSnapshot.Reports
         /// </summary>
         /// <param name="reports">List of reports to generate.</param>
         /// <param name="saveReport">True for save reports in the html file.</param>
-        /// <param name="useSingleThread">True to generate the reports without parallel tasks</param>
+        /// <param name="filename">Sets the file full or relative path, if folder is given default name will be used in it.</param>
+        /// <param name="maxDegreeOfParallelism">Sets the maximum number of concurrent tasks enabled by this ParallelOptions instance.</param>
         /// <returns><see cref="HtmlTemplate"/> with the reports already written in the template.</returns>
-        public static HtmlTemplate GenerateReports(Report[] reports, bool saveReport = true, bool useSingleThread = false)
+        public static HtmlTemplate GenerateReports(Report[] reports, bool saveReport = true, string filename = null, int maxDegreeOfParallelism = -1)
         {
-            var htmlTemplate = new HtmlTemplate();
+            var htmlTemplate = new HtmlTemplate()
+            {
+                Filename =  filename
+            };
             //List<Report> asyncReports = new List<Report>();
 
             /*if (useSingleThread)
@@ -182,10 +186,9 @@ namespace SystemInfoSnapshot.Reports
             else
             {*/
 #if DEBUG
-            var options = new ParallelOptions { MaxDegreeOfParallelism = 1 };
-#else
-            var options = new ParallelOptions { MaxDegreeOfParallelism = useSingleThread ? 1 : -1 };
+            maxDegreeOfParallelism = 1;
 #endif
+            var options = new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism };
             Parallel.ForEach(reports, options, report =>
             {
                 Debug.WriteLine(report.GetTemplateVar());

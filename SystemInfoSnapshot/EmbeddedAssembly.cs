@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Windows.Forms;
 
 namespace SystemInfoSnapshot
 {
@@ -143,7 +144,6 @@ namespace SystemInfoSnapshot
             // Get the Name of the AssemblyFile
             var assemblyName = new AssemblyName(e.Name);
             var dllName = assemblyName.Name + ".dll";
-
             // Load from Embedded Resources
             var resources = thisAssembly.GetManifestResourceNames().Where(s => s.EndsWith(dllName));
             if (resources.Any())

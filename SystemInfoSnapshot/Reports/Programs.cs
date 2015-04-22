@@ -27,9 +27,12 @@ namespace SystemInfoSnapshot.Reports
 
             HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "#");
             HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Program");
-            HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Version");
-            HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Publisher");
-            HtmlWriter.RenderTag(HtmlTextWriterTag.Th, SystemHelper.IsWindows ? "Install Date" : "Description");
+            if (!SystemHelper.IsMacOSX)
+            {
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Version");
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Publisher");
+                HtmlWriter.RenderTag(HtmlTextWriterTag.Th, SystemHelper.IsWindows ? "Install Date" : "Description");
+            }
 
             HtmlWriter.RenderEndTag(); // </tr>
             HtmlWriter.RenderEndTag(); // </thead>
@@ -52,13 +55,21 @@ namespace SystemInfoSnapshot.Reports
 
                 HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "index", i.ToString());
                 HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "program", program.Name);
-                HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "version", program.Version);
-                HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "publisher", program.Publisher);
 
-                if(SystemHelper.IsWindows)
-                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "installdate", program.InstallDate);
-                else
-                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "description", program.Description);
+                if (!SystemHelper.IsMacOSX)
+                {
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "version", program.Version);
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "publisher",
+                        program.Publisher);
+
+                    if (SystemHelper.IsWindows)
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "installdate",
+                            program.InstallDate);
+                    else
+                        HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "description",
+                            program.Description);
+
+                }
 
                 HtmlWriter.RenderEndTag();
 

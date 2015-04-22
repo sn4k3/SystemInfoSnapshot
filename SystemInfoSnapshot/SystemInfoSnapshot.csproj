@@ -71,6 +71,10 @@
     <AssemblyOriginatorKeyFile>sign.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentCommandLineParser">
+      <HintPath>Resources\libraries\FluentCommandLineParser.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="OpenHardwareMonitorLib">
       <HintPath>Resources\libraries\OpenHardwareMonitorLib.dll</HintPath>
       <Private>False</Private>
@@ -147,6 +151,9 @@
     <None Include="..\CHANGELOG.md">
       <Link>CHANGELOG.md</Link>
     </None>
+    <None Include="..\LICENSE.md">
+      <Link>LICENSE.md</Link>
+    </None>
     <None Include="..\Makefile">
       <Link>Makefile</Link>
     </None>
@@ -177,6 +184,7 @@
   <ItemGroup>
     <Content Include="outlineCPU.ico" />
     <Content Include="Resources\data\malware.txt" />
+    <EmbeddedResource Include="Resources\libraries\FluentCommandLineParser.dll" />
     <None Include="Resources\executables\autorunsc.exe" />
     <None Include="Resources\images\web.png" />
     <None Include="Resources\images\folder_open.png" />

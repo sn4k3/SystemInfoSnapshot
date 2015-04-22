@@ -1,5 +1,18 @@
 # Changelog
 
+# v1.6.1.0
+## 22/04/2015
+
+* Added the FluentCommandLineParser.dll library to the project to easier get the passed parameters. https://github.com/fclp/fluent-command-line-parser
+* Added a new argument 'Filename' (-f, /f, --filename): Set the path and/or filename for the generated report file. If the passed path is a directory the default filename will be appended to it. Absolute or relative paths are allowed
+* Added a new argument 'Max Tasks' (-t, /t, --max-tasks <value>): Sets the maximum number of concurrent tasks enabled to generate the reports. If it is -1, there is no limit on the number of concurrently running operations (Default). If it is 1 it will run in a single thread, best used with single core CPUs or for debuging.
+* Added a new argument 'Help' (-?, /?, --help): Display a help message with all possible arguments and its usages
+* Added support for combined (grouped) options when passing three or more boolean arguments. ex: -sno (same as: -s -n -o)
+* Changed the way arguments can be passed. Now it support the following syntax: [-|--|/][switch_name][=|:| ][value]
+* Removed the empty columns for installed programs table under Mac OSX
+* Removed 'Single Thread' argument in favor of the new 'Max Tasks' argument, use -t 1 to produce the same effect
+
+
 # v1.6.0.0
 ## 21/04/2015
 
@@ -8,6 +21,7 @@
 * Fixed a critical bug under linux and OSX that cause program crash if not possible to obtain the hardware
 * Fixed a critical bug under linux and OSX that cause the processes report to broke all the html when any process name is null
 * Changed the InstalledProgram class was been rewrited and moved into Core
+
 
 # v1.5.0.0
 ## 18/04/2015

@@ -59,12 +59,39 @@ namespace SystemInfoSnapshot
         /// </summary>
         public void WriteToFile()
         {
-            var filename = Filename ?? "SystemInfoSnapshot";
-            filename += string.Format("_{0}.html", DateTime.Now).Replace(':', '-').Replace('/', '-').Replace(' ', '_');
+            var defaultFilename = string.Format("SystemInfoSnapshot_{0}.html", DateTime.Now).
+                Replace(':', '-').
+                Replace('/', '-').
+                Replace(' ', '_');;
+            var filename = Filename ?? defaultFilename;
+
+            //filename += string.Format("_{0}.html", DateTime.Now).Replace(':', '-').Replace('/', '-').Replace(' ', '_');
 #if !DEBUG
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            
-            filename = Directory.Exists(path) ? Path.Combine(path, filename) : filename;
+            string path = null;
+            if (!string.IsNullOrEmpty(Filename))
+            {
+                // If is a directory then keep filename the default name and set the folder only.
+                if (Directory.Exists(filename))
+                {
+                    path = filename;
+                    filename = defaultFilename;
+                }
+                else // If is not a directory then get the path from the filename if any and append .html to the filename
+                {
+                    path = Path.GetDirectoryName(Filename);
+                    if (!filename.EndsWith(".html"))
+                        filename += ".html";
+                }
+            }
+
+            // Last check for invalid path, if invalid set path as dekstop
+            if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
+            {
+                path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            }
+
+
+            filename = !string.IsNullOrEmpty(path) && Directory.Exists(path) ? Path.Combine(path, filename) : filename;
 #endif
             using (var htmlWriter = new StreamWriter(filename))
             {

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace SystemInfoSnapshot
 {
@@ -246,6 +247,16 @@ namespace SystemInfoSnapshot
             catch (Exception)
             {
                 // We don't want any surprises
+            }
+        }
+
+        public static void DisplayMessage(string text)
+        {
+            //Debug.WriteLine(text);
+            Console.WriteLine(text);
+            if (IsWindows || IsMacOSX)
+            {
+                MessageBox.Show(text);
             }
         }
         #endregion

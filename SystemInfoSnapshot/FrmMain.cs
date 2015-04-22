@@ -109,12 +109,12 @@ namespace SystemInfoSnapshot
         {
             ButtonsSetEnabled(true);
             var location = Path.GetDirectoryName(Program.HtmlTemplate.LastSaveFilePath);
-            if (string.IsNullOrEmpty(location))
+            /*if (string.IsNullOrEmpty(location))
             {
                 location = Application.StartupPath;
-            }
+            }*/
             lbFilename.Text = Path.GetFileName(Program.HtmlTemplate.LastSaveFilePath);
-            //lbLocation.Text = location;
+            lbLocation.Text = location;
             EndDateTime = DateTime.Now;
             tmClock.Stop();
             lbStatus.Text = string.Format("Report completed in {0:0.##}s", (EndDateTime - StartDateTime).TotalSeconds);
