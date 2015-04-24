@@ -11,7 +11,6 @@
         <link href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/yeti/bootstrap.min.css" rel="stylesheet">
         <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <link href="http://cdn.datatables.net/plug-ins/1.10.6/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
-        <!--<link href="http://cdn.datatables.net/colvis/1.1.2/css/dataTables.colVis.css" rel="stylesheet">-->
 
         <style type="text/css">
         /* XL Grids for Bootstrap */
@@ -576,6 +575,13 @@
         $('#dashboard-warnings, .warnings .text-total').text(messages.warnings.items.length);
         $('#dashboard-problems, .problems .text-total').text(messages.problems.items.length);
 
+        boxes = $('.hardware_hdd > .well:first-child');
+        maxHeight = Math.max.apply(
+                Math, boxes.map(function() {
+                    return $(this).height();
+                }).get());
+        boxes.css('min-height', (maxHeight+90)+'px');
+
         // Call functions
 		enableBackToTop ();
 
@@ -606,24 +612,16 @@
                 }
             } );
             $( colvis.button() ).insertBefore('div.dataTables_wrapper#'+$(this).attr('id')+'_wrapper');*/
+        });
 
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var element = $($(e.target).attr('href'));
+            if(!element.length)
+                return;
+
+            element.find('table.table:first').floatThead("reflow");
         });
     });
-
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-        var element = $($(e.target).attr('href'));
-        if(!element.length)
-            return;
-
-        element.find('table.table:first').floatThead("reflow");
-    });
-
-    boxes = $('.hardware_hdd > .well:first-child');
-    maxHeight = Math.max.apply(
-            Math, boxes.map(function() {
-                return $(this).height();
-            }).get());
-    boxes.css('min-height', (maxHeight+90)+'px');
 
     /*
     * Back to top functions
