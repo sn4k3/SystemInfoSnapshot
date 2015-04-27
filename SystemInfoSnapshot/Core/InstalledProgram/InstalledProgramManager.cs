@@ -9,7 +9,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -28,6 +27,16 @@ namespace SystemInfoSnapshot.Core.InstalledProgram
         public InstalledProgramManager(bool getPrograms = true)
         {
             InstalledPrograms = getPrograms ? GetInstalledPrograms() : new List<InstalledProgramItem>();
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Update all installed programs and refresh the list
+        /// </summary>
+        public void Update()
+        {
+            InstalledPrograms = GetInstalledPrograms();
         }
         #endregion
 
@@ -165,7 +174,7 @@ namespace SystemInfoSnapshot.Core.InstalledProgram
             {
                 try
                 {
-                    using (var proc = new Process())
+                    using (var proc = new System.Diagnostics.Process())
                     {
                         proc.StartInfo.FileName = shellCommand.Key;
                         proc.StartInfo.Arguments = shellCommand.Value;

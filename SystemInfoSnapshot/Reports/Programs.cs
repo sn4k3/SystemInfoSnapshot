@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web.UI;
-using SystemInfoSnapshot.Core.InstalledProgram;
+using SystemInfoSnapshot.Core;
 using SystemInfoSnapshot.Core.Malware;
 using SystemInfoSnapshot.Extensions;
 
@@ -17,8 +17,8 @@ namespace SystemInfoSnapshot.Reports
 
         protected override void Build()
         {
+            Managers.InstalledProgramManager.Update();
             var i = 0;
-            var programManager = new InstalledProgramManager();
             HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);
 
@@ -39,7 +39,7 @@ namespace SystemInfoSnapshot.Reports
 
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tbody);
 
-            foreach (var program in programManager)
+            foreach (var program in Managers.InstalledProgramManager)
             {
                 i++;
                 if (MalwareManager.Instance.Contains(program.Name))

@@ -1,4 +1,5 @@
 ﻿using System.Web.UI;
+using SystemInfoSnapshot.Core;
 
 namespace SystemInfoSnapshot.Reports
 {
@@ -15,6 +16,7 @@ namespace SystemInfoSnapshot.Reports
         {
             if (SystemHelper.IsWindows)
             {
+                Managers.DeviceManager.Update();
                 HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
                 HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);
 
@@ -31,9 +33,8 @@ namespace SystemInfoSnapshot.Reports
 
                 HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tbody);
             
-                var devices = Devices.GetPnPDevices();
                 var i = 0;
-                foreach (var device in devices)
+                foreach (var device in Managers.DeviceManager)
                 {
                     i++;
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);

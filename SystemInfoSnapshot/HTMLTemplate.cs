@@ -7,6 +7,7 @@
  */
 using System;
 using System.IO;
+using SystemInfoSnapshot.Core.Process;
 using SystemInfoSnapshot.Properties;
 
 namespace SystemInfoSnapshot
@@ -130,7 +131,7 @@ namespace SystemInfoSnapshot
         public void ShowInExplorer()
         {
             if (string.IsNullOrEmpty(Program.HtmlTemplate.LastSaveFilePath)) return;
-            ProcessHelper.ShowInExplorer(Program.HtmlTemplate.LastSaveFilePath);
+            ProcessManager.ShowInExplorer(Program.HtmlTemplate.LastSaveFilePath);
         }
 
         /// <summary>
@@ -139,7 +140,7 @@ namespace SystemInfoSnapshot
         public void OpenInDefaultBrowser()
         {
             if (string.IsNullOrEmpty(Program.HtmlTemplate.LastSaveFilePath)) return;
-            ProcessHelper.Open(Program.HtmlTemplate.LastSaveFilePath);
+            ProcessManager.Open(Program.HtmlTemplate.LastSaveFilePath);
         }
         #endregion
     }

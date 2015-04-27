@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Web.UI;
+using SystemInfoSnapshot.Core;
 
 namespace SystemInfoSnapshot.Reports
 {
@@ -70,9 +72,8 @@ namespace SystemInfoSnapshot.Reports
                     {"WMI", ""},
                     {"Sidebar Gadgets", ""},
                 };
-                var autoruns = new Autoruns();
-                autoruns.BuildEntries();
-                var autorunsDict = autoruns.GetAsDictionary();
+                Managers.AutorunManager.Update();
+                var autorunsDict = Managers.AutorunManager.GetAsDictionary();
 
                 HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "nav nav-tabs");
                 HtmlWriter.AddAttribute("role", "tablist");
@@ -102,20 +103,11 @@ namespace SystemInfoSnapshot.Reports
 
                     HtmlWriter.RenderEndTag(); // </a>
                     HtmlWriter.RenderEndTag(); // </li>
-                    /*result +=
-                        string.Format(
-                            "<li role=\"presentation\" class=\"{0}\"><a href=\"#autorun_{2}\" aria-controls=\"{2}\" role=\"tab\" data-toggle=\"tab\"><i class=\"{4}\"></i> {1} ({3})</a></li>",
-                            autorunDict.Key.Equals("Logon") ? "active" : string.Empty,
-                            autorunDict.Key, autorunDict.Key.Replace(" ", ""),
-                            autorunDict.Value.Count,
-                            icons.ContainsKey(autorunDict.Key) ? icons[autorunDict.Key] : string.Empty);*/
                 }
                 HtmlWriter.RenderEndTag(); // </ul>
-                //result += "</ul>";
 
                 HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "tab-content");
                 HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
-                //result += "<div class=\"tab-content\">";
                 foreach (var autorunDict in autorunsDict)
                 {
                     HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Id, string.Format("autorun_{0}", autorunDict.Key.Replace(" ", string.Empty)));
@@ -124,14 +116,11 @@ namespace SystemInfoSnapshot.Reports
                         HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "active");
                     HtmlWriter.AddAttribute("role", "tabpanel");
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
-                    //result += string.Format("<div role=\"tabpanel\" class=\"tab-pane{0}\" id=\"autorun_{1}\">",
-                    //    (autorunDict.Key.Equals("Logon") ? " active" : string.Empty), autorunDict.Key.Replace(" ", ""));
                     if (autorunDict.Value.Count == 0)
                     {
                         HtmlWriter.RenderBeginTag(HtmlTextWriterTag.P);
                         HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Strong);
                         HtmlWriter.Write("No autorun entries under this category.");
-                        //result += "<p><strong>No autorun entries under this category</strong></p>";
                         HtmlWriter.RenderEndTag(); // </strong>
                         HtmlWriter.RenderEndTag(); // </p>
                         continue;
@@ -148,34 +137,14 @@ namespace SystemInfoSnapshot.Reports
                     HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Description");
                     HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Publisher");
                     HtmlWriter.RenderTag(HtmlTextWriterTag.Th, "Image Path");
-                    /*HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Width, "100");
-                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Th);
-                    HtmlWriter.Write("Enabled");
-                    HtmlWriter.RenderEndTag();
-
-                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Th);
-                    HtmlWriter.Write("Entry");
-                    HtmlWriter.RenderEndTag();
-
-                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Th);
-                    HtmlWriter.Write("Description");
-                    HtmlWriter.RenderEndTag();
-
-                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Th);
-                    HtmlWriter.Write("Publisher");
-                    HtmlWriter.RenderEndTag();
-
-                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Th);
-                    HtmlWriter.Write("Image Path");
-                    HtmlWriter.RenderEndTag();*/
-
+                    
                     HtmlWriter.RenderEndTag(); // </tr>
                     HtmlWriter.RenderEndTag(); // </thead>
 
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tbody);
 
                     var i = 0;
-                    foreach (var autorunEntry in autorunDict.Value)
+                    foreach (var autorunEntry in autorunDict.Value.OrderBy(item => !item.Enabled).ThenBy(item => item.Entry))
                     {
                         i++;
                         if (!autorunEntry.IsValidFile)
@@ -200,32 +169,16 @@ namespace SystemInfoSnapshot.Reports
                         HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "imagepath", autorunEntry.ImagePath);
 
                         HtmlWriter.RenderEndTag(); // </tr>
-                        /*result += "<tr class=\"" + extraClass + "\">" +
-                                  "<td class=\"index\">" + i + "</td>" +
-                                  "<td class=\"text-center enabled\" data-order=\"" +
-                                  Convert.ToByte(autorunEntry.Enabled) + "\">" +
-                                  (autorunEntry.Enabled
-                                      ? "<span class=\"glyphicon glyphicon-ok text-success\"></span>"
-                                      : "<span class=\"glyphicon glyphicon-remove text-error\"></span>") + "</td>" +
-                                  "<td class=\"entry\">" + autorunEntry.Entry + "</td>" +
-                                  "<td class=\"description\">" + autorunEntry.Description + "</td>" +
-                                  "<td class=\"publisher\">" + autorunEntry.Publisher + "</td>" +
-                                  "<td class=\"path\">" + autorunEntry.ImagePath + "</td>" +
-                                  "</tr>";*/
                     }
                     HtmlWriter.RenderEndTag(); // </tbody>
                     HtmlWriter.RenderEndTag(); // </table>
-                    //result += "</tbody></table>";
                     HtmlWriter.RenderEndTag(); // </div>
-                    //result += "</div>";
                 }
                 HtmlWriter.RenderEndTag(); // </div>
-                //result += "</div>";
             }
             else
             {
                 WriteNotSupportedMsg();
-                //result = "<strong>This operating system is not suported yet!</strong>";
             }
         }
     }

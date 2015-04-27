@@ -1,10 +1,19 @@
-﻿using System;
+﻿/*
+ * SystemInfoSnapshot
+ * Author: Tiago Conceição
+ * 
+ * http://systeminfosnapshot.com/
+ * https://github.com/sn4k3/SystemInfoSnapshot
+ */
+
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using SystemInfoSnapshot.Properties;
 
-namespace SystemInfoSnapshot
+namespace SystemInfoSnapshot.Core.Autorun
 {
     /// <summary>
     /// Sysinternals Autoruns v13.2 - Autostart program viewer
@@ -50,48 +59,98 @@ namespace SystemInfoSnapshot
     /// -z     Specifies the offline Windows system to scan. 
     /// user   Specifies the name of the user account for which autorun items will be shown. Specify '*' to scan all user profiles.
     /// </summary>
-    public sealed class Autoruns : IDisposable
+    public sealed class AutorunManager : IEnumerable<AutorunItem>, IDisposable
     {
-        public sealed class AutorunEntry
+        #region Properties
+        /// <summary>
+        /// Gets the autoruns
+        /// </summary>
+        public List<AutorunItem> Autoruns { get; private set; }
+
+        /// <summary>
+        /// Gets the path for the executable file autorunsc.exe
+        /// </summary>
+        public static string ExecutableFile { get; private set; }
+        #endregion
+
+        #region Constructor
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="getAll">True if you want populate this class with the predefined files, otherwise false to make it blank.</param>
+        public AutorunManager(bool getAll = true)
         {
-            //Time,Entry Location,Entry,Enabled,Category,Profile,Description,Publisher,Image Path,Version,Launch String
+            Autoruns = getAll ? GetAuroruns() : new List<AutorunItem>();
+        }
+        #endregion
 
-            public DateTime Time { get; set; }
-            public string EntryLocation { get; set; }
-            public string Entry { get; set; }
-            public bool Enabled { get; set; }
-            public string Category { get; set; }
-            public string Profile { get; set; }
-            public string Description { get; set; }
-            public string Publisher { get; set; }
-            public string ImagePath { get; set; }
-            public string Version { get; set; }
-            public string LunchString { get; set; }
+        #region Methods
+        public void Update()
+        {
+            Autoruns = GetAuroruns();
+        }
 
-            public bool IsValidFile { get; set; }
+        public Dictionary<string, List<AutorunItem>> GetAsDictionary()
+        {
+            if (Autoruns.Count == 0)
+                Update();
 
-            public AutorunEntry()
+            var dict = new Dictionary<string, List<AutorunItem>>();
+            foreach (var autorunEntry in Autoruns)
             {
-                IsValidFile = true;
+                if (!dict.ContainsKey(autorunEntry.Category))
+                {
+                    dict.Add(autorunEntry.Category, new List<AutorunItem>());
+                }
+
+                dict[autorunEntry.Category].Add(autorunEntry);
+            }
+            
+            return dict;
+        }
+
+        public void Clear()
+        {
+            if (!string.IsNullOrEmpty(ExecutableFile)) return;
+
+            try
+            {
+                File.Delete(ExecutableFile);
+                ExecutableFile = null;
+            }
+            catch (Exception)
+            {
+                // ignored
             }
         }
-        public string ExecutableFile { get; private set; }
-        public List<AutorunEntry> AutorunEntries { get; private set; }
-        public Autoruns()
-        {
-            AutorunEntries = new List<AutorunEntry>();
-        }
 
-        public void BuildEntries()
+        public void Dispose()
         {
+            Clear();
+        }
+        #endregion
+
+        #region Static Methods
+
+        /// <summary>
+        /// Gets a list of special files on this machine.
+        /// </summary>
+        /// <returns></returns>
+        public static List<AutorunItem> GetAuroruns()
+        {
+            var result = new List<AutorunItem>();
+            if (!SystemHelper.IsWindows)
+                return result;
+
             try
             {
                 if (string.IsNullOrEmpty(ExecutableFile))
                 {
                     ExecutableFile = Path.Combine(Path.GetTempPath(), "autorunsc.exe");
-                    File.WriteAllBytes(ExecutableFile, Resources.autorunsc);
+                    if (!File.Exists(ExecutableFile))
+                        File.WriteAllBytes(ExecutableFile, Resources.autorunsc);
                 }
-                using (var proc = new Process())
+                using (var proc = new System.Diagnostics.Process())
                 {
                     proc.StartInfo.FileName = ExecutableFile;
                     proc.StartInfo.Arguments = "-a * -m -c -accepteula";
@@ -116,12 +175,12 @@ namespace SystemInfoSnapshot
                         }
 
                         byte argc = 0;
-                        AutorunEntry entry = new AutorunEntry();
+                        var entry = new AutorunItem();
                         if (!string.IsNullOrEmpty(args[argc]))
                         {
-                            DateTime result;
-                            DateTime.TryParse(args[argc], out result);
-                            entry.Time = result;
+                            DateTime datetime;
+                            DateTime.TryParse(args[argc], out datetime);
+                            entry.Time = datetime;
                         }
 
                         argc++;
@@ -164,7 +223,7 @@ namespace SystemInfoSnapshot
                             continue;
                         }
 
-                        AutorunEntries.Add(entry);
+                        result.Add(entry);
                     }
 
                     proc.Close();
@@ -174,44 +233,53 @@ namespace SystemInfoSnapshot
             {
                 // ignored
             }
+
+            return result;
         }
 
-        public Dictionary<string, List<AutorunEntry>> GetAsDictionary()
+        #endregion
+
+        #region Overrides
+        public IEnumerator<AutorunItem> GetEnumerator()
         {
-            if(AutorunEntries.Count == 0)
-                BuildEntries();
-
-            var dict = new Dictionary<string, List<AutorunEntry>>();
-            foreach (var autorunEntry in AutorunEntries)
-            {
-                if (!dict.ContainsKey(autorunEntry.Category))
-                {
-                    dict.Add(autorunEntry.Category, new List<AutorunEntry>());
-                }
-
-                dict[autorunEntry.Category].Add(autorunEntry);
-            }
-            return dict;
+            return Autoruns.GetEnumerator();
         }
 
-        public void Clear()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            if (!string.IsNullOrEmpty(ExecutableFile)) return;
-
-            try
-            {
-                File.Delete(ExecutableFile);
-                ExecutableFile = null;
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
+            return GetEnumerator();
         }
+        #endregion
 
-        public void Dispose()
+        #region Indexers
+        /// <summary>
+        /// Indexers 
+        /// </summary>
+        /// <param name="index">index</param>
+        /// <returns></returns>
+        public AutorunItem this[int index]    // Indexer declaration
         {
-            Clear();
+            get
+            {
+                return Autoruns[index];
+            }
+
+            set
+            {
+                Autoruns[index] = value;
+            }
         }
+
+        /// <summary>
+        /// Indexers 
+        /// </summary>
+        /// <param name="name">name</param>
+        /// <returns></returns>
+        public AutorunItem this[string name]    // Indexer declaration
+        {
+            get
+            { return Autoruns.FirstOrDefault(item => item.Equals(name)); }
+        }
+        #endregion
     }
 }

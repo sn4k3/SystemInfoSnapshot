@@ -15,6 +15,7 @@ namespace SystemInfoSnapshot.Reports
 
         protected override void Build()
         {
+            var networks = NetworkInterface.GetAllNetworkInterfaces().ToList().OrderBy(@interface => @interface.OperationalStatus);
             HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);
 
@@ -35,7 +36,7 @@ namespace SystemInfoSnapshot.Reports
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tbody);
 
             var i = 0;
-            foreach (var adapter in NetworkInterface.GetAllNetworkInterfaces())
+            foreach (var adapter in networks)
             {
                 var properties = adapter.GetIPProperties();
                 var statistics = adapter.GetIPv4Statistics();

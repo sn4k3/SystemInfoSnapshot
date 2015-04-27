@@ -1,5 +1,18 @@
 # Changelog
 
+# 1.6.2.0
+## 27/04/2015
+
+* Added a new section on page under the dashboard with 'Actions and page options'
+* Updated autorunsc.exe from v13.2 to v13.3
+* Changed tables will not make use of extra features from datatables by default because huge tables can freeze the page from loading if not loaded locally. Still local html report file will init tables with datatables plugin if there are less than 4000 rows on page or 1000 if online.
+* Changed the networks default sort. They are now sorted by status
+* Changed the processes default sort. They are now sorted by memory DESC
+* Changed the services default sort. They are now sorted by status and name ASC
+* Changed the autoruns default sort. They are now sorted by enabled and name ASC
+* Moved some code classes into Core
+
+
 # v1.6.1.0
 ## 22/04/2015
 

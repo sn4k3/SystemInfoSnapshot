@@ -50,7 +50,7 @@
         .panel-body { padding: 0; }
         .panel-body pre { margin: 0; }
         .panel .panel {margin: 0; }
-        table.table, table.dataTable { margin: 0 !important; }
+         table.table, table.dataTable { margin: 0 !important; }
          td{vertical-align: middle !important;
              word-wrap: break-word;
              -webkit-hyphens: auto;
@@ -159,6 +159,7 @@
 
 
         /* Utilities */
+        .nomargin{ margin:0; }
         .padding20 {padding: 20px;}
         .lessmarginbottom20 { margin-bottom: -20px; }
         .border-warning { outline: #e99002 solid 5px; }
@@ -260,21 +261,31 @@
 	<div class="container-fluid">
         <div id="dashboard" class="panel panel-primary">
             <div class="panel-heading"><h1><i class="glyphicon glyphicon-dashboard pull-right"></i>Dashboard</h1></div>
-            <div class="panel-body lessmarginbottom20">
+            <div class="panel-body">
                 <!--DASHBOARD-->
                 <div class="row">
                     <div class="col-sm-6">
-                        <div class="alert alert-warning text-center">
+                        <div class="alert alert-warning text-center nomargin">
                             <h1><i class="fa fa-exclamation-triangle fa-3x"></i></h1>
                             <h2>Warning(s)</h2>
                             <h1 id="dashboard-warnings">0</h1>
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="alert alert-danger text-center">
+                        <div class="alert alert-danger text-center nomargin">
                             <h1><i class="fa fa-times fa-3x"></i></h1>
                             <h2>Problem(s)</h2>
                             <h1 id="dashboard-problems">0</h1>
+                        </div>
+                    </div>
+                </div>
+                <div id="actions" class="panel panel-primary">
+                    <div class="panel-heading"><h1><i class="glyphicon glyphicon-wrench pull-right"></i>Actions and page options</h1></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-4 col-lg-3">
+                                <button id="EnhancementTablesBtn" class="btn btn-default btn-lg btn-block"><i class="fa fa-table"></i> Enhancement all tables</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -311,16 +322,16 @@
 		
 		<div id="processes" class="panel panel-primary">
 			<div class="panel-heading"><h1><i class="glyphicon glyphicon-tasks pull-right"></i>Processes <span class="count"></span></h1></div>
-				<div class="panel-body">
-					<!--[PROCESSES]-->
+            <div class="panel-body">
+                <!--[PROCESSES]-->
 			</div>
 		</div>
 		
 		<div id="services" class="panel panel-primary">
 			<div class="panel-heading"><h1><i class="fa fa-cogs pull-right"></i>Services <span class="count"></span></h1></div>
-				<div class="panel-body">
-					<!--[SERVICES]-->
-			</div>
+            <div class="panel-body">
+                <!--[SERVICES]-->
+            </div>
 		</div>
 
         <div id="autoruns" class="panel panel-primary">
@@ -386,6 +397,12 @@
     /*
     * Global Variables
     */
+    var pageOptions = {
+        'EnhancementTables' : false,
+        'NavbarHeight'      : 0,
+        'TotalTableItems'   : 0
+    };
+
     var messages = {
         'warnings' : {
             'index' : -1,
@@ -421,7 +438,7 @@
 
 
         $(item['highlightelement']).addClass('border-' + (isWarning ? 'warning' : 'danger'));
-        var top = Math.max(0, $(item['highlightelement']).offset().top - navbarHeight - 100);
+        var top = Math.max(0, $(item['highlightelement']).offset().top - pageOptions['NavbarHeight'] - 100);
         $('body, html').stop().animate({
             scrollTop: top
         }, 600, 'swing');
@@ -434,12 +451,49 @@
         GoToMessage(oldindex, index, false);
     }
 
-    var navbarHeight;
+    function EnhancementTables(confirmMsg)
+    {
+        if(pageOptions['EnhancementTables']) return;
+        if(confirmMsg) {
+            if (!confirm('This option will enhancement all the tables by adding:\n- Fixed Headers;\n- Column sorting;\n- Filters and data searching.\n\nThis action can be slow when having huge tables with lots of data, are you sure you want to enable this?')) return;
+        }
+
+        $('#EnhancementTablesBtn').attr('disabled', 'disabled').append(' <small><i class="fa fa-check text-success"></i></small>')
+
+        $('table.table').each(function(){
+            if(confirmMsg)
+                $(this).unwrap();
+
+            $(this).find('thead tr:first').addClass('active');
+            var table = $(this).dataTable( {
+                "paging":   false,
+                "info":     false,
+                //"scrollX":  true,
+                "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]]
+            });
+
+            $(table).floatThead({
+                scrollingTop: pageOptions['NavbarHeight']
+            }).wrap('<div class="table-responsive"></div>');
+
+
+        });
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var element = $($(e.target).attr('href'));
+            if(!element.length)
+                return;
+
+            element.find('table.table:first').floatThead("reflow");
+        });
+
+        pageOptions['EnhancementTables'] = true;
+    }
+
     function updateResize()
     {
-        navbarHeight = parseInt($('#main-navbar').css("height"));
-        $('body').css('margin-top', navbarHeight);
-        //$('#controls').css('top', navbarHeight+25);
+        pageOptions['NavbarHeight'] = parseInt($('#main-navbar').css("height"));
+        $('body').css('margin-top', pageOptions['NavbarHeight']);
     }
 
     /*
@@ -468,6 +522,7 @@
             var items = $(this).find("tbody tr").length;
             if(items)
             {
+                pageOptions['TotalTableItems'] += items;
                 $(this).closest('.panel').find('.panel-heading .count').text("("+items+")");
             }
         });
@@ -544,6 +599,7 @@
             GoToMessage(oldindex, newindex, isWarning);
         });
 
+
         /*
         * Build messages from html elements
         */
@@ -582,45 +638,20 @@
                 }).get());
         boxes.css('min-height', (maxHeight+90)+'px');
 
+        if((window.location.protocol == 'file:' && pageOptions['TotalTableItems'] <= 4000) || pageOptions['TotalTableItems'] <= 1000) {
+            EnhancementTables(false);
+        }
+        else
+        {
+            $('table.table').wrap('<div class="table-responsive"></div>');
+            // Other buttons events
+            $('#EnhancementTablesBtn').click(function(){
+                EnhancementTables(true);
+            });
+        }
+
         // Call functions
 		enableBackToTop ();
-
-        $('table.table').each(function(){
-            $(this).find('thead tr:first').addClass('active');
-            var table = $(this).dataTable( {
-                "paging":   false,
-                "info":     false,
-                //"scrollX":  true,
-                "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]]
-            } );
-
-            $(table).wrap('<div class="table-responsive"></div>');
-            $(table).floatThead({
-                scrollingTop: navbarHeight
-            });
-            /*new $.fn.dataTable.FixedHeader(table, {
-                "offsetTop": navbarHeight
-            });*/
-
-            /*var colvis = new $.fn.dataTable.ColVis( table,  {
-                exclude: [ 0, 1 ],
-                restore: "Restore",
-                showAll: "Show all",
-                showNone: "Show none",
-                "fnStateChange": function ( iColumn, bVisible ) {
-                    $('table.table').floatThead("reflow");
-                }
-            } );
-            $( colvis.button() ).insertBefore('div.dataTables_wrapper#'+$(this).attr('id')+'_wrapper');*/
-        });
-
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            var element = $($(e.target).attr('href'));
-            if(!element.length)
-                return;
-
-            element.find('table.table:first').floatThead("reflow");
-        });
     });
 
     /*

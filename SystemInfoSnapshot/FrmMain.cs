@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using SystemInfoSnapshot.Core.Process;
 
 namespace SystemInfoSnapshot
 {
@@ -71,7 +72,7 @@ namespace SystemInfoSnapshot
         {
             if (sender == btnWebsite)
             {
-                SystemHelper.OpenLink(Program.Website);
+                ProcessManager.OpenLink(Program.Website);
                 return;
             }
             if (sender == btnRebuildReport)

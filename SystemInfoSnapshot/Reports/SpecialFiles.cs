@@ -1,6 +1,5 @@
 ﻿using System.Web.UI;
-using System.Windows.Forms;
-using SystemInfoSnapshot.Core.SpecialFile;
+using SystemInfoSnapshot.Core;
 
 namespace SystemInfoSnapshot.Reports
 {
@@ -15,10 +14,9 @@ namespace SystemInfoSnapshot.Reports
 
         protected override void Build()
         {
-            var specialFileManager = new SpecialFileManager();
             var i = 0;
 
-            foreach (var specialFile in specialFileManager)
+            foreach (var specialFile in Managers.SpecialFileManager)
             {
                 i++;
                 HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "panel panel-success");

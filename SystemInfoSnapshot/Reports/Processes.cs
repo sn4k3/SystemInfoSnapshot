@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
-using System.Management;
 using System.Web.UI;
+using SystemInfoSnapshot.Core;
+using SystemInfoSnapshot.Core.Process;
 
 namespace SystemInfoSnapshot.Reports
 {
@@ -38,62 +38,27 @@ namespace SystemInfoSnapshot.Reports
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tbody);
 
 
-            ProcessHelper.ClearProcessInfoCache();
-
+            ProcessManager.ClearProcessInfoCache();
+            Managers.ProcessManager.Update();
+            
             var i = 0;
-            foreach (var process in Process.GetProcesses())
+            foreach (var process in Managers.ProcessManager)
             {
                 i++;
 
                 try
                 {
-                    var file = string.Empty;
-                    var uptime = DateTime.Now.Subtract(process.StartTime).ToString(@"d\.hh\:mm\:ss");
-                    var name = "???";
-
-                    try // Try if process is executed under 32bit and system is 64bits we need to handle permission exceptions
-                    {
-                        file = process.MainModule.FileName;
-                    }
-                    catch (Exception)
-                    {
-                        if (SystemHelper.IsWindows)
-                        {
-                            var processinfo = ProcessHelper.GetProcessInfo(process);
-                            if (!ReferenceEquals(processinfo, null))
-                            {
-                                if (!ReferenceEquals(processinfo[ProcessHelper.ExecutablePath], null))
-                                    file = processinfo[ProcessHelper.ExecutablePath].ToString();
-
-                                /*if (!ReferenceEquals(processinfo[ProcessHelper.StartTime], null))
-                            {
-                                uptime =
-                                    DateTime.Now.Subtract(
-                                        ManagementDateTimeConverter.ToDateTime(
-                                            processinfo[ProcessHelper.StartTime].ToString())).ToString(@"d\.hh\:mm\:ss");
-                            }*/
-                            }
-                        }
-                    }
-
-                    try
-                    {
-                        name = process.ProcessName;
-                    }
-                    catch (Exception)
-                    {
-                        if(string.IsNullOrEmpty(file))
-                            continue;
-                    }
+                    if (string.IsNullOrEmpty(process.ProcessName) && string.IsNullOrEmpty(process.ExecutablePath))
+                        continue;
 
 
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
 
                     HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "index", i.ToString());
                     HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "pid", process.Id.ToString());
-                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "name", name);
-                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "file", file);
-                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "uptime", uptime);
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "name", process.ProcessName);
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "file", process.ExecutablePath);
+                    HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "uptime", process.UpTimeString);
                     HtmlWriter.RenderTag(HtmlTextWriterTag.Td, HtmlTextWriterAttribute.Class, "threads", process.Threads.Count.ToString());
 
                     HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "memory");

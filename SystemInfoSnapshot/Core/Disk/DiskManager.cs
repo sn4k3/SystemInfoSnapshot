@@ -13,7 +13,12 @@ namespace SystemInfoSnapshot.Core.Disk
         /// <summary>
         /// Gets the avaliable devices list
         /// </summary>
-        public Dictionary<uint, DiskItem> Devices { get; private set; }
+        public Dictionary<uint, DiskItem> Disks { get; private set; }
+
+        /// <summary>
+        /// Gets the disks count
+        /// </summary>
+        public int Count { get { return Disks.Count;  } }
         #endregion
 
         #region Constructor
@@ -22,7 +27,15 @@ namespace SystemInfoSnapshot.Core.Disk
         /// </summary>
         public DiskManager()
         {
-            Devices = GetAll();
+            Disks = GetAll();
+        }
+        #endregion
+
+        #region Methods
+
+        public void Update()
+        {
+            Disks = GetAll();
         }
         #endregion
 
@@ -31,6 +44,10 @@ namespace SystemInfoSnapshot.Core.Disk
         public static Dictionary<uint, DiskItem> GetAll()
         {
             var drives = new Dictionary<uint, DiskItem>();
+
+            if (!SystemHelper.IsWindows)
+                return drives;
+
             //var props = typeof (DiskItem).GetProperties();
 
             // Win32_DiskDrive
@@ -214,7 +231,7 @@ namespace SystemInfoSnapshot.Core.Disk
 
         public IEnumerator<DiskItem> GetEnumerator()
         {
-            return Devices.Values.GetEnumerator();
+            return Disks.Values.GetEnumerator();
         }
 
         /// <summary>
@@ -225,7 +242,7 @@ namespace SystemInfoSnapshot.Core.Disk
         {
             var sb = new StringBuilder();
 
-            foreach (var device in Devices)
+            foreach (var device in Disks)
             {
                 sb.AppendLine(device.ToString());
             }
@@ -250,12 +267,12 @@ namespace SystemInfoSnapshot.Core.Disk
         {
             get
             {
-                return Devices[(uint)index];
+                return Disks[(uint)index];
             }
 
             set
             {
-                Devices[(uint)index] = value;
+                Disks[(uint)index] = value;
             }
         }
 
@@ -268,12 +285,12 @@ namespace SystemInfoSnapshot.Core.Disk
         {
             get
             {
-                return Devices[index];
+                return Disks[index];
             }
 
             set
             {
-                Devices[index] = value;
+                Disks[index] = value;
             }
         }
 
@@ -281,10 +298,10 @@ namespace SystemInfoSnapshot.Core.Disk
         {
             get
             {
-                var result = Devices.FirstOrDefault(item => item.Value.Equals(name));
+                var result = Disks.FirstOrDefault(item => item.Value.Equals(name));
                 if (ReferenceEquals(result.Value, null))
                 {
-                    result = Devices.FirstOrDefault(item => item.Value.Model.Equals(name));
+                    result = Disks.FirstOrDefault(item => item.Value.Model.Equals(name));
                 }
                 return result.Value;
             }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.UI;
-using System.Windows.Forms;
+using SystemInfoSnapshot.Core;
 using SystemInfoSnapshot.Core.Disk;
 using OpenHardwareMonitor.Hardware;
 
@@ -16,19 +16,9 @@ namespace SystemInfoSnapshot.Reports
             return TemplateVar;
         }
 
-        private DiskManager diskManager;
         protected override void Build()
         {
-            if (SystemHelper.IsWindows)
-            {
-                diskManager = new DiskManager();
-            }
-            Computer computer = new Computer { CPUEnabled = true, FanControllerEnabled = true, GPUEnabled = true, HDDEnabled = true, MainboardEnabled = true, RAMEnabled = true };
-            try
-            {
-                computer.Open();
-            }
-            catch
+            if(!Managers.HardwareManager.IsSupported)
             {
                 WriteNotSupportedMsg();
                 return;
@@ -71,7 +61,7 @@ namespace SystemInfoSnapshot.Reports
             HtmlWriter.AddAttribute("aria-labelledby", "headingOne");
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
 
-            HtmlWriter.RenderTag(HtmlTextWriterTag.Div, HtmlTextWriterAttribute.Class, "panel-body padding20", computer.GetReport().Replace(Environment.NewLine, string.Format("{0}<br>", Environment.NewLine)));
+            HtmlWriter.RenderTag(HtmlTextWriterTag.Div, HtmlTextWriterAttribute.Class, "panel-body padding20", Managers.HardwareManager.GetReport().Replace(Environment.NewLine, string.Format("{0}<br>", Environment.NewLine)));
 
             HtmlWriter.RenderEndTag(); // </div>
             HtmlWriter.RenderEndTag(); // </div>
@@ -95,8 +85,8 @@ namespace SystemInfoSnapshot.Reports
                             "</div>" +
                          "</div>" +
                          "<div class=\"row\">";*/
-         
-            RenderHardware(computer.Hardware);
+
+            RenderHardware(Managers.HardwareManager.Hardware);
 
             HtmlWriter.RenderEndTag(); // </div>
         }
@@ -264,12 +254,12 @@ namespace SystemInfoSnapshot.Reports
 
                 RenderHardware(hardware.SubHardware);
 
-                if (hardware.HardwareType == HardwareType.HDD && SystemHelper.IsWindows)
+                if (hardware.HardwareType == HardwareType.HDD && SystemHelper.IsWindows && Managers.HardwareManager.DiskManager.Count > 0)
                 {
-                    var disk = diskManager[hardware.Name];
+                    var disk = Managers.HardwareManager.DiskManager[hardware.Name];
                     if (!ReferenceEquals(disk, null))
                     {
-                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "text-left");
+                        HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "col-sm-12 text-left");
                         HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
 
                         // Disk Info
@@ -304,6 +294,7 @@ namespace SystemInfoSnapshot.Reports
 
 
                         // Disk SMART
+
 
                         HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
                         HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);

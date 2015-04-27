@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.ServiceProcess;
 using System.Web.UI;
 
@@ -17,7 +18,7 @@ namespace SystemInfoSnapshot.Reports
         {
             if (SystemHelper.IsWindows)
             {
-                var services = ServiceController.GetServices();
+                var services = ServiceController.GetServices().OrderBy(controller => -(int)controller.Status).ThenBy(controller => controller.DisplayName);
                 HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, TABLE_CLASS);
                 HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table);
 

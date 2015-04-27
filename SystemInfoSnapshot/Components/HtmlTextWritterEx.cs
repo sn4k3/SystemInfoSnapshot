@@ -86,5 +86,15 @@ namespace SystemInfoSnapshot.Components
 
             _attrValues = new Dictionary<HtmlTextWriterAttribute, List<string>>();
         }
+
+        public void BeginJavascript()
+        {
+            Write("<script type=\"text/javascript\">");
+        }
+
+        public void EndJavascript()
+        {
+            Write("</script>");
+        }
     }
 }
