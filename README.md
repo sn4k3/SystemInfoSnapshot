@@ -81,10 +81,28 @@ Report will be generated and the html file will show on explorer after completio
  3. "SystemInfoSnapshot.exe -t 4" - Allow only 4 maximum tasks.
 * *Note:* See ParallelOptions > MaxDegreeOfParallelism for more information about it.
 
+## Listen server
+* **Arguments:** '--listen-server' or '/listen-server' <ip:port> [update-interval:int]
+* **Description:** Create a local web server and display live information about this machine on the web.
+* **Default:** *:8080 10.
+* **Examples:**
+  1. "SystemInfoSnapshot.exe --listen-server *" - Listen the server on any IP in the default port with 10 seconds of update interval.
+  2. "SystemInfoSnapshot.exe --listen-server localhost:803" - Listen the server on the 127.0.0.1 IP in the 803 port with 10 seconds of update interval.
+  3. "SystemInfoSnapshot.exe --listen-server * 20" - Listen the server on any IP in the default port with 20 seconds of update interval.
+  4. "SystemInfoSnapshot.exe --listen-server *:600 30" - Listen the server on any IP in the 600 port with 30 seconds of update interval.
+  5. "SystemInfoSnapshot.exe --listen-server *:600 30 --max-tasks 1" - Same as above but set the program to work in a single thread to keep low CPU usage.
+* **Notes:**
+  1. Chosen TPC port must be free, if not server will not start and a error is shown.
+  2. A report will be generated and kept every "Update interval" in seconds.
+  3. When using this option the reports will not be saved anymore in files and exists only in memory. 
+  4. To keep the CPU usage to the minimum i recommend using this options with '--max-tasks' option set to 1 and work in Single thread.
+
+
 ## Examples
 1. "SystemInfoSnapshot.exe --null -o" - Generate and open the report in the default browser without showing the GUI.
 2. "SystemInfoSnapshot.exe -s -o" - Generate, show and open the report in the explorer and the default browser without showing the GUI.
-
+3. "SystemInfoSnapshot.exe --null -o -f D:\snapshots" - Generate and open the report in default browser without showing the GUI. File will be saved on folder D:\snapshots if exists, otherwise a snapshots.html will be created.
+4. "SystemInfoSnapshot.exe --null --max-tasks 1 --listen-server *:8080 20" - Listen a server on any IP address on the port 8080 and update the report every 20 seconds. Also set to 1 task in order to save the CPU and keep at minimum usage when generating a new report on background. No GUI.
 
 # Requirements for Windows
 * Windows Vista or above (Vista, Server 2008, 7, Server 2012, 8, 8.1, 10)
