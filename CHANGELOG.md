@@ -1,7 +1,7 @@
 # Changelog
 
 # 1.7.0.0
-## 30/04/2015
+## 29/04/2015
 
 * Added a local web server to show the machine reports on the web
 * Added the NHttp.dll library to the project. https://github.com/pvginkel/NHttp
