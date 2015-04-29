@@ -8,7 +8,11 @@
 
 using System;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using SystemInfoSnapshot.Core.Web;
+using SystemInfoSnapshot.GUI;
 using SystemInfoSnapshot.Reports;
 
 namespace SystemInfoSnapshot
@@ -56,6 +60,7 @@ namespace SystemInfoSnapshot
             if (resultArgs.HasErrors)
             {
                 SystemHelper.DisplayMessage(resultArgs.ErrorText);
+                return;
             }
             if (resultArgs.HelpCalled)
             {
@@ -64,13 +69,44 @@ namespace SystemInfoSnapshot
             }
             ApplicationArguments.Instance.Fix();
 
+            if (ApplicationArguments.Instance.IsListenServer)
+            {
+                try
+                {
+                    if (!WebServer.Instance.Start(ApplicationArguments.Instance.ListenServerIPEndPoint))
+                    {
+                        SystemHelper.DisplayMessage("Unable to start the server with the selected configuration. Maybe port is on use? Please try again with other options.");
+                        return;
+                    }
+                }
+                catch
+                {
+                    SystemHelper.DisplayMessage("Unable to start the server with the selected configuration. Maybe port is on use? Please try again with other options.");
+                    return;
+                }
+                
+            }
+
             // Null or Silent mode, skip GUI.
             if (ApplicationArguments.Instance.NoGUI)
             {
                 WriteTemplate();
+                if (ApplicationArguments.Instance.IsListenServer)
+                {
+                    Task.Factory.StartNew(() =>
+                    {
+                        while (true)
+                        {
+                            Thread.Sleep((int)ApplicationArguments.Instance.ListenServerUpdateInterval*1000);
+                            WriteTemplate();
+                        }
+                        
+                    });
+                    Console.WriteLine("Server is now listen on: " + ApplicationArguments.Instance.ListenServerIPEndPoint);
+                    WebServer.Instance.BlockAndWait();
+                }
                 return;
             }
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmMain());
@@ -83,17 +119,21 @@ namespace SystemInfoSnapshot
         /// </summary>
         public static void WriteTemplate()
         {
-            HtmlTemplate = Report.GenerateReports(Reports, true, ApplicationArguments.Instance.Filename, ApplicationArguments.Instance.MaxDegreeOfParallelism);
+            HtmlTemplate = Report.GenerateReports(Reports, !ApplicationArguments.Instance.IsListenServer, ApplicationArguments.Instance.Filename, ApplicationArguments.Instance.MaxDegreeOfParallelism);
 
-            if (ApplicationArguments.Instance.Silent)
+            if (!ApplicationArguments.Instance.IsListenServer)
             {
-                HtmlTemplate.ShowInExplorer();
+                if (ApplicationArguments.Instance.Silent)
+                {
+                    HtmlTemplate.ShowInExplorer();
+                }
+
+                if (ApplicationArguments.Instance.OpenReport)
+                {
+                    HtmlTemplate.OpenInDefaultBrowser();
+                }
             }
 
-            if (ApplicationArguments.Instance.OpenReport)
-            {
-                HtmlTemplate.OpenInDefaultBrowser();
-            }
         }
         #endregion
     }

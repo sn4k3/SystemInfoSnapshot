@@ -73,9 +73,29 @@ namespace SystemInfoSnapshot.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cloud {
+            get {
+                object obj = ResourceManager.GetObject("cloud", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap exit {
             get {
                 object obj = ResourceManager.GetObject("exit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap eye {
+            get {
+                object obj = ResourceManager.GetObject("eye", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -99,7 +119,7 @@ namespace SystemInfoSnapshot.Properties {
         ///Appbario toolbar
         ///Appmarket Search
         ///Appmarket Toolbar
-        ///Ask.com Toolbar
+        ///Ask Toolbar
         ///Babylon Toolbar
         ///Baidu Toolbar
         ///BeFrugal Toolbar
@@ -110,7 +130,7 @@ namespace SystemInfoSnapshot.Properties {
         ///Blubster Toolbar
         ///Claro LTD Toolbar
         ///ClixSense Toolbar
-        ///Conduit Search (Search Protect)
+        ///Conduit Search
         ///Connect Toolbar
         ///ConnectSo Toolbar
         ///CoolWebSearch
@@ -118,7 +138,8 @@ namespace SystemInfoSnapshot.Properties {
         ///Coupon Server
         ///CouponXplorer Toolbar
         ///Crawler Toolbar
-        ///CricBuzz T [rest of string was truncated]&quot;;.
+        ///CricBuzz Toolbar
+        ///Crizbuzz Tool [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string malware {
             get {

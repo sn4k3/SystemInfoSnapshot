@@ -6,6 +6,8 @@
  * https://github.com/sn4k3/SystemInfoSnapshot
  */
 
+using System.Collections.Generic;
+using System.Net;
 using Fclp;
 
 namespace SystemInfoSnapshot
@@ -39,7 +41,7 @@ namespace SystemInfoSnapshot
         {
             get
             {
-                return Silent && Null;
+                return Silent || Null;
             }
         }
 
@@ -67,6 +69,26 @@ namespace SystemInfoSnapshot
         /// Gets the full or partial filename to save the report
         /// </summary>
         public string Filename { get; set; }
+
+        /// <summary>
+        /// Gets the listen server args
+        /// </summary>
+        public List<string> ListenServerArgs { get; set; }
+
+        /// <summary>
+        /// Gets if the web server is active or not
+        /// </summary>
+        public bool IsListenServer { get; set; }
+
+        /// <summary>
+        /// Gets the web server <see cref="IPEndPoint"/>
+        /// </summary>
+        public IPEndPoint ListenServerIPEndPoint { get; set; }
+
+        /// <summary>
+        /// Gets the update interval
+        /// </summary>
+        public uint ListenServerUpdateInterval { get; set; }
         #endregion
 
         #region Constructor
@@ -75,6 +97,7 @@ namespace SystemInfoSnapshot
         /// </summary>
         public ApplicationArguments()
         {
+            ListenServerArgs = new List<string>();
         }
         #endregion
 
@@ -94,10 +117,64 @@ namespace SystemInfoSnapshot
             {
                 Filename = null;
             }
+
+            ListenServerIPEndPoint = new IPEndPoint(IPAddress.Any, Core.Web.WebServer.DefaultPort);
+            if (ListenServerArgs.Count > 0)
+            {
+                IsListenServer = true;
+                OpenReport = false;
+                if (Silent)
+                {
+                    Silent = false;
+                    Null = true;
+                }
+
+                var args = ListenServerArgs[0].Split(':');
+                IPAddress address;
+                if (args[0].Equals("localhost") || args[0].Equals("loopback"))
+                {
+                    ListenServerIPEndPoint.Address = IPAddress.Loopback;
+                }
+                else if (args[0].Equals("*") || args[0].Equals("0:0:0:0") || args[0].Equals("any"))
+                {
+                    // ListenServerIPEndPoint.Address = IPAddress.Any;
+                }
+                else if (IPAddress.TryParse(args[0], out address))
+                {
+                    ListenServerIPEndPoint.Address = address;
+                }
+
+                if (args.Length >= 2)
+                {
+                    ushort port;
+                    if (ushort.TryParse(args[1], out port))
+                    {
+                        if (port > 0)
+                        {
+                            ListenServerIPEndPoint.Port = port;
+                        }
+                    }
+                }
+
+                uint updateinterval = 10;
+                if (ListenServerArgs.Count > 1)
+                {
+                    if (uint.TryParse(ListenServerArgs[1], out updateinterval))
+                    {
+                        if (updateinterval < 1)
+                            updateinterval = 5;
+                    }
+                    else
+                    {
+                        updateinterval = 10;
+                    }
+                }
+                ListenServerUpdateInterval = updateinterval;
+            }
         }
         #endregion
 
-        #region Static methods
+        #region Static Methods
         public static ICommandLineParserResult Init(string[] args)
         {
             CmdParser.SetupHelp("?", "help").Callback(SystemHelper.DisplayMessage);
@@ -126,6 +203,11 @@ namespace SystemInfoSnapshot
                 As('f', "target").
                 SetDefault(null).
                 WithDescription("Set the path and/or filename for the generated report file. If the passed path is a directory the default filename will be appended to it. Absolute or relative paths are allowed.");
+
+            CmdParser.Setup(arg => arg.ListenServerArgs).
+                As("listen-server").
+                //SetDefault(null).
+                WithDescription("Create a local web server and display live information about this machine on the web. Syntax: <<ip:port> OR <ip> OR <*:port>> [update-interval]");
 
             var result = CmdParser.Parse(args);
             

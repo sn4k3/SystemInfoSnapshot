@@ -1,5 +1,18 @@
 # Changelog
 
+# 1.7.0.0
+## 30/04/2015
+
+* Added a local web server to show the machine reports on the web
+* Added the NHttp.dll library to the project. https://github.com/pvginkel/NHttp
+* Added a new argument 'Listen Server' (--listen-server): Create a local web server and display live information about this machine on the web
+* Added a option on the GUI for start the listen server
+* Added a notify icon (tray) to the GUI
+* Fixed a bug when passing silent or null options it stills show the GUI
+* Moved the FrmMain into GUI folder (Sourcecode)
+* Removed the big open and show report button on the GUI
+
+
 # 1.6.2.0
 ## 27/04/2015
 

@@ -160,9 +160,9 @@ namespace SystemInfoSnapshot
         {
             //Debug.WriteLine(text);
             Console.WriteLine(text);
-            if (IsWindows || IsMacOSX)
+            if ((IsWindows || IsMacOSX) && !ApplicationArguments.Instance.NoGUI)
             {
-                MessageBox.Show(text);
+                MessageBox.Show(text, "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         #endregion

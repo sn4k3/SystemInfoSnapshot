@@ -143,5 +143,12 @@ namespace SystemInfoSnapshot
             ProcessManager.Open(Program.HtmlTemplate.LastSaveFilePath);
         }
         #endregion
+
+        #region Overrides
+        public override string ToString()
+        {
+            return TemplateHTML;
+        }
+        #endregion
     }
 }
