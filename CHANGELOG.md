@@ -3,11 +3,11 @@
 # 1.8.0.0
 ## 02/05/2015
 
-* Added the Global Statistics into Netowks
-* Added the ICMP Statistics into Netowks
-* Added the TCP Statistics into Netowks
-* Added the UDP Statistics into Netowks
-* Added the TCP and UDP Connections into Netowks
+* Added the Global Statistics into Networks
+* Added the ICMP Statistics into Networks
+* Added the TCP Statistics into Networks
+* Added the UDP Statistics into Networks
+* Added the TCP and UDP Connections into Networks
 * Added the report sections can now be toggled to show or hide information
 * Added a "Toggle sections" button to toggle all sections
 * Added a "Show sections" button to show all sections
