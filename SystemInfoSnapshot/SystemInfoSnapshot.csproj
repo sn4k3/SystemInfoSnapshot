@@ -137,7 +137,7 @@
     <Compile Include="Reports\Report.cs" />
     <Compile Include="Reports\SystemInfo.cs" />
     <Compile Include="Reports\Hardware.cs" />
-    <Compile Include="Reports\NetworkDevices.cs" />
+    <Compile Include="Reports\Networks.cs" />
     <Compile Include="Reports\PnPDevices.cs" />
     <Compile Include="Reports\Processes.cs" />
     <Compile Include="Reports\Services.cs" />

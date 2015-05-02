@@ -1,5 +1,21 @@
 # Changelog
 
+# 1.8.0.0
+## 02/05/2015
+
+* Added the Global Statistics into Netowks
+* Added the ICMP Statistics into Netowks
+* Added the TCP Statistics into Netowks
+* Added the UDP Statistics into Netowks
+* Added the TCP and UDP Connections into Netowks
+* Added the report sections can now be toggled to show or hide information
+* Added a "Toggle sections" button to toggle all sections
+* Added a "Show sections" button to show all sections
+* Added a "Hide sections" button to hide all sections
+* Changed the "Network Devices" title to "Networks" on html file
+* Changed the default update interval for the listen server from 10 to 30 seconds
+
+
 # 1.7.0.0
 ## 29/04/2015
 

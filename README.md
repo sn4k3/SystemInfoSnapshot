@@ -84,10 +84,10 @@ Report will be generated and the html file will show on explorer after completio
 ## Listen server
 * **Arguments:** '--listen-server' or '/listen-server' <ip:port> [update-interval:int]
 * **Description:** Create a local web server and display live information about this machine on the web.
-* **Default:** *:8080 10.
+* **Default:** *:8080 30.
 * **Examples:**
-  1. "SystemInfoSnapshot.exe --listen-server *" - Listen the server on any IP in the default port with 10 seconds of update interval.
-  2. "SystemInfoSnapshot.exe --listen-server localhost:803" - Listen the server on the 127.0.0.1 IP in the 803 port with 10 seconds of update interval.
+  1. "SystemInfoSnapshot.exe --listen-server *" - Listen the server on any IP in the default port with 30 seconds of update interval.
+  2. "SystemInfoSnapshot.exe --listen-server localhost:803" - Listen the server on the 127.0.0.1 IP in the 803 port with 30 seconds of update interval.
   3. "SystemInfoSnapshot.exe --listen-server * 20" - Listen the server on any IP in the default port with 20 seconds of update interval.
   4. "SystemInfoSnapshot.exe --listen-server *:600 30" - Listen the server on any IP in the 600 port with 30 seconds of update interval.
   5. "SystemInfoSnapshot.exe --listen-server *:600 30 --max-tasks 1" - Same as above but set the program to work in a single thread to keep low CPU usage.

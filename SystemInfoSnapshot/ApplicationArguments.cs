@@ -156,17 +156,17 @@ namespace SystemInfoSnapshot
                     }
                 }
 
-                uint updateinterval = 10;
+                uint updateinterval = Core.Web.WebServer.DefaultUpdateInterval;
                 if (ListenServerArgs.Count > 1)
                 {
                     if (uint.TryParse(ListenServerArgs[1], out updateinterval))
                     {
                         if (updateinterval < 1)
-                            updateinterval = 5;
+                            updateinterval = Core.Web.WebServer.DefaultUpdateInterval;
                     }
                     else
                     {
-                        updateinterval = 10;
+                        updateinterval = Core.Web.WebServer.DefaultUpdateInterval;
                     }
                 }
                 ListenServerUpdateInterval = updateinterval;

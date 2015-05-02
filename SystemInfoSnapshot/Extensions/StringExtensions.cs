@@ -6,6 +6,7 @@
  * https://github.com/sn4k3/SystemInfoSnapshot
  */
 using System;
+using System.Text.RegularExpressions;
 
 namespace SystemInfoSnapshot.Extensions
 {
@@ -31,5 +32,13 @@ namespace SystemInfoSnapshot.Extensions
             source = value;
             return true;
         }*/
+
+        public static string SpaceCamelCase(this string s)
+        {
+            return new Regex(@"
+                (?<=[A-Z])(?=[A-Z][a-z]) |
+                 (?<=[^A-Z])(?=[A-Z]) |
+                 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace).Replace(s, " ");
+        }
     }
 }

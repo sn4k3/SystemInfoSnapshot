@@ -50,6 +50,8 @@
         .panel-body { padding: 0; }
         .panel-body pre { margin: 0; }
         .panel .panel {margin: 0; }
+        .panel-primary a { color: #00526e; }
+        .panel-primary a:hover { color: #ffffff; }
          table.table, table.dataTable { margin: 0 !important; }
          td{vertical-align: middle !important;
              word-wrap: break-word;
@@ -284,7 +286,16 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-sm-4 col-lg-3">
-                                <button id="EnhancementTablesBtn" class="btn btn-default btn-lg btn-block"><i class="fa fa-table"></i> Enhancement all tables</button>
+                                <button id="EnhancementTablesBtn" class="btn btn-default btn-lg btn-block"><i class="fa fa-table"></i> Enhancement tables</button>
+                            </div>
+                            <div class="col-sm-4 col-lg-3">
+                                <button id="ToggleSectionsBtn" class="btn btn-default btn-lg btn-block" onclick="ToggleAllSections(0);"><i class="fa fa-eye-slash"></i> Toggle sections</button>
+                            </div>
+                            <div class="col-sm-4 col-lg-3">
+                                <button id="ShowSectionsBtn" class="btn btn-default btn-lg btn-block" onclick="ToggleAllSections(1);"><i class="fa fa-toggle-on"></i> Show sections</button>
+                            </div>
+                            <div class="col-sm-4 col-lg-3">
+                                <button id="HideSectionsBtn" class="btn btn-default btn-lg btn-block" onclick="ToggleAllSections(-1);"><i class="fa fa-toggle-off"></i> Hide sections</button>
                             </div>
                         </div>
                     </div>
@@ -293,63 +304,63 @@
         </div>
 
 		<div id="systeminfo" class="panel panel-primary">
-			<div class="panel-heading"><h1><i class="glyphicon glyphicon-info-sign pull-right"></i>System Info</h1></div>
+			<div class="panel-heading"><h1><i class="glyphicon glyphicon-info-sign pull-right"></i><a href="javascript:;" class="colapse"><i class="fa fa-chevron-circle-down"></i></a> System Info</h1></div>
 			<div class="panel-body lessmarginbottom20">
 			    <!--[SYSTEMINFO]-->
 			</div>
 		</div>
 
         <div id="hardware" class="panel panel-primary">
-            <div class="panel-heading"><h1><i class="glyphicon glyphicon-tower pull-right"></i>Hardware</h1></div>
+            <div class="panel-heading"><h1><i class="glyphicon glyphicon-tower pull-right"></i><a href="javascript:;" class="colapse"><i class="fa fa-chevron-circle-down"></i></a> Hardware</h1></div>
             <div class="panel-body lessmarginbottom20">
                 <!--[HARDWARE]-->
             </div>
         </div>
 
         <div id="networks" class="panel panel-primary">
-            <div class="panel-heading"><h1><i class="fa fa-wifi pull-right"></i>Network Devices <span class="count"></span></h1></div>
+            <div class="panel-heading"><h1><i class="fa fa-wifi pull-right"></i><a href="javascript:;" class="colapse"><i class="fa fa-chevron-circle-down"></i></a> Networks <span class="count"></span></h1></div>
             <div class="panel-body">
-                <!--[NETWORKDEVICES]-->
+                <!--[NETWORKS]-->
             </div>
         </div>
 
         <div id="pnpdevices" class="panel panel-primary">
-            <div class="panel-heading"><h1><i class="fa fa-plug pull-right"></i>PnP Devices <span class="count"></span></h1></div>
+            <div class="panel-heading"><h1><i class="fa fa-plug pull-right"></i><a href="javascript:;" class="colapse"><i class="fa fa-chevron-circle-down"></i></a> PnP Devices <span class="count"></span></h1></div>
             <div class="panel-body">
                 <!--[PNPDEVICES]-->
             </div>
         </div>
 		
 		<div id="processes" class="panel panel-primary">
-			<div class="panel-heading"><h1><i class="glyphicon glyphicon-tasks pull-right"></i>Processes <span class="count"></span></h1></div>
+			<div class="panel-heading"><h1><i class="glyphicon glyphicon-tasks pull-right"></i><a href="javascript:;" class="colapse"><i class="fa fa-chevron-circle-down"></i></a> Processes <span class="count"></span></h1></div>
             <div class="panel-body">
                 <!--[PROCESSES]-->
 			</div>
 		</div>
 		
 		<div id="services" class="panel panel-primary">
-			<div class="panel-heading"><h1><i class="fa fa-cogs pull-right"></i>Services <span class="count"></span></h1></div>
+			<div class="panel-heading"><h1><i class="fa fa-cogs pull-right"></i><a href="javascript:;" class="colapse"><i class="fa fa-chevron-circle-down"></i></a> Services <span class="count"></span></h1></div>
             <div class="panel-body">
                 <!--[SERVICES]-->
             </div>
 		</div>
 
         <div id="autoruns" class="panel panel-primary">
-            <div class="panel-heading"><h1><i class="glyphicon glyphicon-play pull-right"></i>Autoruns <span class="count"></span></h1></div>
+            <div class="panel-heading"><h1><i class="glyphicon glyphicon-play pull-right"></i><a href="javascript:;" class="colapse"><i class="fa fa-chevron-circle-down"></i></a> Autoruns <span class="count"></span></h1></div>
             <div class="panel-body">
                 <!--[AUTORUNS]-->
             </div>
         </div>
 
         <div id="installedprograms" class="panel panel-primary">
-            <div class="panel-heading"><h1><i class="glyphicon glyphicon-wrench pull-right"></i>Installed Programs <span class="count"></span></h1></div>
+            <div class="panel-heading"><h1><i class="glyphicon glyphicon-wrench pull-right"></i><a href="javascript:;" class="colapse"><i class="fa fa-chevron-circle-down"></i></a> Installed Programs <span class="count"></span></h1></div>
             <div class="panel-body">
                 <!--[PROGRAMS]-->
             </div>
         </div>
 
         <div id="specialfiles" class="panel panel-primary">
-            <div class="panel-heading"><h1><i class="fa fa-files-o pull-right"></i>Special Files <span class="count"></span></h1></div>
+            <div class="panel-heading"><h1><i class="fa fa-files-o pull-right"></i><a href="javascript:;" class="colapse"><i class="fa fa-chevron-circle-down"></i></a> Special Files <span class="count"></span></h1></div>
             <div class="panel-body">
                 <!--[SPECIALFILES]-->
             </div>
@@ -424,6 +435,13 @@
             return;
 
         var item = obj.items[index];
+
+        var panel = $(item['element'].closest('div.panel')).find('.panel-heading i.fa-chevron-circle-left:first');
+        if(panel.length > 0)
+        {
+            $(panel).parent().click();
+        }
+
         if(item['hastab'])
         {
             $('a[href="#'+$(item['tabelement']).attr('id')+'"]').click();
@@ -488,6 +506,19 @@
         });
 
         pageOptions['EnhancementTables'] = true;
+    }
+
+    function ToggleAllSections(visibility)
+    {
+        if(visibility == -1) {
+            $('.panel-heading a.colapse i.fa-chevron-circle-down').parent().click();
+        }
+        else if(visibility == 0) {
+            $('.panel-heading a.colapse').click();
+        }
+        else if(visibility == 1) {
+            $('.panel-heading a.colapse i.fa-chevron-circle-left').parent().click();
+        }
     }
 
     function updateResize()
@@ -597,6 +628,20 @@
             obj.index = newindex;
 
             GoToMessage(oldindex, newindex, isWarning);
+        });
+
+        $('a.colapse').on('click', function() {
+            var isVisible = $(this).children().hasClass('fa-chevron-circle-down');
+            $(this).closest('div.panel').find('.panel-body').slideToggle();
+
+            if(isVisible)
+            {
+                $(this).children().removeClass('fa-chevron-circle-down').addClass('fa-chevron-circle-left');
+            }
+            else
+            {
+                $(this).children().removeClass('fa-chevron-circle-left').addClass('fa-chevron-circle-down');
+            }
         });
 
 

@@ -28,6 +28,11 @@ namespace SystemInfoSnapshot.Core.Web
         /// Default port to use on web server
         /// </summary>
         public const ushort DefaultPort = 8080;
+
+        /// <summary>
+        /// Default update interval time in seconds
+        /// </summary>
+        public const uint DefaultUpdateInterval = 30;
         #endregion
 
         #region Properties

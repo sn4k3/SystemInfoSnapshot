@@ -41,6 +41,7 @@ namespace SystemInfoSnapshot.GUI.Forms
             cbIPAddress.SelectedIndex = 0;
 
             tbPort.Text = WebServer.DefaultPort.ToString();
+            tbUpdateInterval.Text = WebServer.DefaultUpdateInterval.ToString();
         }
         #endregion
 
@@ -83,11 +84,11 @@ namespace SystemInfoSnapshot.GUI.Forms
                 if (uint.TryParse(tbUpdateInterval.Text, out updateInterval))
                 {
                     if (updateInterval < 1)
-                        updateInterval = 5;
+                        updateInterval = WebServer.DefaultUpdateInterval;
                 }
                 else
                 {
-                    updateInterval = 10;
+                    updateInterval = WebServer.DefaultUpdateInterval;
                 }
 
                 UpdateInterval = updateInterval;

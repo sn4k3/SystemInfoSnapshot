@@ -131,7 +131,7 @@
             this.tbUpdateInterval.Name = "tbUpdateInterval";
             this.tbUpdateInterval.Size = new System.Drawing.Size(59, 20);
             this.tbUpdateInterval.TabIndex = 8;
-            this.tbUpdateInterval.Text = "10";
+            this.tbUpdateInterval.Text = "30";
             // 
             // lbUpdateInterval
             // 
